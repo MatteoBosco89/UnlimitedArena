@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class MenuEffect : MonoBehaviour
 {
-    [SerializeField] protected float speed = 3.0f;
-    [SerializeField] protected float translationSpeed = 0.05f;
-    [SerializeField] protected GameObject objectToRotate;
+    [SerializeField] protected float speed = 0.05f;
+    float rot = 0f;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +16,9 @@ public class MenuEffect : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        objectToRotate.transform.Rotate(speed, speed, speed);
-        objectToRotate.transform.Translate(translationSpeed, 0, 0, Space.Self);
+        rot += speed;
+        if(rot > 360) rot = 0; 
+        rot %= 360;
+        RenderSettings.skybox.SetFloat("_Rotation", rot);
     }
 }
