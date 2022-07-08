@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
@@ -9,7 +10,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof (CharacterController))]
     [RequireComponent(typeof (AudioSource))]
-    public class FirstPersonController : MonoBehaviour
+    public class FirstPersonController : NetworkBehaviour
     {
         [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
@@ -28,7 +29,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
-
+        [SerializeField] private GameObject pl;
+        
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
@@ -47,19 +49,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Use this for initialization
         private void Start()
         {
-            animator = GetComponent<Animator>();
-            m_CharacterController = GetComponent<CharacterController>();
-            m_Camera = Camera.main;
-            m_OriginalCameraPosition = m_Camera.transform.localPosition;
-            m_FovKick.Setup(m_Camera);
-            m_HeadBob.Setup(m_Camera, m_StepInterval);
-            m_StepCycle = 0f;
-            m_NextStep = m_StepCycle/2f;
-            m_Jumping = false;
-            m_AudioSource = GetComponent<AudioSource>();
-			m_MouseLook.Init(transform , m_Camera.transform);
+            if (isLocalPlayer) {
+                animator = GetComponent<Animator>();
+                m_CharacterController = GetComponent<CharacterController>();
+                m_Camera = pl.GetComponent<Camera>();
+                m_Camera.enabled = true;
+                m_OriginalCameraPosition = m_Camera.transform.localPosition;
+                m_FovKick.Setup(m_Camera);
+                m_HeadBob.Setup(m_Camera, m_StepInterval);
+                m_StepCycle = 0f;
+                m_NextStep = m_StepCycle/2f;
+                m_Jumping = false;
+                m_AudioSource = GetComponent<AudioSource>();
+			    m_MouseLook.Init(transform , m_Camera.transform);
+            }
         }
-
 
         // Update is called once per frame
         private void Update()
@@ -86,14 +90,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }
 
-
         private void PlayLandingSound()
         {
             m_AudioSource.clip = m_LandSound;
             m_AudioSource.Play();
             m_NextStep = m_StepCycle + .5f;
         }
-
 
         private void FixedUpdate()
         {
