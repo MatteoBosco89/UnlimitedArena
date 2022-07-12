@@ -1,34 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 
-namespace PlayerSelection
+namespace GameManager
 {
+    [System.Obsolete]
     public class NetManager : MonoBehaviour
     {
-        [SerializeField] protected List<GameObject> characters;
-        protected GameObject player;
-        protected PlayerSpawn ps;
+        protected SceneChangeManager scm;
+        protected NetworkManager networkManager;
+        protected bool inGame = false;
+
+        public bool InGame
+        {
+            get { return inGame; }
+            set { inGame = value; }
+        }
 
         private void Awake()
         {
-            ps = GetComponent<PlayerSpawn>();
+            networkManager = GetComponent<NetworkManager>();
+            scm = GetComponent<SceneChangeManager>();
         }
 
-        public GameObject Player
+        private string ChooseMap()
         {
-            get { return player; }
+            // choose the map with RNG
+            return "WareHouseScene";
         }
 
-        public void ChooseMe(string ch)
+        public void StartGame()
         {
-            if (ch == "Cube") ps.Player = characters[0];
-            if (ch == "Sphere") ps.Player = characters[1];
-
-            ps.Spawn();
+           scm.LoadingScreen(ChooseMap());
         }
 
+        public void SpawnPlayer()
+        {
+            inGame = false;
+            networkManager.StartHost();
+
+        }
+        
     }
 }
 

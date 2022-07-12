@@ -10,13 +10,26 @@ namespace Character
 
         [SerializeField] protected float walkSpeed = 15.0f;
         [SerializeField] protected float rotationSensitivity = 0.2f;
+        [SerializeField] protected float cameraClamp = 25.0f;
         protected bool isMoving; 
         protected bool isRotating; 
         protected bool isRunning; 
         protected bool isJumping;
         protected bool isFiring;
+        protected bool isChangingWeaponPre;
+        protected bool isChangingWeaponNext;
         protected Vector3 movement; 
         protected Vector3 rotation; 
+
+        public bool IsChangingWeaponsPre
+        {
+            get { return isChangingWeaponPre; }
+        }
+
+        public bool IsChangingWeaponsNext
+        {
+            get { return isChangingWeaponNext; }
+        }
 
         public bool IsMoving
         {
@@ -71,6 +84,7 @@ namespace Character
             Vector3 inputs = value.ReadValue<Vector2>();
             rotation.x += inputs.x * rotationSensitivity;
             rotation.y += inputs.y * rotationSensitivity;
+            rotation.y = Mathf.Clamp(rotation.y, -cameraClamp, cameraClamp);
         }
 
         public void OnJump(InputAction.CallbackContext value)
@@ -84,6 +98,18 @@ namespace Character
             if (value.started) isFiring = true;
             else if (value.canceled) isFiring = false;
         }
+        public void OnChangeWeaponPre(InputAction.CallbackContext value)
+        {
+            if (value.started) isChangingWeaponPre = true;
+            else if (value.canceled) isChangingWeaponPre = false;
+        }
+
+        public void OnChangeWeaponNext(InputAction.CallbackContext value)
+        {
+            if (value.started) isChangingWeaponNext = true;
+            else if (value.canceled) isChangingWeaponNext = false;
+        }
+
 
     }
 }

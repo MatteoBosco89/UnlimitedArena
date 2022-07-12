@@ -8,6 +8,7 @@ namespace Character
     {
         [SerializeField] protected List<GameObject> characters;
         [SerializeField] protected Camera mainCam;
+        [SerializeField] protected ConsumableManager consumableManager;
         protected GameObject thisChar = null;
         protected Vector3 playerPosition;
         protected float yPos;
@@ -21,13 +22,19 @@ namespace Character
         {
             playerPosition = transform.position;
             playerPosition.y -= 1;
-            thisChar = Instantiate(characters[0], playerPosition, Quaternion.identity, transform);
+            thisChar = Instantiate(characters[PlayerPrefs.GetInt("character")], playerPosition, Quaternion.identity, transform);
             yPos = thisChar.transform.localPosition.y;
+            thisChar.SetActive(true);
         }
 
         private void FixedUpdate()
         {
             thisChar.transform.localPosition = new Vector3(0, yPos, 0);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            consumableManager.ApplyAura(other.gameObject);
         }
 
     }

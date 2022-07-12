@@ -8,12 +8,17 @@ namespace Character
     {
         protected Dictionary<string, float> speedBuffs = new Dictionary<string, float>();
 
-        public void addBuff(string name, float buff)
+        public void AddBuff(string name, float buff)
         {
             speedBuffs[name] = buff;
         }
 
-        public float calcSpeed(float baseSpeed)
+        public void RemoveBuff(string name)
+        {
+            speedBuffs[name] = 1;
+        }
+
+        public float CalcSpeed(float baseSpeed)
         {
             float speed = baseSpeed;
             foreach (KeyValuePair<string, float> entry in speedBuffs)

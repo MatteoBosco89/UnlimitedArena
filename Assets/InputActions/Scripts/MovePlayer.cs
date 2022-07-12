@@ -10,8 +10,8 @@ namespace Character
         [SerializeField] protected float _baseJump = 5.0f;
         [SerializeField] protected float _gravity = 9.81f;
         [SerializeField] protected Camera _camera;
-        [SerializeField] protected float _cameraClamp = 25.0f;
         [SerializeField] protected float _weight = 3.0f;
+        [SerializeField] protected float _runSpeedBuff = 2.0f;
         protected CharacterController _charController;
         protected Animator animator;
         protected CharacterStatus status;
@@ -46,15 +46,15 @@ namespace Character
 
             verticalVelocity = VerticalVelocityCalc();
 
-            if (status.IsRunning) sc.addBuff("run", 2);
-            else if (!status.IsRunning) sc.addBuff("run", 1);
+            if (status.IsRunning) sc.AddBuff("run", _runSpeedBuff);
+            else if (!status.IsRunning) sc.RemoveBuff("run");
 
             if (status.IsRotating)
             {
                 RotateChar(status.Rotation.x, status.Rotation.y);
             }
 
-            _speed = sc.calcSpeed(_baseSpeed);
+            _speed = sc.CalcSpeed(_baseSpeed);
 
             if (status.IsMoving)
             {
@@ -74,8 +74,6 @@ namespace Character
             movement.y = verticalVelocity;
             AnimatorSpeed(movement);
             MoveChar(movement);
-
-
         }
 
         private void AnimatorSpeed(Vector3 movement)
@@ -104,7 +102,7 @@ namespace Character
         private void RotateChar(float x, float y)
         {
             transform.localRotation = Quaternion.Euler(0, x, 0);
-            _camera.transform.localRotation = Quaternion.Euler(Mathf.Clamp(-y, -_cameraClamp, _cameraClamp), 0, 0);
+            _camera.transform.localRotation = Quaternion.Euler(-y, 0, 0);
         }
 
     }
