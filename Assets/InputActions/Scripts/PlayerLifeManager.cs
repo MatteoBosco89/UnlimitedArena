@@ -45,7 +45,7 @@ namespace Character
             get { return armor; }
         }
 
-        public void DoDamage(int dmg)
+        public void TakeDamage(int dmg)
         {
             health -= dmgReceived.CalcDamageReceived(dmg);
             if (armor > 0) ReduceArmor(dmg);
@@ -68,7 +68,6 @@ namespace Character
             if (powerUp.GetTimeRemaining("Invincibility") > 0)
             {
                 dmgReceived.AddBuff("Invincibility", powerUp.GetAura("Invincibility"));
-                Debug.Log(powerUp.GetTimeRemaining("Invincibility"));
             }
             else dmgReceived.RemoveBuff("Invincibility");
 
@@ -90,7 +89,7 @@ namespace Character
 
         protected void TestDamage()
         {
-            DoDamage(20);
+            TakeDamage(20);
         }
 
     }

@@ -9,14 +9,24 @@ namespace Character
         [SerializeField] protected GameObject _playerManager;
         [SerializeField] protected List<GameObject> powerups;
         protected string countdown = "CountDown";
-        protected Dictionary<string, int> timeRemain = new Dictionary<string, int>();
-        protected Dictionary<string, PowerupHandler> handlers = new Dictionary<string, PowerupHandler>();
-        protected List<string> powerupsId = new List<string>();
+        protected Dictionary<string, int> timeRemain;
+        protected Dictionary<string, PowerupHandler> handlers;
+        protected List<string> powerupsId;
         protected PowerupHandler powerupHandler;
+
+        private void Awake()
+        {
+            timeRemain = new Dictionary<string, int>();
+            handlers = new Dictionary<string, PowerupHandler>();
+            powerupsId = new List<string>();
+        }
 
         public int GetTimeRemaining(string id)
         {
-            return timeRemain[id];
+            int t = 0;
+            try{ t = timeRemain[id]; }
+            catch (System.Exception){ timeRemain.Add(id, 0); }
+            return t;
         }
 
         public float GetAura(string id)
@@ -27,7 +37,6 @@ namespace Character
 
         private void Start()
         {
-            // vedere bene fa errore se modifica on the fly
             foreach(GameObject p in powerups)
             {
                 string id = GetIdFromGameObject(p);
@@ -59,7 +68,7 @@ namespace Character
         {
             foreach (string p in powerupsId)
             {
-                if (timeRemain[p] > 0) timeRemain[p] -= 1;
+                if (GetTimeRemaining(p) > 0) timeRemain[p] -= 1;
             }
         }
 

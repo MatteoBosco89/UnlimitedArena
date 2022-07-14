@@ -10,7 +10,7 @@ namespace Character
         [SerializeField] protected float dmg = 1.0f;
         [SerializeField] protected float range = 100.0f;
         [SerializeField] protected Camera _camera;
-        [SerializeField] protected GameObject wpManager;
+        [SerializeField] protected GameObject WeaponManagerObj;
         protected CharacterStatus status;
         protected WeaponManager weaponManager;
         private float curr_dmg;
@@ -20,7 +20,7 @@ namespace Character
         private void Awake()
         {
             status = GetComponent<CharacterStatus>();
-            weaponManager = wpManager.GetComponent<WeaponManager>();
+            weaponManager = WeaponManagerObj.GetComponent<WeaponManager>();
         }
 
 
@@ -28,26 +28,26 @@ namespace Character
         {
             if (status.IsFiring && canShoot)
             {
-                Shoot();
+                DoShoot();
             }
         }
 
-        void Shoot()
+        private void DoShoot()
         {
-            RaycastHit hitInfo;
             canShoot = false;
-            weaponManager.ShotWeapon();
-            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hitInfo, range))
+            weaponManager.TriggerShoot();
+            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hitInfo, range))
             {
-                Debug.Log(hitInfo.transform.name);
-                //give damage to object
+                if (hitInfo.transform.gameObject.CompareTag("Player")) Debug.Log("Player Hit");
+                // SendToServer(weaponManager.GetActiveWeaponDamage());
             }
-            StartCoroutine(ShotCooldown());
+            StartCoroutine(ShootCooldown());
         }
-        private IEnumerator ShotCooldown()
+
+        private IEnumerator ShootCooldown()
         {
 
-            yield return new WaitForSeconds(weaponManager.GetActiveWeaponShotDelay());
+            yield return new WaitForSeconds(weaponManager.GetActiveWeaponShootDelay());
             canShoot = true;
         }
 

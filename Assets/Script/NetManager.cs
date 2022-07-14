@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
 
 namespace GameManager
 {
-    [System.Obsolete]
     public class NetManager : MonoBehaviour
     {
         protected SceneChangeManager scm;
+        [System.Obsolete]
         protected NetworkManager networkManager;
         protected bool inGame = false;
 
@@ -19,6 +17,7 @@ namespace GameManager
             set { inGame = value; }
         }
 
+        [System.Obsolete]
         private void Awake()
         {
             networkManager = GetComponent<NetworkManager>();
@@ -28,7 +27,7 @@ namespace GameManager
         private string ChooseMap()
         {
             // choose the map with RNG
-            return "WareHouseScene";
+            return "UnlimitedArena_WareHouseScene";
         }
 
         public void StartGame()
@@ -36,6 +35,7 @@ namespace GameManager
            scm.LoadingScreen(ChooseMap());
         }
 
+        [System.Obsolete]
         public void SpawnPlayer()
         {
             inGame = false;

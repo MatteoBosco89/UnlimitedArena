@@ -9,6 +9,11 @@ TagManager:
   - Invincibility
   - Speed
   - PowerUp
+  - WeaponContainer
+  - Ammo
+  - Weapon
+  - Armor
+  - Consumable
   layers:
   - Default
   - TransparentFX

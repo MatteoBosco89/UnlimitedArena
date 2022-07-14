@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/menu.unity
+    path: Assets/Scenes/UnlimitedArena_Menu.unity
     guid: 4580070448b101f4b8472ca8d959d484
   - enabled: 1
-    path: Assets/Scenes/WareHouseScene.unity
-    guid: 469082c8847f31a419d09efa9c8dbb51
-  - enabled: 1
-    path: Assets/Scenes/Loading.unity
+    path: Assets/Scenes/UnlimitedArena_Loading.unity
     guid: bd35e43ca3223c247856d7e39b7ec6be
+  - enabled: 1
+    path: Assets/Scenes/UnlimitedArena_WareHouseScene.unity
+    guid: 469082c8847f31a419d09efa9c8dbb51
   m_configObjects: {}

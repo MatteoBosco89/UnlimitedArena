@@ -5,10 +5,9 @@ using UnityEngine;
 
 namespace Weapon
 {
-   
+
     public class WeaponStatus : MonoBehaviour
     {
-        // Start is called before the first frame update
         [SerializeField] protected int id;
         [SerializeField] protected float damage;
         [SerializeField] protected bool has_infinite_ammo;
@@ -19,7 +18,25 @@ namespace Weapon
         [SerializeField] protected float time_between_shot;
         [SerializeField] protected bool is_single_fire;
         [SerializeField] protected AudioClip fire_sound;
+        [SerializeField] protected Vector3 position;
+        [SerializeField] protected Vector3 rotation;
+        [SerializeField] protected string weaponType;
         
+        public string WeaponType
+        {
+            get { return weaponType; }
+        }
+
+        public Vector3 Position
+        {
+            get { return position; }
+        }
+
+        public Vector3 Rotation
+        {
+            get { return rotation; }
+        }
+
         public AudioClip Fire_sound
         {
             get { return fire_sound; }
@@ -60,19 +77,19 @@ namespace Weapon
         {
             get { return range; }
         }
-     
+
         void Start()
         {
-            if(ammo > max_ammo)
+            if (ammo > max_ammo)
             {
                 ammo = max_ammo;
             }
 
         }
-                
+
         public void AddAmmo(int value)
         {
-            if((ammo + value) < max_ammo)
+            if ((ammo + value) < max_ammo)
             {
                 ammo += value;
             }
@@ -80,9 +97,9 @@ namespace Weapon
             {
                 ammo = max_ammo;
             }
-            
+
         }
-        public void Shot()
+        public void Shoot()
         {
             if (!has_infinite_ammo)
             {

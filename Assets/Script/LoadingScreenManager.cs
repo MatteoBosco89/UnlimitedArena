@@ -22,7 +22,7 @@ namespace GameManager
             set { isLoading = value; }
         }
 
-        public void loading()
+        public void Loading()
         {
             StartCoroutine(WaitForLoad());
         }
@@ -31,8 +31,9 @@ namespace GameManager
         {
             thisLoadingScreen = Instantiate(loadingScreen);
             isLoading = false;
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(1);
             sceneChangeManager.ChangeScene();
+            
         }
 
         // Update is called once per frame

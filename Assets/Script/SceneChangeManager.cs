@@ -25,6 +25,7 @@ namespace GameManager
             loadingScreenManager = GetComponent<LoadingScreenManager>();
         }
 
+        [System.Obsolete]
         void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -33,7 +34,7 @@ namespace GameManager
         public void LoadingScreen(string scene)
         {
             sceneToLoad = scene;
-            SceneManager.LoadScene("Loading");
+            SceneManager.LoadScene("UnlimitedArena_Loading");
             loadingScreenManager.IsLoading = true;
         }
 
@@ -44,10 +45,11 @@ namespace GameManager
             netManager.InGame = true;
         }
 
+        [System.Obsolete]
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (netManager.InGame) netManager.SpawnPlayer();
-            else if (loadingScreenManager.IsLoading) loadingScreenManager.loading();
+            else if (loadingScreenManager.IsLoading) loadingScreenManager.Loading();
         }
     }
 }

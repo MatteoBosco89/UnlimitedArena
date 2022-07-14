@@ -10,158 +10,129 @@ namespace Weapon
 
         [SerializeField] protected List<GameObject> weaponsList;
         [SerializeField] protected GameObject playerManager;
+        protected PlayerManagerScript pms;
+        private SortedDictionary<int, bool> enabledWeapons;
+        private SortedDictionary<int, GameObject> playerWeapons;
+
         private AudioSource audioS;
-        private Dictionary<int, bool> enabledWeaponList = new Dictionary<int, bool>();
-        private Dictionary<int, GameObject> playerWeapons = new Dictionary<int, GameObject>();
-        protected GameObject activeWeapon;
-        private int actWepIndex;
+        private GameObject activeWeapon = null;
+        private int activeWeaponId;
+        private WeaponStatus activeWeaponStatus;
+
         private bool changeButtonsPressed = false;
         protected CharacterStatus status;
-        
+
+        protected GameObject weaponContainer;
+
         public GameObject ActiveWeapon
         {
             get { return activeWeapon; }
         }
-        void Awake()
+
+        public GameObject WeaponContainer
+        {
+            get { return weaponContainer; }
+            set { weaponContainer = value; }
+        }
+
+        private void Awake()
+        {
+            pms = playerManager.GetComponent<PlayerManagerScript>();
+        }
+
+        public void Spawn()
         {
             if (weaponsList.Count > 0)
             {
+                enabledWeapons = new SortedDictionary<int, bool>();
+                playerWeapons = new SortedDictionary<int, GameObject>();
                 status = playerManager.GetComponent<CharacterStatus>();
                 audioS = playerManager.GetComponent<AudioSource>();
-                Debug.Log("Weapon manager Start");
-                enabledWeaponList.Add(weaponsList[0].GetComponent<WeaponStatus>().Id, true);
-                //set i = 1 after testing
-                for (int i = 1; i < weaponsList.Count; i++)
+                for (int i = 0; i < weaponsList.Count; i++)
                 {
-                    Debug.Log(i);
-                    enabledWeaponList.Add(weaponsList[i].GetComponent<WeaponStatus>().Id, false);
-                    weaponsList[i].SetActive(false);
+                    GameObject weapon = Instantiate(weaponsList[i], weaponContainer.transform.position, weaponContainer.transform.rotation, weaponContainer.transform);
+                    weapon.SetActive(false);
+                    enabledWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, false);
+                    playerWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, weapon);
                 }
-                AddWeapon();
-                activeWeapon = weaponsList[0];
-                actWepIndex = 0;
-                activeWeapon.SetActive(true);
-
+                ChangeWeapon(0);
             }
 
         }
 
         void Update()
         {
-            if(weaponsList.Count > 0)
+            if (weaponsList.Count > 0)
             {
                 SelectWeapon();
                 CheckButtonPressed();
             }
         }
 
-        private void AddWeapon()
-        {
-            for (int i = 0; i < weaponsList.Count; i++)
-            {
-                WeaponStatus wps = weaponsList[i].GetComponent<WeaponStatus>();
-                if (enabledWeaponList[wps.Id])
-                {
-                    if(!playerWeapons.ContainsKey(i))
-                        playerWeapons.Add(wps.Id, weaponsList[i]);
-                }
-            }
-        }
-
         private void SelectWeapon()
         {
-            if (status.IsChangingWeaponsNext && !changeButtonsPressed)
-            {
-                Debug.Log("Weapon: " + activeWeapon.name);
-                activeWeapon.SetActive(false);
-                actWepIndex = NextWeapon();
-                activeWeapon = playerWeapons[actWepIndex];
-                activeWeapon.SetActive(true);
-                Debug.Log("Weapon: " + activeWeapon.name);
-            }
-            if (status.IsChangingWeaponsPre && !changeButtonsPressed)
-            {
-                Debug.Log("Weapon: " + activeWeapon.name);
-                activeWeapon.SetActive(false);
-                actWepIndex = PreWeapon();
-                activeWeapon = playerWeapons[actWepIndex];
-                activeWeapon.SetActive(true);
-                Debug.Log("Weapon: " + activeWeapon.name);
-            }
+            if (status.IsChangingWeaponsNext && !changeButtonsPressed) ChangeWeapon(NextWeapon());
+            if (status.IsChangingWeaponsPre && !changeButtonsPressed) ChangeWeapon(PreWeapon());
         }
 
         public void PickUpWeapon(GameObject pickWeap)
         {
-            WeaponConsumable pick_stat = pickWeap.GetComponent<WeaponConsumable>();
-            if (enabledWeaponList[pick_stat.Id])
+            WeaponConsumable pick_consumable = pickWeap.GetComponent<WeaponConsumable>();
+            if (enabledWeapons.ContainsKey(pick_consumable.Id))
             {
-                //increase ammo
-                Debug.Log("Increase ammo of " + pick_stat.Id);
-                WeaponStatus w_stat = playerWeapons[pick_stat.Id].GetComponent<WeaponStatus>();
-                w_stat.AddAmmo(pick_stat.Ammo);
-            }
-            else
-            {
-                //enable weapon for use
-                enabledWeaponList[pick_stat.Id] = true;
-                AddWeapon();
-                WeaponStatus w_stat = playerWeapons[pick_stat.Id].GetComponent<WeaponStatus>();
-                w_stat.AddAmmo(pick_stat.Ammo);
-                activeWeapon.SetActive(false);
-                activeWeapon = playerWeapons[pick_stat.Id];
-                activeWeapon.SetActive(true);
-                actWepIndex = pick_stat.Id;
-                Debug.Log("Picked " + pick_stat.Id);
-            }
-        }
-
-        public void AddAmmToWeapon(int id, int ammo)
-        {
-            for(int i = 0; i < weaponsList.Count; i++)
-            {
-                WeaponStatus weps = weaponsList[i].GetComponent<WeaponStatus>();
-                if(weps.Id == id)
+                if (enabledWeapons[pick_consumable.Id])
                 {
-                    weps.AddAmmo(ammo);
+                    WeaponStatus w_stat = playerWeapons[pick_consumable.Id].GetComponent<WeaponStatus>();
+                    w_stat.AddAmmo(pick_consumable.Ammo);
+                }
+                else
+                {
+                    enabledWeapons[pick_consumable.Id] = true;
+                    ChangeWeapon(pick_consumable.Id);
+                    activeWeaponStatus.AddAmmo(pick_consumable.Ammo);
                 }
             }
         }
 
-        public void ShotWeapon()
+        public void AddAmmoToWeapon(GameObject ammoBox)
         {
-            WeaponStatus active_stats = activeWeapon.GetComponent<WeaponStatus>();
-            if (active_stats.Ammo > 0 || active_stats.Has_infinite_ammo) {
-                audioS.clip = active_stats.Fire_sound;
-                audioS.Play();
-                active_stats.Shot();
-            }
-            else if(active_stats.Ammo <= 0 && !active_stats.Has_infinite_ammo)
+            AmmoBox ab = ammoBox.GetComponent<AmmoBox>();
+            int id = ab.Id;
+            int ammo = ab.Ammo;
+            if (playerWeapons.ContainsKey(id))
             {
-                Debug.Log("next");
-                activeWeapon.SetActive(false);
-                actWepIndex = NextWeapon();
-                activeWeapon = playerWeapons[actWepIndex];
-                activeWeapon.SetActive(true);
+                WeaponStatus weps = playerWeapons[id].GetComponent<WeaponStatus>();
+                weps.AddAmmo(ammo);
             }
+        }
+
+        public void TriggerShoot()
+        {
+            if (activeWeaponStatus.Ammo > 0 || activeWeaponStatus.Has_infinite_ammo) WeaponShoot();
+            else if (activeWeaponStatus.Ammo <= 0 && !activeWeaponStatus.Has_infinite_ammo) ChangeWeapon(NextWeapon());
+        }
+
+        protected void WeaponShoot()
+        {
+            audioS.clip = activeWeaponStatus.Fire_sound;
+            audioS.Play();
+            activeWeaponStatus.Shoot();
         }
 
         private int NextWeapon()
         {
             int i;
             bool found = false;
-            for (i = actWepIndex + 1; i < playerWeapons.Count && !found; i++)
+            for (i = activeWeaponId + 1; i < playerWeapons.Count && !found; i++)
             {
-                if (playerWeapons.ContainsKey(i))
+                if (enabledWeapons[i])
                 {
                     WeaponStatus wep_stat = playerWeapons[i].GetComponent<WeaponStatus>();
-                    if (wep_stat.Ammo>0 || wep_stat.Has_infinite_ammo)
+                    if (wep_stat.Ammo > 0 || wep_stat.Has_infinite_ammo)
                         found = true;
                 }
             }
-            if (found)
-            {
-                return i - 1;
-            }
+            if (found) return i - 1;
             return 0;
         }
 
@@ -169,35 +140,48 @@ namespace Weapon
         {
             int i;
             bool found = false;
-            for (i = actWepIndex - 1; i >= 0 && !found; i--)
+            for (i = activeWeaponId - 1; i >= 0 && !found; i--)
             {
-                if (playerWeapons.ContainsKey(i))
+                if (enabledWeapons[i])
                 {
                     WeaponStatus wep_stat = playerWeapons[i].GetComponent<WeaponStatus>();
                     if (wep_stat.Ammo > 0 || wep_stat.Has_infinite_ammo)
                         found = true;
                 }
             }
-            if (found)
-            {
-                return i + 1;
-            }
+            if (found) return i + 1;
             return 0;
+        }
+
+        protected void ChangeWeapon(int weaponId)
+        {
+            if(activeWeapon != null) activeWeapon.SetActive(false);
+            activeWeaponId = weaponId;
+            activeWeapon = playerWeapons[activeWeaponId];
+            activeWeapon.SetActive(true);
+            activeWeaponStatus = activeWeapon.GetComponent<WeaponStatus>();
+            WeaponInPosition();
+            AnimateByWeapon();
+        }
+
+        protected void WeaponInPosition()
+        {
+            weaponContainer.transform.localPosition = activeWeaponStatus.Position;
+            weaponContainer.transform.localRotation = Quaternion.Euler(activeWeaponStatus.Rotation);
+        }
+
+        protected void AnimateByWeapon()
+        {
+            pms.SetAnimator(activeWeaponStatus.WeaponType);
         }
 
         private void CheckButtonPressed()
         {
-            if (!status.IsChangingWeaponsNext && !status.IsChangingWeaponsPre)
-            {
-                changeButtonsPressed = false;
-            }
-            else
-            {
-                changeButtonsPressed = true;
-            }
+            if (!status.IsChangingWeaponsNext && !status.IsChangingWeaponsPre) changeButtonsPressed = false;
+            else changeButtonsPressed = true;
         }
-        
-        public float GetActiveWeaponShotDelay()
+
+        public float GetActiveWeaponShootDelay()
         {
             return ActiveWeapon.GetComponent<WeaponStatus>().Time_between_shot;
         }
