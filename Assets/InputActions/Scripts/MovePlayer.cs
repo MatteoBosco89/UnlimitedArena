@@ -12,11 +12,12 @@ namespace Character
         [SerializeField] protected Camera _camera;
         [SerializeField] protected float _weight = 3.0f;
         [SerializeField] protected float _runSpeedBuff = 2.0f;
+        [SerializeField] protected GameObject _powerupManager;
+        protected PowerUpManager powerUp;
         protected CharacterController _charController;
         protected Animator animator;
         protected CharacterStatus status;
         protected SpeedCalc sc;
-        protected JumpCalc jc;
         protected PlayerManagerScript pms;
         protected float _speed;
         protected float _jump = 5.0f;
@@ -33,8 +34,8 @@ namespace Character
             _charController = GetComponent<CharacterController>();
             status = GetComponent<CharacterStatus>();
             sc = GetComponent<SpeedCalc>();
-            jc = GetComponent<JumpCalc>();
             pms = GetComponent<PlayerManagerScript>();
+            powerUp = _powerupManager.GetComponent<PowerUpManager>();
         }
 
         private void FixedUpdate()
@@ -48,6 +49,9 @@ namespace Character
 
             if (status.IsRunning) sc.AddBuff("run", _runSpeedBuff);
             else if (!status.IsRunning) sc.RemoveBuff("run");
+
+            if (powerUp.GetTimeRemaining("Speed") > 0) sc.AddBuff("SpeedPowerUp", powerUp.GetAura("Speed"));
+            else sc.RemoveBuff("Speed");
 
             if (status.IsRotating)
             {

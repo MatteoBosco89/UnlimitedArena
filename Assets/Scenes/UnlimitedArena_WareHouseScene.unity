@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.2233505, g: 0.22638911, b: 0.26162538, a: 1}
+  m_IndirectSpecularColor: {r: 0.23092553, g: 0.23410803, b: 0.2704092, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -317,6 +317,10 @@ PrefabInstance:
     - target: {fileID: 4551930365939085437, guid: 1e272701edd1cc4498647b4f07a0fcbd, type: 3}
       propertyPath: m_Name
       value: WareHouseMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 4829797354715663484, guid: 1e272701edd1cc4498647b4f07a0fcbd, type: 3}
+      propertyPath: _rotationAngle
+      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e272701edd1cc4498647b4f07a0fcbd, type: 3}

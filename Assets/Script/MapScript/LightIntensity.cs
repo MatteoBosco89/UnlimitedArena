@@ -4,25 +4,30 @@ using UnityEngine;
 
 public class LightIntensity : MonoBehaviour
 {
-    [SerializeField] protected float _duration = 0.1f;
     [SerializeField] protected int _initialIntensity = 1;
     [SerializeField] protected int _finalIntensity = 4;
     [SerializeField] protected bool _isRotating = false;
-    [SerializeField] protected float _rotationAngle = 30.0f;
+    [SerializeField] protected float _rotationAngle = 300.0f;
     [SerializeField] protected float _rotationRate = 1.0f;
+    [SerializeField] protected float _initialRotation = 100.0f;
     protected Light _thisLight;
     protected bool intensityUp = true;
     protected bool rotateForward = true;
-    protected float initialRotation;
     protected float rotate;
 
     private void Awake()
     {
         _thisLight = GetComponent<Light>();
         _thisLight.intensity = _initialIntensity;
-        initialRotation = _thisLight.transform.localRotation.x;
-        rotate = initialRotation;
-        InvokeRepeating("ChangeLight", 0.0f, _duration);
+        _initialRotation = 0;
+        rotate = _initialRotation;
+        _rotationAngle = Quaternion.Euler(_rotationAngle, 0, 0).x;
+        if(_isRotating) _thisLight.transform.localRotation = Quaternion.Euler(_initialRotation, 0, 0);
+    }
+
+    private void FixedUpdate()
+    {
+        ChangeLight();
     }
 
     protected void ChangeLight()
@@ -44,15 +49,14 @@ public class LightIntensity : MonoBehaviour
             {
                 rotate += _rotationRate;
                 _thisLight.transform.localRotation = Quaternion.Euler(rotate, 0, 0);
-                if (_thisLight.transform.rotation.x >= initialRotation + _rotationAngle) rotateForward = false;
+                if (_thisLight.transform.localRotation.x >= _initialRotation + _rotationAngle) rotateForward = false;
             }
             else if (!rotateForward)
             {
                 rotate -= _rotationRate;
                 _thisLight.transform.localRotation = Quaternion.Euler(rotate, 0, 0);
-                if (_thisLight.transform.rotation.x <= initialRotation) rotateForward = true;
+                if (_thisLight.transform.localRotation.x <= _initialRotation) rotateForward = true;
             }
-
         }
 
     }
