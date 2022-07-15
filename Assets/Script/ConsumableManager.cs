@@ -12,6 +12,7 @@ namespace Character
         [SerializeField] protected WeaponManager weaponManager;
         [SerializeField] protected float consumableCooldown = 30.0f; 
         [SerializeField] protected AudioManager audioManager;
+        [SerializeField] protected PlayerLifeManager playerLife;
 
         public void ApplyAura(GameObject o)
         {
@@ -24,6 +25,7 @@ namespace Character
             if (o.CompareTag("PowerUp")) powerupManager.PowerUpPickup(o);
             if (o.CompareTag("Weapon")) weaponManager.PickUpWeapon(o);
             if (o.CompareTag("Ammo")) weaponManager.AddAmmoToWeapon(o);
+            if (o.CompareTag("Consumable")) playerLife.PickConsumable(o);
         }
 
         protected void BeginCooldown(GameObject o)

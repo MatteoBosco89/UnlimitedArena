@@ -21,7 +21,13 @@ namespace Weapon
         [SerializeField] protected Vector3 position;
         [SerializeField] protected Vector3 rotation;
         [SerializeField] protected string weaponType;
+        [SerializeField] protected string weaponName;
         
+        public string WeaponName
+        {
+            get { return weaponName; }
+        }
+
         public string WeaponType
         {
             get { return weaponType; }

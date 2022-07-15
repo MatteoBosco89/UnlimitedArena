@@ -8,19 +8,20 @@ namespace Character
     {
 
         [SerializeField] protected int maxHealth = 100;
+        [SerializeField] protected int maxArmor = 200;
         [SerializeField] protected int health = 100;
         [SerializeField] protected int armor = 0;
         [SerializeField] protected float _armorReduction = 0.3f;
         [SerializeField] protected float _armorReductionOnHit = 0.2f;
         [SerializeField] protected GameObject _powerupManager;
         protected bool isDead = false;
-        protected string normalizeHealth = "NormalizeHealth";
         protected DmgReceivedCalc dmgReceived;
         protected PowerUpManager powerUp;
+        protected ConsumableHandler consumableHandler;
 
         private void Start()
         {
-            InvokeRepeating(normalizeHealth, 0.1f, 1f);
+            //InvokeRepeating("TestDamage", 0.1f, 1f);
             dmgReceived = GetComponent<DmgReceivedCalc>();
             powerUp = _powerupManager.GetComponent<PowerUpManager>();
         }
@@ -51,11 +52,18 @@ namespace Character
             if (armor > 0) ReduceArmor(dmg);
         }
 
-        public void Heal(int healing)
+        private void Heal(int healing)
         {
             health += healing;
-            if (health > maxHealth) { InvokeRepeating(normalizeHealth, 0.1f, 1f); }
+            if (health > maxHealth) health = maxHealth;
         }
+
+        private void AddArmor(int a)
+        {
+            armor += a;
+            if (armor > maxArmor) armor = maxArmor;
+        }
+
         private void FixedUpdate()
         {
             if (health <= 0) {
@@ -76,7 +84,7 @@ namespace Character
 
         protected void NormalizeHealth()
         {
-            if (health <= maxHealth) CancelInvoke(normalizeHealth);
+            if (health <= maxHealth) CancelInvoke("NormalizeHealth");
             else health -= 1;
         }
 
@@ -90,6 +98,13 @@ namespace Character
         protected void TestDamage()
         {
             TakeDamage(20);
+        }
+
+        public void PickConsumable(GameObject o)
+        {
+            consumableHandler = o.GetComponent<ConsumableHandler>();
+            if (consumableHandler.Id.Equals("Medikit")) Heal(consumableHandler.Value);
+            if (consumableHandler.Id.Equals("Armor")) AddArmor(consumableHandler.Value);
         }
 
     }

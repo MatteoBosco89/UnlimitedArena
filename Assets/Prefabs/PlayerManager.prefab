@@ -47,6 +47,7 @@ MonoBehaviour:
   weaponManager: {fileID: 6022728355370921574}
   consumableCooldown: 30
   audioManager: {fileID: 2867725771892789690}
+  playerLife: {fileID: 1615446667531850186}
 --- !u!1 &1580435237918623003
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,7 +1047,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 10}
+  m_SizeDelta: {x: 50, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6841014809757488821
 CanvasRenderer:
@@ -1303,9 +1304,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerManager: {fileID: 6666194668634368530}
+  weaponManagerObj: {fileID: 4332530921150970649}
+  consumableManagerObj: {fileID: 1415280495631791562}
   maxHealth: {fileID: 2851762154644321735}
   health: {fileID: 7195641178492966699}
   armor: {fileID: 2062779504216353893}
+  lifeBar: {fileID: 1105152266816036246}
+  weapon: {fileID: 4794049832780067271}
+  ammo: {fileID: 9169562319917767943}
+  placeHolder: {fileID: 3555759831513163126}
 --- !u!1 &5373241001668539797
 GameObject:
   m_ObjectHideFlags: 0
@@ -1932,6 +1939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  maxArmor: 200
   health: 100
   armor: 50
   _armorReduction: 0.3
@@ -2505,7 +2513,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -180, y: -150}
-  m_SizeDelta: {x: 300, y: 50}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4406521214270664268
 CanvasRenderer:

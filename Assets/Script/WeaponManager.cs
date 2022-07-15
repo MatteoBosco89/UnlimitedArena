@@ -170,6 +170,11 @@ namespace Weapon
             weaponContainer.transform.localRotation = Quaternion.Euler(activeWeaponStatus.Rotation);
         }
 
+        public WeaponStatus ActiveWeaponStatus
+        {
+            get { return activeWeaponStatus; }
+        }
+
         protected void AnimateByWeapon()
         {
             pms.SetAnimator(activeWeaponStatus.WeaponType);
@@ -183,27 +188,32 @@ namespace Weapon
 
         public float GetActiveWeaponShootDelay()
         {
-            return ActiveWeapon.GetComponent<WeaponStatus>().Time_between_shot;
+            return activeWeaponStatus.Time_between_shot;
+        }
+
+        public string GetActiveWeaponName()
+        {
+            return activeWeaponStatus.WeaponName;
         }
 
         public int GetActiveWeaponAmmo()
         {
-            return ActiveWeapon.GetComponent<WeaponStatus>().Ammo;
+            return activeWeaponStatus.Ammo;
         }
 
         public float GetActiveWeaponDamage()
         {
-            return activeWeapon.GetComponent<WeaponStatus>().Damage;
+            return activeWeaponStatus.Damage;
         }
 
         public float GetActiveWeaponRange()
         {
-            return activeWeapon.GetComponent<WeaponStatus>().Range;
+            return activeWeaponStatus.Range;
         }
 
         public int GetActiveWeaponMaxAmmo()
         {
-            return activeWeapon.GetComponent<WeaponStatus>().Max_ammo;
+            return activeWeaponStatus.Max_ammo;
         }
 
     }

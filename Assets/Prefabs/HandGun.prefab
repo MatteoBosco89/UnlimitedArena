@@ -405,6 +405,7 @@ MonoBehaviour:
   position: {x: 0.027, y: 0.164, z: -0.047}
   rotation: {x: -104.55, y: 25.85, z: -112.72}
   weaponType: Pistol
+  weaponName: Hand Gun
 --- !u!1 &8018648106291836137
 GameObject:
   m_ObjectHideFlags: 0

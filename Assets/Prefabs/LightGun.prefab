@@ -107,3 +107,4 @@ MonoBehaviour:
   position: {x: -0.001, y: 0.103, z: -0.044}
   rotation: {x: -85.707, y: -71.511, z: -10.33}
   weaponType: Rifle
+  weaponName: Light Gun
