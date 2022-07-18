@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Character
 {
-    public class MovePlayer : MonoBehaviour
+    public class MovePlayer : NetworkBehaviour
     {
         [SerializeField] protected float _baseSpeed = 15.0f;
         [SerializeField] protected float _baseJump = 5.0f;
@@ -40,44 +41,46 @@ namespace Character
 
         private void FixedUpdate()
         {
-
-            _spawnedChar = pms.SpawnedChar;
-
-            Vector3 movement = new Vector3(0, 0, 0);
-
-            verticalVelocity = VerticalVelocityCalc();
-
-            if (status.IsRunning) sc.AddBuff("run", _runSpeedBuff);
-            else if (!status.IsRunning) sc.RemoveBuff("run");
-
-            if (powerUp.GetTimeRemaining("Speed") > 0) sc.AddBuff("SpeedPowerUp", powerUp.GetAura("Speed"));
-            else sc.RemoveBuff("Speed");
-
-            if (status.IsRotating)
+            if (isLocalPlayer)
             {
-                RotateChar(status.Rotation.x, status.Rotation.y);
-            }
+                _spawnedChar = pms.SpawnedChar;
 
-            _speed = sc.CalcSpeed(_baseSpeed);
+                Vector3 movement = new Vector3(0, 0, 0);
 
-            if (status.IsMoving)
-            {
-                movement.z = status.Movement.z * _speed * Time.deltaTime;
-                movement.x = status.Movement.x * _speed * Time.deltaTime;
-            }
+                verticalVelocity = VerticalVelocityCalc();
 
-            if (status.IsJumping && _charController.isGrounded)
-            {
-                if (groundedTimer > 0)
+                if (status.IsRunning) sc.AddBuff("run", _runSpeedBuff);
+                else if (!status.IsRunning) sc.RemoveBuff("run");
+
+                if (powerUp.GetTimeRemaining("Speed") > 0) sc.AddBuff("SpeedPowerUp", powerUp.GetAura("Speed"));
+                else sc.RemoveBuff("Speed");
+
+                if (status.IsRotating)
                 {
-                    groundedTimer = 0;
-                    verticalVelocity += Mathf.Sqrt(_jump * 2 * _gravity);
+                    RotateChar(status.Rotation.x, status.Rotation.y);
                 }
-            }
 
-            movement.y = verticalVelocity;
-            AnimatorSpeed(movement);
-            MoveChar(movement);
+                _speed = sc.CalcSpeed(_baseSpeed);
+
+                if (status.IsMoving)
+                {
+                    movement.z = status.Movement.z * _speed * Time.deltaTime;
+                    movement.x = status.Movement.x * _speed * Time.deltaTime;
+                }
+
+                if (status.IsJumping && _charController.isGrounded)
+                {
+                    if (groundedTimer > 0)
+                    {
+                        groundedTimer = 0;
+                        verticalVelocity += Mathf.Sqrt(_jump * 2 * _gravity);
+                    }
+                }
+
+                movement.y = verticalVelocity;
+                AnimatorSpeed(movement);
+                MoveChar(movement);
+            }
         }
 
         private void AnimatorSpeed(Vector3 movement)

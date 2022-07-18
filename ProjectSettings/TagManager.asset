@@ -14,6 +14,8 @@ TagManager:
   - Weapon
   - Armor
   - Consumable
+  - ConsumableSpawnManager
+  - NetworkManager
   layers:
   - Default
   - TransparentFX

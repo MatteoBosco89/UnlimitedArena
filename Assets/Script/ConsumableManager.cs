@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Weapon;
 using AudioManagerPkg;
+using UnityEngine.Networking;
+using GameManager;
 
 namespace Character
 {
@@ -10,9 +12,15 @@ namespace Character
     {
         [SerializeField] protected PowerUpManager powerupManager;
         [SerializeField] protected WeaponManager weaponManager;
-        [SerializeField] protected float consumableCooldown = 30.0f; 
         [SerializeField] protected AudioManager audioManager;
         [SerializeField] protected PlayerLifeManager playerLife;
+        protected NetManager netManager;
+        
+        public NetManager NetM
+        {
+            set { netManager = value; }
+            get { return netManager; }
+        }
 
         public void ApplyAura(GameObject o)
         {
@@ -30,18 +38,9 @@ namespace Character
 
         protected void BeginCooldown(GameObject o)
         {
-            // send to server
             audioManager.PlaySound(o.GetComponent<AudioScript>().Clip);
-            o.SetActive(false);
-            StartCoroutine(SetCooldown(o));
+            netManager.ConsumablePickedUp(o);
         }
-
-        IEnumerator SetCooldown(GameObject o)
-        {
-            yield return new WaitForSeconds(consumableCooldown);
-            o.SetActive(true);
-        }
-
     }
 }
 

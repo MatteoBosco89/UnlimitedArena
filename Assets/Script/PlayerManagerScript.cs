@@ -1,19 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using Weapon;
 using GameManager;
 
 namespace Character
 { 
-    public class PlayerManagerScript : MonoBehaviour
+    public class PlayerManagerScript : NetworkBehaviour
     {
         [SerializeField] protected List<GameObject> characters;
         [SerializeField] protected Camera mainCam;
         [SerializeField] protected GameObject consumableManagerObj;
         [SerializeField] protected GameObject weaponManagerObj;
         [SerializeField] protected GameObject animatorManagerObj;
-        [SerializeField] protected GameObject networkManagerObj;
+        protected GameObject networkManagerObj;
         protected ConsumableManager consumableManager;
         protected WeaponManager weaponManager;
         protected AnimatorManager animatorManager;
@@ -30,10 +31,12 @@ namespace Character
 
         private void Awake()
         {
+            networkManagerObj = GameObject.FindGameObjectWithTag("NetworkManager");
             consumableManager = consumableManagerObj.GetComponent<ConsumableManager>();
             weaponManager = weaponManagerObj.GetComponent<WeaponManager>();
             animatorManager = animatorManagerObj.GetComponent<AnimatorManager>();
             netManager = networkManagerObj.GetComponent<NetManager>();
+            consumableManager.NetM = netManager;
         }
 
         private void Start()
@@ -46,6 +49,19 @@ namespace Character
             thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
             weaponManager.WeaponContainer = thisCharWeapon;
             weaponManager.Spawn();
+            CmdSpawnPlayer();
+        }
+
+        [Command]
+        void CmdSpawnPlayer()
+        {
+            NetworkServer.SpawnWithClientAuthority(thisChar, connectionToClient);
+        }
+
+        [Command]
+        public void CmdSpawnWeapon(GameObject weapon)
+        {
+            NetworkServer.SpawnWithClientAuthority(weapon, connectionToClient);
         }
 
         private void FixedUpdate()

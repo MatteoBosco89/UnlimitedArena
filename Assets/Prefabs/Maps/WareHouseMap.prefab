@@ -106,12 +106,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 2
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &737216527193457679
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,12 +218,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 2
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &737216527253964895
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,12 +330,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 2
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &737216527367681864
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,12 +535,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 2
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &737216527800756759
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,12 +833,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 4
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &737216528331603701
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,12 +945,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 4
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &737216528392003940
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,12 +1057,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 4
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &737216528980465921
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,12 +1262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 2
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &2802676803022879314
 GameObject:
   m_ObjectHideFlags: 0
@@ -13026,12 +13026,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 4
   _isRotating: 0
   _rotationAngle: 30
   _rotationRate: 1
+  _initialRotation: 100
 --- !u!1 &7372960404386789329
 GameObject:
   m_ObjectHideFlags: 0
@@ -13138,12 +13138,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec894c746fa8e44d81f0bdf1f874bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 0.1
   _initialIntensity: 1
   _finalIntensity: 20
   _isRotating: 1
   _rotationAngle: 30
   _rotationRate: 0.01
+  _initialRotation: 100
 --- !u!1001 &107102737339589770
 PrefabInstance:
   m_ObjectHideFlags: 0

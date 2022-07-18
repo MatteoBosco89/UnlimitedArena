@@ -45,7 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerupManager: {fileID: 8849865170838056140}
   weaponManager: {fileID: 6022728355370921574}
-  consumableCooldown: 30
   audioManager: {fileID: 2867725771892789690}
   playerLife: {fileID: 1615446667531850186}
 --- !u!1 &1580435237918623003
@@ -656,6 +655,7 @@ GameObject:
   - component: {fileID: 3518600808140707553}
   - component: {fileID: 4562242209003515458}
   - component: {fileID: 644163703158898302}
+  - component: {fileID: 3012385603872682002}
   m_Layer: 0
   m_Name: FPCamera
   m_TagString: MainCamera
@@ -730,6 +730,39 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3214542060234496072}
   m_Enabled: 1
+--- !u!114 &3012385603872682002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214542060234496072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!1 &3265834254844278699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1568,6 +1601,7 @@ GameObject:
   - component: {fileID: 8071889849303746511}
   - component: {fileID: 2737055497636203910}
   - component: {fileID: 6390374207803589799}
+  - component: {fileID: 1854647328756850522}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Player
@@ -1665,7 +1699,6 @@ MonoBehaviour:
   consumableManagerObj: {fileID: 1415280495631791562}
   weaponManagerObj: {fileID: 4332530921150970649}
   animatorManagerObj: {fileID: 5286259190842476530}
-  networkManagerObj: {fileID: 7582783594494416068, guid: ec5d64a6e40094348b404a56c970d730, type: 3}
 --- !u!143 &6666194668634368536
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2065,6 +2098,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f2d7326158bbae41a03447187fc6930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1854647328756850522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13d6c522af31447398568cc65334232b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!1 &6715530305080902221
 GameObject:
   m_ObjectHideFlags: 0

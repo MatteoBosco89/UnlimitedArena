@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
 
 namespace Character
 {
-    public class CharacterStatus : MonoBehaviour // Manager del Character Controller
+    public class CharacterStatus : NetworkBehaviour // Manager del Character Controller
     {
 
         [SerializeField] protected float walkSpeed = 15.0f;

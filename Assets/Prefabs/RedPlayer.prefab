@@ -1825,7 +1825,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7467282289178646444}
-  - component: {fileID: 3549172378069290454}
+  - component: {fileID: 6719613053234806648}
+  - component: {fileID: 6650749647367605754}
+  - component: {fileID: 5035025406565155793}
   m_Layer: 0
   m_Name: RedPlayer
   m_TagString: Untagged
@@ -1849,7 +1851,40 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &3549172378069290454
+--- !u!114 &6719613053234806648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7848310705475243286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
+--- !u!95 &6650749647367605754
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -1860,7 +1895,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b0e24fef7eca3974d8dbc6010e9e07f3, type: 3}
   m_Controller: {fileID: 9100000, guid: 7f7404a4d4ce1ae44888e14aa96319e9, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -1868,6 +1903,26 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5035025406565155793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7848310705475243286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18e15ed5495c434d969378156376a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 6650749647367605754}
+  m_ParameterSendBits: 1
+  param0: 
+  param1: 
+  param2: 
+  param3: 
+  param4: 
+  param5: 
 --- !u!1 &7869004401588590974
 GameObject:
   m_ObjectHideFlags: 0

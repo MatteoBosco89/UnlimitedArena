@@ -333,8 +333,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8020332677471428543}
-  - component: {fileID: 7930908801977254469}
   - component: {fileID: 6229229793471096415}
+  - component: {fileID: -9024506808250010574}
   m_Layer: 0
   m_Name: HandGun
   m_TagString: Untagged
@@ -361,25 +361,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &7930908801977254469
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8018606936078106615}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 90c58c65f76dbe741b5dede2c0ac644d, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &6229229793471096415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,6 +387,39 @@ MonoBehaviour:
   rotation: {x: -104.55, y: 25.85, z: -112.72}
   weaponType: Pistol
   weaponName: Hand Gun
+--- !u!114 &-9024506808250010574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8018606936078106615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!1 &8018648106291836137
 GameObject:
   m_ObjectHideFlags: 0
