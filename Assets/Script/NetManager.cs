@@ -1,18 +1,20 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-
+using Character;
 
 namespace GameManager
 {
-    public class NetManager : MonoBehaviour
+    public class NetManager : NetworkManager
     {
         protected SceneChangeManager scm;
-        [System.Obsolete]
-        protected NetworkManager networkManager;
         protected bool inGame = false;
         protected ConsumableSpawnManager consumableSpawnManager;
         protected GameObject csm;
+        protected int chosenPlayer = 0; //index of the chosen character
+        protected GameObject player;
+        protected bool isHost = false;
+        [SerializeField] protected CustomizedPlayer[] players;
 
         public bool InGame
         {
@@ -20,37 +22,51 @@ namespace GameManager
             set { inGame = value; }
         }
 
+        public GameObject Player
+        {
+            get { return player; }
+        }
+
         public ConsumableSpawnManager ConsumableManager
         {
             get { return consumableSpawnManager; }
             set { consumableSpawnManager = value; }
         }
-
-        [System.Obsolete]
-        private void Awake()
+        
+        void Start()
         {
-            networkManager = GetComponent<NetworkManager>();
-            scm = GetComponent<SceneChangeManager>();           
+            scm = GetComponent<SceneChangeManager>();
         }
-
+            
         private string ChooseMap()
         {
             // choose the map with RNG
             return "UnlimitedArena_WareHouseScene";
         }
 
+        public void StartAsHost()
+        {
+            isHost = true;
+            StartGame();
+        }
+
+        public void StartAsClient()
+        {
+            isHost = false;
+            StartGame();
+        }
+
         public void StartGame()
         {
-           scm.LoadingScreen(ChooseMap());
+            scm.LoadingScreen(ChooseMap());
         }
 
         [System.Obsolete]
         public void SpawnPlayer()
         {
             inGame = false;
-            networkManager.StartClient();
-            SetConsumableSpawnManager();
-            SpawnConsumables();
+            if (isHost) StartHost();
+            else StartClient();
         }
 
         public void ConsumablePickedUp(GameObject consumable)
@@ -72,7 +88,46 @@ namespace GameManager
             consumableSpawnManager.NetHandler = gameObject.GetComponent<NetManager>();
         }
 
-        
+
+        [System.Serializable]
+        public class CustomizedPlayer
+        {
+            public GameObject playerModel;
+        }
+
+
+        public class NetworkMessage : MessageBase
+        {
+            public int chosenPlayer;
+        }
+
+        public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
+        {
+            Debug.LogError("INSTANTIATE");
+            player = Instantiate(spawnPrefabs[0], startPositions[0].position, Quaternion.identity);
+            GameObject model = Instantiate(players[PlayerPrefs.GetInt("character")].playerModel, player.transform.position, player.transform.rotation, player.transform);
+            //thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
+            //weaponManager.WeaponContainer = thisCharWeapon;
+            //weaponManager.Spawn();
+            player.GetComponent<PlayerManagerScript>().SpawnedChar = model;
+            player.GetComponent<PlayerManagerScript>().YPos = -1.0f;
+            Debug.LogError("BEFORE ADD");
+            NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+            Debug.LogError("AFTER ADD");
+            //SetConsumableSpawnManager();
+            //SpawnConsumables();
+        }
+        public override void OnClientConnect(NetworkConnection conn)
+        {
+            Debug.LogError("CLIENT CONNECT");
+            NetworkMessage msg = new NetworkMessage();
+            ClientScene.AddPlayer(conn, 0, msg);
+        }
+
+        public override void OnClientSceneChanged(NetworkConnection conn)
+        {
+            //base.OnClientSceneChanged(conn);
+        }
 
     }
 }

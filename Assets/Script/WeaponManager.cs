@@ -66,8 +66,8 @@ namespace Weapon
         {
             if (weaponsList.Count > 0)
             {
-                SelectWeapon();
-                CheckButtonPressed();
+                //SelectWeapon();
+                //CheckButtonPressed();
             }
         }
 

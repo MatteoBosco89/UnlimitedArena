@@ -23,10 +23,18 @@ namespace Character
         protected Vector3 playerPosition;
         protected float yPos;
         protected NetManager netManager;
+        protected int chosenPlayer;
+
+
+        public float YPos
+        {
+            set { yPos = value; }
+        }
 
         public GameObject SpawnedChar
         {
             get { return thisChar; }
+            set { thisChar = value; }
         }
 
         private void Awake()
@@ -39,23 +47,21 @@ namespace Character
             consumableManager.NetM = netManager;
         }
 
-        private void Start()
+       public void ActivateCam()
         {
-            playerPosition = transform.position;
-            playerPosition.y -= 1;
-            thisChar = Instantiate(characters[PlayerPrefs.GetInt("character")], playerPosition, Quaternion.identity, transform);
-            yPos = thisChar.transform.localPosition.y;
-            thisChar.SetActive(true);
-            thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
-            weaponManager.WeaponContainer = thisCharWeapon;
-            weaponManager.Spawn();
-            CmdSpawnPlayer();
+            if(isLocalPlayer) mainCam.gameObject.SetActive(true);
+        }
+
+        void Start()
+        {
+            ActivateCam();
+            Debug.LogError("PLAYER MANAGER START");
         }
 
         [Command]
-        void CmdSpawnPlayer()
+        public void CmdSpawnPlayer()
         {
-            NetworkServer.SpawnWithClientAuthority(thisChar, connectionToClient);
+            NetworkServer.Spawn(thisChar);
         }
 
         [Command]
@@ -66,7 +72,7 @@ namespace Character
 
         private void FixedUpdate()
         {
-            thisChar.transform.localPosition = new Vector3(0, yPos, 0);
+           if(thisChar != null) thisChar.transform.localPosition = new Vector3(0, yPos, 0);
         }
 
         private void OnTriggerEnter(Collider other)

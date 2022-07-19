@@ -9,8 +9,13 @@ namespace GameManager
 
         [SerializeField] protected float rotationSpeed = -1.0f;
         [SerializeField] protected GameObject[] characthers;
-        [SerializeField] protected NetManager _netManager;
+        protected NetManager _netManager;
         private int currentChar;
+
+        void Awake()
+        {
+            _netManager = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetManager>();
+        }
 
         private void Start()
         {
@@ -36,10 +41,16 @@ namespace GameManager
             characthers[currentChar].transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
         }
 
-        public void selectChar()
+        public void SelectCharHost()
         {
             PlayerPrefs.SetInt("character", currentChar);
-            _netManager.StartGame();
+            _netManager.StartAsHost();
+        }
+
+        public void SelectCharClient()
+        {
+            PlayerPrefs.SetInt("character", currentChar);
+            _netManager.StartAsClient();
         }
 
         void FixedUpdate()

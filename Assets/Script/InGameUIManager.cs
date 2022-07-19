@@ -38,9 +38,10 @@ namespace Character
         {
             health.text = lifeManager.Health.ToString();
             armor.text = lifeManager.Armor.ToString();
-            weapon.text = weaponManager.GetActiveWeaponName();
-            if (weaponManager.ActiveWeaponStatus.Has_infinite_ammo) { ammo.text = "\u221E"; ammo.fontSize = 65; }
-            else { ammo.text = weaponManager.GetActiveWeaponAmmo().ToString(); ammo.fontSize = 30; }
+            weapon.text = "";//weaponManager.GetActiveWeaponName();
+            //if (weaponManager.ActiveWeaponStatus.Has_infinite_ammo) { ammo.text = "\u221E"; ammo.fontSize = 65; }  
+            //else { ammo.text = weaponManager.GetActiveWeaponAmmo().ToString(); ammo.fontSize = 30; }
+            ammo.text = "\u221E";
             lifeBar.rectTransform.sizeDelta = new Vector2(LifeBarCalc(lifeManager.Health), lifeBar.rectTransform.sizeDelta.y);
         }
 
