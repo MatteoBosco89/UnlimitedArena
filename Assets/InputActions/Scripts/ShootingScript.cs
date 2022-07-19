@@ -10,7 +10,6 @@ namespace Character
         [SerializeField] protected float dmg = 1.0f;
         [SerializeField] protected float range = 100.0f;
         [SerializeField] protected Camera _camera;
-        [SerializeField] protected GameObject WeaponManagerObj;
         [SerializeField] protected GameObject _powerupManager;
         protected PowerUpManager powerUp;
         protected CharacterStatus status;
@@ -23,7 +22,7 @@ namespace Character
         private void Awake()
         {
             status = GetComponent<CharacterStatus>();
-            weaponManager = WeaponManagerObj.GetComponent<WeaponManager>();
+            weaponManager = GetComponent<WeaponManager>();
             ddc = GetComponent<DmgDoneCalc>();
             powerUp = _powerupManager.GetComponent<PowerUpManager>();
         }

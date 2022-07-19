@@ -9,7 +9,6 @@ namespace Character
     public class InGameUIManager : MonoBehaviour
     {
         [SerializeField] protected GameObject playerManager;
-        [SerializeField] protected GameObject weaponManagerObj;
         [SerializeField] protected GameObject consumableManagerObj;
         [SerializeField] protected Text maxHealth;
         [SerializeField] protected Text health;
@@ -27,7 +26,7 @@ namespace Character
         void Awake()
         {
             lifeManager = playerManager.GetComponent<PlayerLifeManager>();
-            weaponManager = weaponManagerObj.GetComponent<WeaponManager>();
+            weaponManager = playerManager.GetComponent<WeaponManager>();
             consumableManager = consumableManagerObj.GetComponent<ConsumableManager>();
             maxHealth.text = lifeManager.MaxHealth.ToString();
             placeholderVal = Mathf.CeilToInt(placeHolder.rectTransform.sizeDelta.x);

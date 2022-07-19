@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Character;
+using UnityEngine.Networking;
 
 namespace Weapon
 {
-    public class WeaponManager : MonoBehaviour
+    public class WeaponManager : NetworkBehaviour
     {
 
         [SerializeField] protected List<GameObject> weaponsList;
-        [SerializeField] protected GameObject playerManager;
         protected PlayerManagerScript pms;
         private SortedDictionary<int, bool> enabledWeapons;
         private SortedDictionary<int, GameObject> playerWeapons;
 
         private AudioSource audioS;
         private GameObject activeWeapon = null;
-        private int activeWeaponId;
+        [SyncVar(hook = nameof(ChangeWeapon))] private int activeWeaponId = 0;
         private WeaponStatus activeWeaponStatus;
 
         private bool changeButtonsPressed = false;
@@ -37,7 +37,7 @@ namespace Weapon
 
         private void Awake()
         {
-            pms = playerManager.GetComponent<PlayerManagerScript>();
+            pms = GetComponent<PlayerManagerScript>();
         }
 
         public void Spawn()
@@ -46,28 +46,32 @@ namespace Weapon
             {
                 enabledWeapons = new SortedDictionary<int, bool>();
                 playerWeapons = new SortedDictionary<int, GameObject>();
-                status = playerManager.GetComponent<CharacterStatus>();
-                audioS = playerManager.GetComponent<AudioSource>();
+                status = GetComponent<CharacterStatus>();
+                audioS = GetComponent<AudioSource>();
                 for (int i = 0; i < weaponsList.Count; i++)
                 {
                     GameObject weapon = Instantiate(weaponsList[i], weaponContainer.transform.position, weaponContainer.transform.rotation, weaponContainer.transform);
                     weapon.SetActive(false);
                     //pms.CmdSpawnWeapon(weapon);
-                    enabledWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, false);
+                    enabledWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, true);
                     playerWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, weapon);
                 }
-                ChangeWeapon(0);
+
+                //activeWeaponId = 0;
+                ChangeWeapon(activeWeaponId);
             }
 
         }
 
-
         void Update()
         {
-            if (weaponsList.Count > 0)
+            if (isLocalPlayer)
             {
-                //SelectWeapon();
-                //CheckButtonPressed();
+                if (weaponsList.Count > 0)
+                {
+                    SelectWeapon();
+                    CheckButtonPressed();
+                }
             }
         }
 
@@ -157,13 +161,21 @@ namespace Weapon
 
         protected void ChangeWeapon(int weaponId)
         {
-            if(activeWeapon != null) activeWeapon.SetActive(false);
+            //Debug.LogError("ChangeWepon on " + pms.NetMan.IsHost + " weapon id " + weaponId);
+            if (activeWeapon != null) activeWeapon.SetActive(false);
+            if (hasAuthority) CmdChangeWeapon(weaponId);
             activeWeaponId = weaponId;
             activeWeapon = playerWeapons[activeWeaponId];
             activeWeapon.SetActive(true);
             activeWeaponStatus = activeWeapon.GetComponent<WeaponStatus>();
             WeaponInPosition();
             AnimateByWeapon();
+        }
+
+        [Command]
+        protected void CmdChangeWeapon(int weaponId)
+        {
+            activeWeaponId = weaponId;
         }
 
         protected void WeaponInPosition()

@@ -6,13 +6,12 @@ using Weapon;
 using GameManager;
 
 namespace Character
-{ 
+{
     public class PlayerManagerScript : NetworkBehaviour
     {
         [SerializeField] protected List<GameObject> characters;
         [SerializeField] protected Camera mainCam;
         [SerializeField] protected GameObject consumableManagerObj;
-        [SerializeField] protected GameObject weaponManagerObj;
         [SerializeField] protected GameObject animatorManagerObj;
         protected GameObject networkManagerObj;
         protected ConsumableManager consumableManager;
@@ -23,12 +22,21 @@ namespace Character
         protected Vector3 playerPosition;
         protected float yPos;
         protected NetManager netManager;
-        protected int chosenPlayer;
-
+        [SyncVar] protected int chosenPlayer;
 
         public float YPos
         {
             set { yPos = value; }
+        }
+        public int ChosenPlayer
+        {
+            get { return chosenPlayer; }
+            set { chosenPlayer = value; }
+        }
+
+        public NetManager NetMan
+        {
+            get { return netManager; }
         }
 
         public GameObject SpawnedChar
@@ -41,38 +49,36 @@ namespace Character
         {
             networkManagerObj = GameObject.FindGameObjectWithTag("NetworkManager");
             consumableManager = consumableManagerObj.GetComponent<ConsumableManager>();
-            weaponManager = weaponManagerObj.GetComponent<WeaponManager>();
+            weaponManager = GetComponent<WeaponManager>();
             animatorManager = animatorManagerObj.GetComponent<AnimatorManager>();
             netManager = networkManagerObj.GetComponent<NetManager>();
             consumableManager.NetM = netManager;
         }
 
-       public void ActivateCam()
+        public void ActivateCam()
         {
-            if(isLocalPlayer) mainCam.gameObject.SetActive(true);
+            if (isLocalPlayer) mainCam.gameObject.SetActive(true);
         }
 
         void Start()
         {
+            yPos = -1.0f;
+            thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
+            weaponManager.WeaponContainer = thisCharWeapon;
+            weaponManager.Spawn();
             ActivateCam();
+            SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
             Debug.LogError("PLAYER MANAGER START");
-        }
-
-        [Command]
-        public void CmdSpawnPlayer()
-        {
-            NetworkServer.Spawn(thisChar);
-        }
-
-        [Command]
-        public void CmdSpawnWeapon(GameObject weapon)
-        {
-            NetworkServer.SpawnWithClientAuthority(weapon, connectionToClient);
         }
 
         private void FixedUpdate()
         {
-           if(thisChar != null) thisChar.transform.localPosition = new Vector3(0, yPos, 0);
+            if (thisChar != null)
+            {
+                thisChar.transform.localPosition = new Vector3(0, yPos, 0);
+                UpdateAnimator();
+            }
+
         }
 
         private void OnTriggerEnter(Collider other)
@@ -89,7 +95,21 @@ namespace Character
         public void SetAnimator(string animatorId)
         {
             animatorManager.LoadAnimators();
-            thisChar.GetComponent<Animator>().runtimeAnimatorController = animatorManager.GetAnimator(animatorId);
+            GetComponent<Animator>().runtimeAnimatorController = animatorManager.GetAnimator(animatorId);
+            thisChar.GetComponent<Animator>().runtimeAnimatorController = GetComponent<Animator>().runtimeAnimatorController;
+
+        }
+
+        private void UpdateAnimator()
+        {
+            float speed = GetComponent<Animator>().GetFloat("speed");
+            thisChar.GetComponent<Animator>().SetFloat("speed", speed);
+        }
+
+        public override void PreStartClient()
+        {
+            base.PreStartClient();
+            thisChar = Instantiate(characters[chosenPlayer], transform.position, gameObject.transform.rotation, transform);
         }
 
         public AnimatorManager AnimatorManager

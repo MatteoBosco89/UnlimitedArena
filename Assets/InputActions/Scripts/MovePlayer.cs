@@ -26,7 +26,6 @@ namespace Character
         private float verticalVelocity;
         CursorLockMode lockMode;
         protected float _animSpeed;
-        protected GameObject _spawnedChar;
 
         void Awake()
         {
@@ -43,8 +42,6 @@ namespace Character
         {
             if (isLocalPlayer)
             {
-                _spawnedChar = pms.SpawnedChar;
-
                 Vector3 movement = new Vector3(0, 0, 0);
 
                 verticalVelocity = VerticalVelocityCalc();
@@ -81,12 +78,12 @@ namespace Character
                 AnimatorSpeed(movement);
                 MoveChar(movement);
             }
+            
         }
 
         private void AnimatorSpeed(Vector3 movement)
         {
-            if (_spawnedChar == null) return;
-            animator = _spawnedChar.GetComponent<Animator>();
+            animator = pms.GetComponent<Animator>();
             _ = movement.z > movement.x ? _animSpeed = movement.z : _animSpeed = movement.x;
             animator.SetFloat("speed", _animSpeed);
         }

@@ -730,7 +730,6 @@ GameObject:
   - component: {fileID: 2648703833563403313}
   - component: {fileID: -7081640835686941189}
   - component: {fileID: -1180723406794039024}
-  - component: {fileID: 3911815243504431149}
   m_Layer: 0
   m_Name: BluePlayer
   m_TagString: Untagged
@@ -806,26 +805,6 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
---- !u!114 &3911815243504431149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3425487480612408971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e18e15ed5495c434d969378156376a52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: -7081640835686941189}
-  m_ParameterSendBits: 1
-  param0: 
-  param1: 
-  param2: 
-  param3: 
-  param4: 
-  param5: 
 --- !u!1 &3570670481056843148
 GameObject:
   m_ObjectHideFlags: 0

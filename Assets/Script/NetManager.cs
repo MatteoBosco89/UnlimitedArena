@@ -16,6 +16,16 @@ namespace GameManager
         protected bool isHost = false;
         [SerializeField] protected CustomizedPlayer[] players;
 
+        public bool IsHost
+        {
+            get { return isHost; }
+        }
+
+        public int ChosenPlayer
+        {
+            set { chosenPlayer = value; }
+        }
+
         public bool InGame
         {
             get { return inGame; }
@@ -103,24 +113,16 @@ namespace GameManager
 
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
         {
-            Debug.LogError("INSTANTIATE");
             player = Instantiate(spawnPrefabs[0], startPositions[0].position, Quaternion.identity);
-            GameObject model = Instantiate(players[PlayerPrefs.GetInt("character")].playerModel, player.transform.position, player.transform.rotation, player.transform);
-            //thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
-            //weaponManager.WeaponContainer = thisCharWeapon;
-            //weaponManager.Spawn();
-            player.GetComponent<PlayerManagerScript>().SpawnedChar = model;
-            player.GetComponent<PlayerManagerScript>().YPos = -1.0f;
-            Debug.LogError("BEFORE ADD");
+            NetworkMessage msg = extraMessageReader.ReadMessage<NetworkMessage>();
+            player.GetComponent<PlayerManagerScript>().ChosenPlayer = msg.chosenPlayer;
             NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
-            Debug.LogError("AFTER ADD");
-            //SetConsumableSpawnManager();
-            //SpawnConsumables();
         }
+
         public override void OnClientConnect(NetworkConnection conn)
         {
-            Debug.LogError("CLIENT CONNECT");
             NetworkMessage msg = new NetworkMessage();
+            msg.chosenPlayer = PlayerPrefs.GetInt("character");
             ClientScene.AddPlayer(conn, 0, msg);
         }
 
