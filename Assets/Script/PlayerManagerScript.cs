@@ -13,6 +13,7 @@ namespace Character
         [SerializeField] protected Camera mainCam;
         [SerializeField] protected GameObject consumableManagerObj;
         [SerializeField] protected GameObject animatorManagerObj;
+        [SerializeField] protected float yPos = -1.0f;
         protected GameObject networkManagerObj;
         protected ConsumableManager consumableManager;
         protected WeaponManager weaponManager;
@@ -21,7 +22,6 @@ namespace Character
         protected GameObject thisChar = null;
         protected GameObject thisCharWeapon = null;
         protected Vector3 playerPosition;
-        protected float yPos;
         protected NetManager netManager;
         protected int clientId;
         [SyncVar] protected int chosenPlayer;
@@ -69,7 +69,6 @@ namespace Character
 
         void Start()
         {
-            yPos = -1.0f;
             thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
             weaponManager.WeaponContainer = thisCharWeapon;
             weaponManager.Spawn();

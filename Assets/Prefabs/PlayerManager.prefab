@@ -1617,6 +1617,7 @@ MonoBehaviour:
   mainCam: {fileID: 4562242209003515458}
   consumableManagerObj: {fileID: 1415280495631791562}
   animatorManagerObj: {fileID: 5286259190842476530}
+  yPos: -1
 --- !u!143 &6666194668634368536
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1634,7 +1635,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.08, z: 0}
 --- !u!114 &6666194668634368543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1664,12 +1665,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseSpeed: 15
   _baseJump: 5
-  _maxJump: 5
+  _maxJump: 10
   _gravity: 9.81
   _camera: {fileID: 4562242209003515458}
   _weight: 3
   _runSpeedBuff: 2
   _powerupManager: {fileID: 1750767430552886244}
+  _jumpCooldown: 0.2
 --- !u!114 &6666194668634368540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1871,11 +1873,11 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6666194668634368530}
-  m_Material: {fileID: 13400000, guid: 52baaeb214519f347a35cf0edfd262ff, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 1
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1615446667531850186

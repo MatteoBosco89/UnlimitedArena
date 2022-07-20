@@ -22,7 +22,6 @@ namespace Character
 
         private void Start()
         {
-            //InvokeRepeating("TestDamage", 0.1f, 1f);
             dmgReceived = GetComponent<DmgReceivedCalc>();
             powerUp = _powerupManager.GetComponent<PowerUpManager>();
         }
@@ -85,22 +84,11 @@ namespace Character
 
         }
 
-        protected void NormalizeHealth()
-        {
-            if (health <= maxHealth) CancelInvoke("NormalizeHealth");
-            else health -= 1;
-        }
-
         protected void ReduceArmor(int dmg)
         {
             float reduction = dmg * _armorReductionOnHit;
             armor -= Mathf.CeilToInt(reduction);
             if (armor <= 0) armor = 0;
-        }
-
-        protected void TestDamage()
-        {
-            //TakeDamage(20);
         }
 
         public void PickConsumable(GameObject o)
