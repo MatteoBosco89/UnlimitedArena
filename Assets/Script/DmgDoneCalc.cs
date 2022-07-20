@@ -7,9 +7,9 @@ namespace Character
 {
     public class DmgDoneCalc : BuffHandler
     {
-        public float CalcDmg(float baseDmg)
+        public int CalcDmg(float baseDmg)
         {
-            return CalcBuff(baseDmg);
+            return Mathf.CeilToInt(CalcBuff(baseDmg));
         }
     }
 }

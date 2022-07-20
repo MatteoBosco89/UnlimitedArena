@@ -1256,7 +1256,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerManager: {fileID: 6666194668634368530}
-  weaponManagerObj: {fileID: 0}
   consumableManagerObj: {fileID: 1415280495631791562}
   maxHealth: {fileID: 2851762154644321735}
   health: {fileID: 7195641178492966699}
@@ -1565,7 +1564,6 @@ MonoBehaviour:
   dmg: 1
   range: 30
   _camera: {fileID: 4562242209003515458}
-  WeaponManagerObj: {fileID: 0}
   _powerupManager: {fileID: 1750767430552886244}
 --- !u!114 &5398706823425373229
 MonoBehaviour:
@@ -1618,7 +1616,6 @@ MonoBehaviour:
   - {fileID: 7848310705475243286, guid: 38525e82f0c67134e848b4f89ebf6dfc, type: 3}
   mainCam: {fileID: 4562242209003515458}
   consumableManagerObj: {fileID: 1415280495631791562}
-  weaponManagerObj: {fileID: 0}
   animatorManagerObj: {fileID: 5286259190842476530}
 --- !u!143 &6666194668634368536
 CharacterController:
@@ -1652,7 +1649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 15
   rotationSensitivity: 0.2
-  cameraClamp: 25
+  cameraClamp: 35
 --- !u!114 &6666194668634368542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1667,6 +1664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseSpeed: 15
   _baseJump: 5
+  _maxJump: 5
   _gravity: 9.81
   _camera: {fileID: 4562242209003515458}
   _weight: 3
@@ -1896,8 +1894,8 @@ MonoBehaviour:
   maxArmor: 200
   health: 100
   armor: 50
-  _armorReduction: 0.3
-  _armorReductionOnHit: 0.2
+  _armorReduction: 0.7
+  _armorReductionOnHit: 0.5
   _powerupManager: {fileID: 1750767430552886244}
 --- !u!114 &8071889849303746511
 MonoBehaviour:
@@ -2053,7 +2051,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: b0e24fef7eca3974d8dbc6010e9e07f3, type: 3}
   m_Controller: {fileID: 9100000, guid: 7f7404a4d4ce1ae44888e14aa96319e9, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Character;
@@ -11,9 +12,10 @@ namespace GameManager
         protected bool inGame = false;
         protected ConsumableSpawnManager consumableSpawnManager;
         protected GameObject csm;
-        protected int chosenPlayer = 0; //index of the chosen character
+        protected int chosenPlayer = 0;
         protected GameObject player;
         protected bool isHost = false;
+        protected Dictionary<int, GameObject> connectedPlayer = new Dictionary<int, GameObject>();
         [SerializeField] protected CustomizedPlayer[] players;
 
         public bool IsHost
@@ -98,6 +100,11 @@ namespace GameManager
             consumableSpawnManager.NetHandler = gameObject.GetComponent<NetManager>();
         }
 
+        public void SetPvP(bool flag)
+        {
+            foreach (GameObject o in connectedPlayer.Values) o.GetComponent<PlayerManagerScript>().SetPvP(flag);
+
+        }
 
         [System.Serializable]
         public class CustomizedPlayer
@@ -116,6 +123,9 @@ namespace GameManager
             player = Instantiate(spawnPrefabs[0], startPositions[0].position, Quaternion.identity);
             NetworkMessage msg = extraMessageReader.ReadMessage<NetworkMessage>();
             player.GetComponent<PlayerManagerScript>().ChosenPlayer = msg.chosenPlayer;
+            player.GetComponent<PlayerManagerScript>().ClientId = conn.connectionId;
+            //Debug.LogError("Conn id " + conn.connectionId);
+            if (isHost) connectedPlayer[conn.connectionId] = player; 
             NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
         }
 
@@ -124,6 +134,17 @@ namespace GameManager
             NetworkMessage msg = new NetworkMessage();
             msg.chosenPlayer = PlayerPrefs.GetInt("character");
             ClientScene.AddPlayer(conn, 0, msg);
+        }
+
+        public override void OnClientDisconnect(NetworkConnection conn)
+        {
+            base.OnClientDisconnect(conn);
+        }
+
+        public override void OnServerDisconnect(NetworkConnection conn)
+        {
+            base.OnServerDisconnect(conn);
+            connectedPlayer.Remove(conn.connectionId);
         }
 
         public override void OnClientSceneChanged(NetworkConnection conn)

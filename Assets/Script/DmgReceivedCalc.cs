@@ -8,7 +8,7 @@ namespace Character
     {
         public int CalcDamageReceived(int dmg)
         {
-            return Mathf.FloorToInt(CalcBuff(dmg));
+            return Mathf.CeilToInt(CalcBuff(dmg));
         }
     }
 }

@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Weapon;
+using UnityEngine.Networking;
 
 namespace Character
 {
-    public class ShootingScript : MonoBehaviour
+    public class ShootingScript : NetworkBehaviour
     {
         [SerializeField] protected float dmg = 1.0f;
         [SerializeField] protected float range = 100.0f;
@@ -14,10 +15,16 @@ namespace Character
         protected PowerUpManager powerUp;
         protected CharacterStatus status;
         protected WeaponManager weaponManager;
-        private float curr_dmg;
-        private float curr_range;
         private bool canShoot = true;
         protected DmgDoneCalc ddc;
+        [SyncVar] protected bool pvp = true;
+
+
+        public bool Pvp
+        {
+            get { return pvp; }
+            set { pvp = value; }
+        }
 
         private void Awake()
         {
@@ -30,6 +37,7 @@ namespace Character
 
         void FixedUpdate()
         {
+            if (!isLocalPlayer) return;
             if (status.IsFiring && canShoot)
             {
                 DoShoot();
@@ -42,20 +50,32 @@ namespace Character
 
         private void DoShoot()
         {
+
             canShoot = false;
             weaponManager.TriggerShoot();
             if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hitInfo, range))
             {
-                if (hitInfo.transform.gameObject.CompareTag("Player"))
+                GameObject enemy = hitInfo.transform.gameObject;
+                int finalDmg = ddc.CalcDmg(weaponManager.GetActiveWeaponDamage());
+                if (enemy.CompareTag("Player") && pvp)
                 {
-                    float finalDmg = ddc.CalcDmg(weaponManager.GetActiveWeaponDamage());
-                    Debug.Log(finalDmg);
-                    // SendToServer();
+                    CmdShootEnemyPlayer(enemy, finalDmg);
                 }
+                //if (enemy.CompareTag("Enemy"))
+                //{
+                //enemy take damage
+                //}
             }
             StartCoroutine(ShootCooldown());
         }
 
+        [Command]
+        private void CmdShootEnemyPlayer(GameObject enemy, int dmg)
+        {
+            //Only for testing
+            enemy.GetComponent<PlayerLifeManager>().TakeDamage(dmg);
+
+        }
         private IEnumerator ShootCooldown()
         {
 

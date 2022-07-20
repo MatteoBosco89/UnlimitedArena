@@ -9,6 +9,7 @@ namespace Character
     {
         [SerializeField] protected float _baseSpeed = 15.0f;
         [SerializeField] protected float _baseJump = 5.0f;
+        [SerializeField] protected float _maxJump = 5.0f;
         [SerializeField] protected float _gravity = 9.81f;
         [SerializeField] protected Camera _camera;
         [SerializeField] protected float _weight = 3.0f;
@@ -21,11 +22,11 @@ namespace Character
         protected SpeedCalc sc;
         protected PlayerManagerScript pms;
         protected float _speed;
-        protected float _jump = 5.0f;
         private float groundedTimer;
         private float verticalVelocity;
         CursorLockMode lockMode;
         protected float _animSpeed;
+        protected bool inAir = false;
 
         void Awake()
         {
@@ -67,10 +68,10 @@ namespace Character
 
                 if (status.IsJumping && _charController.isGrounded)
                 {
-                    if (groundedTimer > 0)
+                    if (groundedTimer <= 0)
                     {
                         groundedTimer = 0;
-                        verticalVelocity += Mathf.Sqrt(_jump * 2 * _gravity);
+                        if(verticalVelocity < _maxJump) verticalVelocity += Mathf.Sqrt(_baseJump * 2 * _gravity);
                     }
                 }
 
@@ -96,7 +97,7 @@ namespace Character
 
         private float VerticalVelocityCalc()
         {
-            if (_charController.isGrounded) groundedTimer = 0.2f;
+            if (inAir) groundedTimer = 0.1f;
             if (groundedTimer > 0) groundedTimer -= Time.deltaTime;
             if (_charController.isGrounded && verticalVelocity < 0) verticalVelocity = 0f;
             verticalVelocity -= _gravity * _weight * Time.deltaTime;

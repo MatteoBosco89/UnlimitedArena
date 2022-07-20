@@ -17,11 +17,13 @@ namespace Character
         protected ConsumableManager consumableManager;
         protected WeaponManager weaponManager;
         protected AnimatorManager animatorManager;
+        protected PlayerLifeManager lifeManager;
         protected GameObject thisChar = null;
         protected GameObject thisCharWeapon = null;
         protected Vector3 playerPosition;
         protected float yPos;
         protected NetManager netManager;
+        protected int clientId;
         [SyncVar] protected int chosenPlayer;
 
         public float YPos
@@ -33,7 +35,11 @@ namespace Character
             get { return chosenPlayer; }
             set { chosenPlayer = value; }
         }
-
+        public int ClientId
+        {
+            get { return clientId; }
+            set { clientId = value; }
+        }
         public NetManager NetMan
         {
             get { return netManager; }
@@ -52,6 +58,7 @@ namespace Character
             weaponManager = GetComponent<WeaponManager>();
             animatorManager = animatorManagerObj.GetComponent<AnimatorManager>();
             netManager = networkManagerObj.GetComponent<NetManager>();
+            lifeManager = GetComponent<PlayerLifeManager>();
             consumableManager.NetM = netManager;
         }
 
@@ -71,19 +78,30 @@ namespace Character
             Debug.LogError("PLAYER MANAGER START");
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (thisChar != null)
             {
                 thisChar.transform.localPosition = new Vector3(0, yPos, 0);
                 UpdateAnimator();
+                if (lifeManager.IsDead)
+                {
+                    //Animazione di morte con setAnimator
+                    //funzione reset di consumabili
+                    //funzione di cooldown respawn
+                    //funzione di respawn
+                }
             }
-
         }
 
         private void OnTriggerEnter(Collider other)
         {
             consumableManager.ApplyAura(other.gameObject);
+        }
+
+        public void SetPvP(bool flag)
+        {
+            GetComponent<ShootingScript>().Pvp = flag;
         }
 
         protected GameObject SearchByTag(GameObject o, string tag)

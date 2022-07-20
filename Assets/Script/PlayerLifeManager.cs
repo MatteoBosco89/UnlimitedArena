@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Character
 {
-    public class PlayerLifeManager : MonoBehaviour
+    public class PlayerLifeManager : NetworkBehaviour
     {
 
         [SerializeField] protected int maxHealth = 100;
         [SerializeField] protected int maxArmor = 200;
-        [SerializeField] protected int health = 100;
-        [SerializeField] protected int armor = 0;
-        [SerializeField] protected float _armorReduction = 0.3f;
-        [SerializeField] protected float _armorReductionOnHit = 0.2f;
+        [SyncVar][SerializeField] protected int health = 100;
+        [SyncVar][SerializeField] protected int armor = 50;
+        [SerializeField] protected float _armorReduction = 0.7f;
+        [SerializeField] protected float _armorReductionOnHit = 0.5f;
         [SerializeField] protected GameObject _powerupManager;
         protected bool isDead = false;
         protected DmgReceivedCalc dmgReceived;
@@ -39,13 +40,14 @@ namespace Character
         public int Health
         {
             get { return health; }
+            set { health = value; }
         }
 
         public int Armor
         {
             get { return armor; }
+            set { armor = value; }
         }
-
         public void TakeDamage(int dmg)
         {
             health -= dmgReceived.CalcDamageReceived(dmg);
@@ -66,10 +68,12 @@ namespace Character
 
         private void FixedUpdate()
         {
-            if (health <= 0) {
+            if (health <= 0)
+            {
                 health = 0;
-                isDead = true; 
+                isDead = true;
             }
+
             if (armor > 0) dmgReceived.AddBuff("armor", _armorReduction);
             else dmgReceived.RemoveBuff("armor");
 
@@ -78,7 +82,6 @@ namespace Character
                 dmgReceived.AddBuff("Invincibility", powerUp.GetAura("Invincibility"));
             }
             else dmgReceived.RemoveBuff("Invincibility");
-
 
         }
 
@@ -91,13 +94,13 @@ namespace Character
         protected void ReduceArmor(int dmg)
         {
             float reduction = dmg * _armorReductionOnHit;
-            armor -= Mathf.FloorToInt(reduction);
+            armor -= Mathf.CeilToInt(reduction);
             if (armor <= 0) armor = 0;
         }
 
         protected void TestDamage()
         {
-            TakeDamage(20);
+            //TakeDamage(20);
         }
 
         public void PickConsumable(GameObject o)
