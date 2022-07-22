@@ -22,7 +22,14 @@ namespace GameManager
         protected NetworkClient myClient;
         protected PlayerManagerScript playerManager;
         protected List<Vector3> spawnPoints;
+        protected List<GameObject> playerSpawners;
         protected PlayerSpawnScript pss;
+        protected short controllerCounter = 0;
+
+        public List<Vector3> SpawnPositionsList
+        {
+            get { return spawnPoints; }
+        }
 
         public PlayerManagerScript PManager
         {
@@ -110,6 +117,7 @@ namespace GameManager
         protected void LoadSpawnPositions()
         {
             spawnPoints = pss.SpawnPositions;
+            playerSpawners = pss.PlayerSpawners;
         }
 
         public void ConsumablePickedUp(GameObject consumable)
@@ -136,10 +144,10 @@ namespace GameManager
             foreach (GameObject o in connectedPlayer.Values) o.GetComponent<PlayerManagerScript>().SetPvP(flag);
         }
 
-        public void SignalDeath()
+        public void SignalDeath(short conn)
         {
             NetworkSignalDeathMessage msg = new NetworkSignalDeathMessage();
-            msg.isDead = true;
+            msg.connectionId = conn;
             myClient.Send(UAMess.MSG_HOST_SIGNAL_DEATH, msg);
         }
 
@@ -163,7 +171,7 @@ namespace GameManager
 
         public class NetworkSignalDeathMessage : MessageBase
         {
-            public bool isDead;
+            public short connectionId;
         }
 
         public class NetworkPositionMessage : MessageBase
@@ -183,13 +191,20 @@ namespace GameManager
             public static short MSG_HOST_SIGNAL_DEATH = 1010;
         }
 
-        public Transform SpawnPoint()
+        public Vector3 SpawnPoint()
         {
-            Transform s = startPositions[currentSpawnPoint];
-            s.position = spawnPoints[currentSpawnPoint];
+            Vector3 p = startPositions[currentSpawnPoint].position;
             currentSpawnPoint++;
             if (currentSpawnPoint >= startPositions.Count) currentSpawnPoint = 0;
-            return s;
+            return p;
+        }
+
+        public GameObject SSpawnPoint()
+        {
+            GameObject spanwer = playerSpawners[currentSpawnPoint];
+            currentSpawnPoint++;
+            if (currentSpawnPoint >= playerSpawners.Count) currentSpawnPoint = 0;
+            return spanwer;
         }
 
         public Vector3 RandomSpawnPoint()
@@ -199,12 +214,25 @@ namespace GameManager
 
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
         {
-            player = Instantiate(playerManagerPrefab, SpawnPoint().position, Quaternion.identity);
+            player = Instantiate(playerManagerPrefab, SpawnPoint(), Quaternion.identity);
             NetworkHeroSelectionMessage msg = extraMessageReader.ReadMessage<NetworkHeroSelectionMessage>();
             player.GetComponent<PlayerManagerScript>().ChosenPlayer = msg.chosenPlayer;
-            player.GetComponent<PlayerManagerScript>().ClientId = conn.connectionId;
-            if (isHost) connectedPlayer[conn.connectionId] = player;
-            NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+            player.GetComponent<PlayerManagerScript>().ClientId = controllerCounter;
+            if (isHost) connectedPlayer[controllerCounter] = player;
+            NetworkServer.AddPlayerForConnection(conn, player, controllerCounter);
+            controllerCounter++;
+        }
+
+        public void PlayerWasKilled(short clientId)
+        {
+            if (!isHost) return;
+            NetworkConnection conn = NetworkServer.connections[clientId];
+            GameObject player = conn.playerControllers[clientId].gameObject;
+            var newPlayer = Instantiate(playerManagerPrefab, SpawnPoint(), Quaternion.identity);
+            newPlayer.GetComponent<PlayerManagerScript>().ChosenPlayer = player.GetComponent<PlayerManagerScript>().ChosenPlayer;
+            newPlayer.GetComponent<PlayerManagerScript>().ClientId = clientId;
+            Destroy(player);
+            NetworkServer.ReplacePlayerForConnection(conn, newPlayer, clientId);
         }
 
         public override void OnClientConnect(NetworkConnection conn)
@@ -212,7 +240,6 @@ namespace GameManager
             NetworkHeroSelectionMessage msg = new NetworkHeroSelectionMessage();
             msg.chosenPlayer = PlayerPrefs.GetInt("character");
             ClientScene.AddPlayer(conn, 0, msg);
-            Debug.LogError("Registered position");
             myClient.RegisterHandler(UAMess.MSG_NEW_SPAWN_POSITION, OnSetSpawnPosition);
         }
 
@@ -226,7 +253,7 @@ namespace GameManager
         private void OnSignalDeath(NetworkMessage netMsg)
         {
             NetworkSignalDeathMessage msg = netMsg.ReadMessage<NetworkSignalDeathMessage>();
-            if (msg.isDead) SetNextSpawn();
+            PlayerWasKilled(msg.connectionId);
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)

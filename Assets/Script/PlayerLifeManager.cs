@@ -18,6 +18,7 @@ namespace Character
         protected PowerUpManager powerUp;
         protected ConsumableHandler consumableHandler;
         protected CharacterStatus characterStatus;
+        protected InGameUIManager inGameUI;
         [SyncVar] protected int armor;
         [SyncVar] protected int health;
         [SyncVar] protected bool isDead = false;
@@ -27,6 +28,7 @@ namespace Character
             dmgReceived = GetComponent<DmgReceivedCalc>();
             powerUp = GetComponent<PowerUpManager>();
             characterStatus = GetComponent<CharacterStatus>();
+            inGameUI = GetComponent<PlayerManagerScript>().InGameUI;
             armor = initialArmor;
             health = initialHealth;
         }
@@ -66,6 +68,7 @@ namespace Character
             if (isDead) return;
             health -= dmgReceived.CalcDamageReceived(dmg);
             if (armor > 0) ReduceArmor(dmg);
+            MakeFeedback(Color.red);
         }
 
         private void Heal(int healing)
@@ -73,6 +76,7 @@ namespace Character
             if (isDead) return;
             health += healing;
             if (health > maxHealth) health = maxHealth;
+            MakeFeedback(Color.green);
         }
 
         private void AddArmor(int a)
@@ -80,6 +84,7 @@ namespace Character
             if (isDead) return;
             armor += a;
             if (armor > maxArmor) armor = maxArmor;
+            MakeFeedback(Color.yellow);
         }
 
         private void FixedUpdate()
@@ -100,6 +105,13 @@ namespace Character
                 dmgReceived.AddBuff("Invincibility", powerUp.GetAura("Invincibility"));
             }
             else dmgReceived.RemoveBuff("Invincibility");
+
+            CheckIsOutOfBorder();
+        }
+
+        protected void CheckIsOutOfBorder()
+        {
+            if (transform.localPosition.y < -30) health = 0;
         }
 
         [Command]
@@ -138,6 +150,11 @@ namespace Character
             consumableHandler = o.GetComponent<ConsumableHandler>();
             if (consumableHandler.Id.Equals("Medikit")) Heal(consumableHandler.Value);
             if (consumableHandler.Id.Equals("Armor")) AddArmor(consumableHandler.Value);
+        }
+
+        public void MakeFeedback(Color color)
+        {
+            inGameUI.DoFeedback(color);
         }
 
     }

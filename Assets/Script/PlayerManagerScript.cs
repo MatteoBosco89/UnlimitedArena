@@ -14,6 +14,7 @@ namespace Character
         [SerializeField] protected GameObject animatorManagerObj;
         [SerializeField] protected float yPos = -2.0f;
         [SerializeField] protected float deathCooldown = 2.0f;
+        [SerializeField] protected GameObject inGameUIObj;
         protected float startDeathCooldown = 0;
         protected GameObject networkManagerObj;
         protected ConsumableManager consumableManager;
@@ -27,10 +28,11 @@ namespace Character
         protected NetManager netManager;
         protected CharacterStatus characterStatus;
         protected MovePlayer mp;
-        [SyncVar] protected bool isDeathCooldown = false;
+        protected bool isDeathCooldown = false;
+        protected InGameUIManager inGameUI;
         [SyncVar] protected int chosenPlayer;
         protected Vector3 theSpawnPosition = new Vector3(0, 0, 0);
-        protected int clientId = 0;
+        [SyncVar] protected short clientId = 0;
 
         public Vector3 TheSpawnPosition
         {
@@ -47,7 +49,7 @@ namespace Character
             get { return chosenPlayer; }
             set { chosenPlayer = value; }
         }
-        public int ClientId
+        public short ClientId
         {
             get { return clientId; }
             set { clientId = value; }
@@ -63,6 +65,11 @@ namespace Character
             set { thisChar = value; }
         }
 
+        public InGameUIManager InGameUI
+        {
+            get { return inGameUI; }
+        }
+
         private void Awake()
         {
             networkManagerObj = GameObject.FindGameObjectWithTag("NetworkManager");
@@ -74,6 +81,7 @@ namespace Character
             powerUpManager = GetComponent<PowerUpManager>();
             characterStatus = GetComponent<CharacterStatus>();
             mp = GetComponent<MovePlayer>();
+            inGameUI = inGameUIObj.GetComponent<InGameUIManager>();
             consumableManager.NetM = netManager;
         }
 
@@ -90,7 +98,7 @@ namespace Character
             weaponManager.WeaponContainer = thisCharWeapon;
             weaponManager.Spawn();
             Settings();
-            if(isLocalPlayer) PlayerReset();
+            if (isLocalPlayer) PlayerReset();
             SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
             ActivateCam();
         }
@@ -105,34 +113,16 @@ namespace Character
            thisChar.SetActive(true);
         }
 
-        private void DeactivateModel()
-        {
-            // attiva particellato morte
-            thisChar.SetActive(false);
-        }
-
         private void PlayerReset()
         {
-            netManager.SignalDeath();
             lifeManager.ResetPlayerLife();
             weaponManager.ResetWeapons();
             powerUpManager.ResetPowerUps();    
         }
 
-        private void ResetPosition()
-        {
-            Debug.LogError("RESET POSITION");
-            isDeathCooldown = false;
-            CmdDeathCooldown(false);
-            theSpawnPosition = netManager.RandomSpawnPoint();
-            mp.TeleportToRespawn(theSpawnPosition);
-            SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
-        }
-
         private void StartDeathCooldown()
         {
             isDeathCooldown = true;
-            CmdDeathCooldown(true);
             startDeathCooldown = Time.time;
         }
 
@@ -149,24 +139,21 @@ namespace Character
 
             if (lifeManager.IsDead && !isDeathCooldown)
             {
-                Debug.LogError("Dead");
-                StartDeathCooldown();
                 SetDeathAnimator();
+                StartDeathCooldown();
             }
 
-            if (isLocalPlayer)
+            if (isLocalPlayer && lifeManager.IsDead && isDeathCooldown)
             {
-                if (isDeathCooldown && Time.time - startDeathCooldown >= deathCooldown)
+                if (Time.time - startDeathCooldown >= deathCooldown && characterStatus.IsJumping)
                 {
-                    if (characterStatus.IsFiring)
-                    {
-                        PlayerReset();
-                        ResetPosition();
-                    }
-                    
+                    netManager.SignalDeath(clientId);
+                    isDeathCooldown = false;
                 }
             }
-            
+
+            // for debugging purpose
+            if (isLocalPlayer && characterStatus.IsChangingWeaponsPre) lifeManager.TakeDamage(10);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -193,6 +180,8 @@ namespace Character
 
         public void SetDeathAnimator()
         {
+            mainCam.transform.localPosition = new Vector3(mainCam.transform.localPosition.x, mainCam.transform.localPosition.y, -1);
+            mainCam.transform.localRotation = Quaternion.Euler(40, 0, 0);
             GetComponent<Animator>().runtimeAnimatorController = animatorManager.RandomDeathAnimator();
             thisChar.GetComponent<Animator>().runtimeAnimatorController = GetComponent<Animator>().runtimeAnimatorController;
         }

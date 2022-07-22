@@ -20,6 +20,11 @@ namespace GameManager
         {
             get { return spawnPositions; }
         }
+
+        public List<GameObject> PlayerSpawners
+        {
+            get { return spawnPointsList; }
+        }
     }
 }
 
