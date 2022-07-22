@@ -11,20 +11,32 @@ namespace Character
     {
         [SerializeField] protected List<GameObject> characters;
         [SerializeField] protected Camera mainCam;
-        [SerializeField] protected GameObject consumableManagerObj;
         [SerializeField] protected GameObject animatorManagerObj;
-        [SerializeField] protected float yPos = -1.0f;
+        [SerializeField] protected float yPos = -2.0f;
+        [SerializeField] protected float deathCooldown = 2.0f;
+        protected float startDeathCooldown = 0;
         protected GameObject networkManagerObj;
         protected ConsumableManager consumableManager;
         protected WeaponManager weaponManager;
         protected AnimatorManager animatorManager;
         protected PlayerLifeManager lifeManager;
+        protected PowerUpManager powerUpManager;
         protected GameObject thisChar = null;
         protected GameObject thisCharWeapon = null;
         protected Vector3 playerPosition;
         protected NetManager netManager;
-        protected int clientId;
+        protected CharacterStatus characterStatus;
+        protected MovePlayer mp;
+        [SyncVar] protected bool isDeathCooldown = false;
         [SyncVar] protected int chosenPlayer;
+        protected Vector3 theSpawnPosition = new Vector3(0, 0, 0);
+        protected int clientId = 0;
+
+        public Vector3 TheSpawnPosition
+        {
+            get { return theSpawnPosition; }
+            set { theSpawnPosition = value; }
+        }
 
         public float YPos
         {
@@ -54,11 +66,14 @@ namespace Character
         private void Awake()
         {
             networkManagerObj = GameObject.FindGameObjectWithTag("NetworkManager");
-            consumableManager = consumableManagerObj.GetComponent<ConsumableManager>();
+            consumableManager = GetComponent<ConsumableManager>();
             weaponManager = GetComponent<WeaponManager>();
             animatorManager = animatorManagerObj.GetComponent<AnimatorManager>();
             netManager = networkManagerObj.GetComponent<NetManager>();
             lifeManager = GetComponent<PlayerLifeManager>();
+            powerUpManager = GetComponent<PowerUpManager>();
+            characterStatus = GetComponent<CharacterStatus>();
+            mp = GetComponent<MovePlayer>();
             consumableManager.NetM = netManager;
         }
 
@@ -69,28 +84,89 @@ namespace Character
 
         void Start()
         {
+            if(isLocalPlayer) netManager.PManager = GetComponent<PlayerManagerScript>();
+            ActivateModel();
             thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
             weaponManager.WeaponContainer = thisCharWeapon;
             weaponManager.Spawn();
-            ActivateCam();
+            Settings();
+            if(isLocalPlayer) PlayerReset();
             SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
-            Debug.LogError("PLAYER MANAGER START");
+            ActivateCam();
         }
 
-        private void Update()
+        private void Settings()
+        {
+            // poi vediamo
+        }
+
+        private void ActivateModel()
+        {
+           thisChar.SetActive(true);
+        }
+
+        private void DeactivateModel()
+        {
+            // attiva particellato morte
+            thisChar.SetActive(false);
+        }
+
+        private void PlayerReset()
+        {
+            netManager.SignalDeath();
+            lifeManager.ResetPlayerLife();
+            weaponManager.ResetWeapons();
+            powerUpManager.ResetPowerUps();    
+        }
+
+        private void ResetPosition()
+        {
+            Debug.LogError("RESET POSITION");
+            isDeathCooldown = false;
+            CmdDeathCooldown(false);
+            theSpawnPosition = netManager.RandomSpawnPoint();
+            mp.TeleportToRespawn(theSpawnPosition);
+            SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
+        }
+
+        private void StartDeathCooldown()
+        {
+            isDeathCooldown = true;
+            CmdDeathCooldown(true);
+            startDeathCooldown = Time.time;
+        }
+
+        private void FixedUpdate()
         {
             if (thisChar != null)
             {
-                thisChar.transform.localPosition = new Vector3(0, yPos, 0);
-                UpdateAnimator();
-                if (lifeManager.IsDead)
+                if (thisChar.activeSelf && !lifeManager.IsDead)
                 {
-                    //Animazione di morte con setAnimator
-                    //funzione reset di consumabili
-                    //funzione di cooldown respawn
-                    //funzione di respawn
+                    thisChar.transform.localPosition = new Vector3(0, yPos, 0);
+                    UpdateAnimator();
                 }
             }
+
+            if (lifeManager.IsDead && !isDeathCooldown)
+            {
+                Debug.LogError("Dead");
+                StartDeathCooldown();
+                SetDeathAnimator();
+            }
+
+            if (isLocalPlayer)
+            {
+                if (isDeathCooldown && Time.time - startDeathCooldown >= deathCooldown)
+                {
+                    if (characterStatus.IsFiring)
+                    {
+                        PlayerReset();
+                        ResetPosition();
+                    }
+                    
+                }
+            }
+            
         }
 
         private void OnTriggerEnter(Collider other)
@@ -111,10 +187,14 @@ namespace Character
 
         public void SetAnimator(string animatorId)
         {
-            animatorManager.LoadAnimators();
-            GetComponent<Animator>().runtimeAnimatorController = animatorManager.GetAnimator(animatorId);
+            GetComponent<Animator>().runtimeAnimatorController = animatorManager.GetCombatAnimator(animatorId);
             thisChar.GetComponent<Animator>().runtimeAnimatorController = GetComponent<Animator>().runtimeAnimatorController;
+        }
 
+        public void SetDeathAnimator()
+        {
+            GetComponent<Animator>().runtimeAnimatorController = animatorManager.RandomDeathAnimator();
+            thisChar.GetComponent<Animator>().runtimeAnimatorController = GetComponent<Animator>().runtimeAnimatorController;
         }
 
         private void UpdateAnimator()
@@ -126,13 +206,20 @@ namespace Character
         public override void PreStartClient()
         {
             base.PreStartClient();
-            thisChar = Instantiate(characters[chosenPlayer], transform.position, gameObject.transform.rotation, transform);
+            thisChar = Instantiate(characters[chosenPlayer], transform.localPosition, gameObject.transform.rotation, transform);
         }
 
         public AnimatorManager AnimatorManager
         {
             get { return animatorManager; }
         }
+
+        [Command]
+        protected void CmdDeathCooldown(bool val)
+        {
+            isDeathCooldown = val;
+        }
+
 
     }
 }

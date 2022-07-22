@@ -17,6 +17,24 @@ namespace GameManager
         protected bool isHost = false;
         protected Dictionary<int, GameObject> connectedPlayer = new Dictionary<int, GameObject>();
         [SerializeField] protected CustomizedPlayer[] players;
+        [SerializeField] protected GameObject playerManagerPrefab;
+        protected int currentSpawnPoint = 0;
+        protected NetworkClient myClient;
+        protected PlayerManagerScript playerManager;
+        protected List<Vector3> spawnPoints;
+        protected PlayerSpawnScript pss;
+
+        public PlayerManagerScript PManager
+        {
+            get { return playerManager; }
+            set { playerManager = value; }
+        }
+
+        public NetworkClient MyClient
+        {
+            get { return myClient; }
+            set { myClient = value; }
+        }
 
         public bool IsHost
         {
@@ -60,6 +78,12 @@ namespace GameManager
         {
             isHost = true;
             StartGame();
+            RegisterServerHandlers();
+        }
+
+        protected void RegisterServerHandlers()
+        {
+            NetworkServer.RegisterHandler(UAMess.MSG_HOST_SIGNAL_DEATH, OnSignalDeath);
         }
 
         public void StartAsClient()
@@ -76,9 +100,16 @@ namespace GameManager
         [System.Obsolete]
         public void SpawnPlayer()
         {
+            pss = GameObject.FindGameObjectWithTag("PlayerSpawnManager").GetComponent<PlayerSpawnScript>();
+            LoadSpawnPositions();
             inGame = false;
-            if (isHost) StartHost();
-            else StartClient();
+            if (isHost) myClient = StartHost();
+            else myClient = StartClient();
+        }
+
+        protected void LoadSpawnPositions()
+        {
+            spawnPoints = pss.SpawnPositions;
         }
 
         public void ConsumablePickedUp(GameObject consumable)
@@ -103,7 +134,25 @@ namespace GameManager
         public void SetPvP(bool flag)
         {
             foreach (GameObject o in connectedPlayer.Values) o.GetComponent<PlayerManagerScript>().SetPvP(flag);
+        }
 
+        public void SignalDeath()
+        {
+            NetworkSignalDeathMessage msg = new NetworkSignalDeathMessage();
+            msg.isDead = true;
+            myClient.Send(UAMess.MSG_HOST_SIGNAL_DEATH, msg);
+        }
+
+        public void SetNextSpawn()
+        {
+            NetworkPositionMessage msg = new NetworkPositionMessage();
+            msg.position = RandomSpawnPoint();
+            foreach (NetworkConnection o in NetworkServer.connections)
+            {
+                Debug.LogError(o.connectionId);
+                o.Send(UAMess.MSG_NEW_SPAWN_POSITION, msg);
+                o.FlushChannels();
+            }
         }
 
         [System.Serializable]
@@ -112,28 +161,72 @@ namespace GameManager
             public GameObject playerModel;
         }
 
+        public class NetworkSignalDeathMessage : MessageBase
+        {
+            public bool isDead;
+        }
 
-        public class NetworkMessage : MessageBase
+        public class NetworkPositionMessage : MessageBase
+        {
+            public Vector3 position;
+        }
+        [System.Serializable]
+        public class NetworkHeroSelectionMessage : MessageBase
         {
             public int chosenPlayer;
         }
 
+        public class UAMess
+        {
+            public static short MSG_NEW_SPAWN_POSITION = 1000;
+            public static short MSG_PVP = 1005;
+            public static short MSG_HOST_SIGNAL_DEATH = 1010;
+        }
+
+        public Transform SpawnPoint()
+        {
+            Transform s = startPositions[currentSpawnPoint];
+            s.position = spawnPoints[currentSpawnPoint];
+            currentSpawnPoint++;
+            if (currentSpawnPoint >= startPositions.Count) currentSpawnPoint = 0;
+            return s;
+        }
+
+        public Vector3 RandomSpawnPoint()
+        {
+            return spawnPoints[Random.Range(0, spawnPoints.Count)];
+        }
+
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
         {
-            player = Instantiate(spawnPrefabs[0], startPositions[0].position, Quaternion.identity);
-            NetworkMessage msg = extraMessageReader.ReadMessage<NetworkMessage>();
+            player = Instantiate(playerManagerPrefab, SpawnPoint().position, Quaternion.identity);
+            NetworkHeroSelectionMessage msg = extraMessageReader.ReadMessage<NetworkHeroSelectionMessage>();
             player.GetComponent<PlayerManagerScript>().ChosenPlayer = msg.chosenPlayer;
             player.GetComponent<PlayerManagerScript>().ClientId = conn.connectionId;
-            //Debug.LogError("Conn id " + conn.connectionId);
-            if (isHost) connectedPlayer[conn.connectionId] = player; 
+            if (isHost) connectedPlayer[conn.connectionId] = player;
             NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
         }
 
         public override void OnClientConnect(NetworkConnection conn)
         {
-            NetworkMessage msg = new NetworkMessage();
+            NetworkHeroSelectionMessage msg = new NetworkHeroSelectionMessage();
             msg.chosenPlayer = PlayerPrefs.GetInt("character");
             ClientScene.AddPlayer(conn, 0, msg);
+            Debug.LogError("Registered position");
+            myClient.RegisterHandler(UAMess.MSG_NEW_SPAWN_POSITION, OnSetSpawnPosition);
+        }
+
+        private void OnSetSpawnPosition(NetworkMessage netMsg)
+        {
+            NetworkPositionMessage msg = netMsg.ReadMessage<NetworkPositionMessage>();
+            playerManager.TheSpawnPosition = msg.position;
+            Debug.LogError(msg.position);
+        }
+
+        private void OnSignalDeath(NetworkMessage netMsg)
+        {
+            NetworkSignalDeathMessage msg = netMsg.ReadMessage<NetworkSignalDeathMessage>();
+            if (msg.isDead) SetNextSpawn();
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)
@@ -151,6 +244,8 @@ namespace GameManager
         {
             //base.OnClientSceneChanged(conn);
         }
+
+        
 
     }
 }

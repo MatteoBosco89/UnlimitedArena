@@ -10,20 +10,34 @@ namespace Character
 
         [SerializeField] protected int maxHealth = 100;
         [SerializeField] protected int maxArmor = 200;
-        [SyncVar][SerializeField] protected int health = 100;
-        [SyncVar][SerializeField] protected int armor = 50;
+        [SerializeField] protected int initialHealth = 100;
+        [SerializeField] protected int initialArmor = 25;
         [SerializeField] protected float _armorReduction = 0.7f;
         [SerializeField] protected float _armorReductionOnHit = 0.5f;
-        [SerializeField] protected GameObject _powerupManager;
-        protected bool isDead = false;
         protected DmgReceivedCalc dmgReceived;
         protected PowerUpManager powerUp;
         protected ConsumableHandler consumableHandler;
+        protected CharacterStatus characterStatus;
+        [SyncVar] protected int armor;
+        [SyncVar] protected int health;
+        [SyncVar] protected bool isDead = false;
 
-        private void Start()
+        private void Awake()
         {
             dmgReceived = GetComponent<DmgReceivedCalc>();
-            powerUp = _powerupManager.GetComponent<PowerUpManager>();
+            powerUp = GetComponent<PowerUpManager>();
+            characterStatus = GetComponent<CharacterStatus>();
+            armor = initialArmor;
+            health = initialHealth;
+        }
+
+        public void ResetPlayerLife()
+        {
+            isDead = false;
+            CmdAlive();
+            CmdAddArmor(initialArmor);
+            CmdHeal(initialHealth);
+            characterStatus.IsAlive = true;
         }
 
         public bool IsDead
@@ -49,18 +63,21 @@ namespace Character
         }
         public void TakeDamage(int dmg)
         {
+            if (isDead) return;
             health -= dmgReceived.CalcDamageReceived(dmg);
             if (armor > 0) ReduceArmor(dmg);
         }
 
         private void Heal(int healing)
         {
+            if (isDead) return;
             health += healing;
             if (health > maxHealth) health = maxHealth;
         }
 
         private void AddArmor(int a)
         {
+            if (isDead) return;
             armor += a;
             if (armor > maxArmor) armor = maxArmor;
         }
@@ -71,6 +88,8 @@ namespace Character
             {
                 health = 0;
                 isDead = true;
+                CmdDeath();
+                characterStatus.IsAlive = false;
             }
 
             if (armor > 0) dmgReceived.AddBuff("armor", _armorReduction);
@@ -81,7 +100,30 @@ namespace Character
                 dmgReceived.AddBuff("Invincibility", powerUp.GetAura("Invincibility"));
             }
             else dmgReceived.RemoveBuff("Invincibility");
+        }
 
+        [Command]
+        protected void CmdHeal(int amount)
+        {
+            Heal(amount);
+        }
+
+        [Command]
+        protected void CmdAddArmor(int amount)
+        {
+            AddArmor(amount);
+        }
+
+        [Command]
+        protected void CmdDeath()
+        {
+            isDead = true;
+        }
+
+        [Command]
+        protected void CmdAlive()
+        {
+            isDead = false;
         }
 
         protected void ReduceArmor(int dmg)

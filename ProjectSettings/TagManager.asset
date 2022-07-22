@@ -16,6 +16,7 @@ TagManager:
   - Consumable
   - ConsumableSpawnManager
   - NetworkManager
+  - PlayerSpawnManager
   layers:
   - Default
   - TransparentFX

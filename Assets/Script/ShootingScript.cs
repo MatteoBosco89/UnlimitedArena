@@ -11,7 +11,6 @@ namespace Character
         [SerializeField] protected float dmg = 1.0f;
         [SerializeField] protected float range = 100.0f;
         [SerializeField] protected Camera _camera;
-        [SerializeField] protected GameObject _powerupManager;
         protected PowerUpManager powerUp;
         protected CharacterStatus status;
         protected WeaponManager weaponManager;
@@ -31,21 +30,18 @@ namespace Character
             status = GetComponent<CharacterStatus>();
             weaponManager = GetComponent<WeaponManager>();
             ddc = GetComponent<DmgDoneCalc>();
-            powerUp = _powerupManager.GetComponent<PowerUpManager>();
+            powerUp = GetComponent<PowerUpManager>();
         }
 
 
         void FixedUpdate()
         {
             if (!isLocalPlayer) return;
-            if (status.IsFiring && canShoot)
-            {
-                DoShoot();
-            }
 
             if (powerUp.GetTimeRemaining("QuadDamage") > 0) ddc.AddBuff("QuadDamage", powerUp.GetAura("QuadDamage"));
             else ddc.RemoveBuff("QuadDamage");
 
+            if (status.IsFiring && canShoot) DoShoot();
         }
 
         private void DoShoot()
@@ -72,13 +68,11 @@ namespace Character
         [Command]
         private void CmdShootEnemyPlayer(GameObject enemy, int dmg)
         {
-            //Only for testing
             enemy.GetComponent<PlayerLifeManager>().TakeDamage(dmg);
-
         }
+
         private IEnumerator ShootCooldown()
         {
-
             yield return new WaitForSeconds(weaponManager.GetActiveWeaponShootDelay());
             canShoot = true;
         }

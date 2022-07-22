@@ -14,7 +14,6 @@ namespace Character
         [SerializeField] protected Camera _camera;
         [SerializeField] protected float _weight = 3.0f;
         [SerializeField] protected float _runSpeedBuff = 2.0f;
-        [SerializeField] protected GameObject _powerupManager;
         [SerializeField] protected float _jumpCooldown = 0.2f;
         protected PowerUpManager powerUp;
         protected CharacterController _charController;
@@ -36,12 +35,12 @@ namespace Character
             status = GetComponent<CharacterStatus>();
             sc = GetComponent<SpeedCalc>();
             pms = GetComponent<PlayerManagerScript>();
-            powerUp = _powerupManager.GetComponent<PowerUpManager>();
+            powerUp = GetComponent<PowerUpManager>();
         }
 
         private void FixedUpdate()
         {
-            if (isLocalPlayer)
+            if (isLocalPlayer && status.IsAlive)
             {
                 Vector3 movement = new Vector3(0, 0, 0);
 
@@ -85,8 +84,33 @@ namespace Character
         private void AnimatorSpeed(Vector3 movement)
         {
             animator = pms.GetComponent<Animator>();
-            _ = movement.z > movement.x ? _animSpeed = movement.z : _animSpeed = movement.x;
+            _animSpeed = movement.z;
             animator.SetFloat("speed", _animSpeed);
+        }
+
+        public void TeleportToRespawn(Vector3 respawnPos)
+        {
+            _charController.enabled = false;
+            transform.position = respawnPos;
+            _charController.enabled = true;
+            CmdRespawn(transform.position);
+        }
+
+        [Command]
+        public void CmdRespawn(Vector3 respawnPos)
+        {
+            RpcRespawn(respawnPos);
+        }
+
+        [ClientRpc]
+        protected void RpcRespawn(Vector3 respawnPos)
+        {
+            if(isLocalPlayer)
+            {
+                _charController.enabled = false;
+                transform.position = respawnPos;
+                _charController.enabled = true;
+            }
         }
 
         private void MoveChar(Vector3 movement)

@@ -23,6 +23,11 @@ namespace Weapon
         [SerializeField] protected string weaponType;
         [SerializeField] protected string weaponName;
         
+        public void ResetAmmo()
+        {
+            ammo = 0;
+        }
+
         public string WeaponName
         {
             get { return weaponName; }

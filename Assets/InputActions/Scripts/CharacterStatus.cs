@@ -6,9 +6,8 @@ using UnityEngine.Networking;
 
 namespace Character
 {
-    public class CharacterStatus : NetworkBehaviour // Manager del Character Controller
+    public class CharacterStatus : NetworkBehaviour 
     {
-
         [SerializeField] protected float walkSpeed = 15.0f;
         [SerializeField] protected float rotationSensitivity = 0.2f;
         [SerializeField] protected float cameraClamp = 25.0f;
@@ -19,8 +18,16 @@ namespace Character
         protected bool isFiring;
         protected bool isChangingWeaponPre;
         protected bool isChangingWeaponNext;
+        protected bool isAlive = true;
         protected Vector3 movement; 
-        protected Vector3 rotation; 
+        protected Vector3 rotation;
+        protected PlayerLifeManager lifeManager;
+        
+        public bool IsAlive
+        {
+            get { return isAlive; }
+            set { isAlive = value; }
+        }
 
         public bool IsChangingWeaponsPre
         {
@@ -67,6 +74,7 @@ namespace Character
             isMoving = (movement.z != 0 || movement.x != 0);
             isRotating = (rotation.y != 0 || rotation.x != 0);
         }
+
         public void OnMove(InputAction.CallbackContext value)
         {
             Vector2 inputs = value.ReadValue<Vector2>();
@@ -110,7 +118,5 @@ namespace Character
             if (value.started) isChangingWeaponNext = true;
             else if (value.canceled) isChangingWeaponNext = false;
         }
-
-
     }
 }

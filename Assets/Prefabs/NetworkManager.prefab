@@ -97,9 +97,9 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 0}
+  m_PlayerPrefab: {fileID: 6666194668634368530, guid: 2687dd91696591f47bad0b63742777bc, type: 3}
   m_AutoCreatePlayer: 0
-  m_PlayerSpawnMethod: 0
+  m_PlayerSpawnMethod: 1
   m_OfflineScene: UnlimitedArena_Menu
   m_OnlineScene: UnlimitedArena_WareHouseScene
   m_SpawnPrefabs:
@@ -169,6 +169,7 @@ MonoBehaviour:
   - playerModel: {fileID: 3425487480612408971, guid: 023c46880f33cd34b9eb7ccca2798719, type: 3}
   - playerModel: {fileID: 6991073262372153442, guid: a85b09d0ffa58124583532617e2fc912, type: 3}
   - playerModel: {fileID: 7848310705475243286, guid: 38525e82f0c67134e848b4f89ebf6dfc, type: 3}
+  playerManagerPrefab: {fileID: 6666194668634368530, guid: 2687dd91696591f47bad0b63742777bc, type: 3}
 --- !u!114 &2713889187884214774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,3 +182,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49adcc09a5f34df469645d1a3d600fb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pvp: 1

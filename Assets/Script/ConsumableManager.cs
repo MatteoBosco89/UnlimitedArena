@@ -10,16 +10,24 @@ namespace Character
 {
     public class ConsumableManager : MonoBehaviour
     {
-        [SerializeField] protected PowerUpManager powerupManager;
-        [SerializeField] protected WeaponManager weaponManager;
         [SerializeField] protected AudioManager audioManager;
-        [SerializeField] protected PlayerLifeManager playerLife;
         protected NetManager netManager;
-        
+        protected PlayerLifeManager playerLife;
+        protected WeaponManager weaponManager;
+        protected PowerUpManager powerupManager;
+
+
         public NetManager NetM
         {
             set { netManager = value; }
             get { return netManager; }
+        }
+
+        private void Awake()
+        {
+            playerLife = GetComponent<PlayerLifeManager>();
+            weaponManager = GetComponent<WeaponManager>();
+            powerupManager = GetComponent<PowerUpManager>();
         }
 
         public void ApplyAura(GameObject o)

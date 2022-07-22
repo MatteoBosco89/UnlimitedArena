@@ -6,7 +6,6 @@ namespace Character
 {
     public class PowerUpManager : MonoBehaviour
     {
-        [SerializeField] protected GameObject _playerManager;
         [SerializeField] protected List<GameObject> powerups;
         protected string countdown = "CountDown";
         protected Dictionary<string, int> timeRemain;
@@ -19,6 +18,15 @@ namespace Character
             timeRemain = new Dictionary<string, int>();
             handlers = new Dictionary<string, PowerupHandler>();
             powerupsId = new List<string>();
+        }
+
+        public void ResetPowerUps()
+        {
+            foreach (GameObject p in powerups)
+            {
+                string id = GetIdFromGameObject(p);
+                timeRemain[id] = 0;
+            }
         }
 
         public int GetTimeRemaining(string id)
@@ -44,7 +52,7 @@ namespace Character
                 powerupsId.Add(id);
                 handlers[id] = p.GetComponent<PowerupHandler>();
             }
-            InvokeRepeating(countdown, 0.1f, 1);
+            //InvokeRepeating(countdown, 0.1f, 1);
         }
 
         private string GetIdFromGameObject(GameObject o)

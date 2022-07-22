@@ -1,52 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1415280495631791562
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1415280495631791557}
-  - component: {fileID: 1049381836221064838}
-  m_Layer: 0
-  m_Name: ConsumableManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1415280495631791557
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1415280495631791562}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3121397809359699161}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1049381836221064838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1415280495631791562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8738b819fb0df44f9f23097aa44b717, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powerupManager: {fileID: 8849865170838056140}
-  weaponManager: {fileID: 7597605632689739556}
-  audioManager: {fileID: 2867725771892789690}
-  playerLife: {fileID: 1615446667531850186}
 --- !u!1 &1580435237918623003
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,54 +79,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: ARMOR
---- !u!1 &1750767430552886244
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 813360196644184669}
-  - component: {fileID: 8849865170838056140}
-  m_Layer: 0
-  m_Name: PowerUpManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &813360196644184669
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1750767430552886244}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3121397809359699161}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8849865170838056140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1750767430552886244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 387a2394c5e87ff4e8b7a7443408373e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerManager: {fileID: 6666194668634368530}
-  powerups:
-  - {fileID: 631950880566075843, guid: 5f549b11d8105e3499724a6989187032, type: 3}
-  - {fileID: 3795783636829145110, guid: 2a13dd011d4fe1b46978c7283c597072, type: 3}
-  - {fileID: 1882649575228776267, guid: ecf00558b6e2cb449b548afd4e0fc6f9, type: 3}
 --- !u!1 &2189526480983155933
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,7 +439,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3121397809359699161}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2867725771892789690
 MonoBehaviour:
@@ -1147,7 +1052,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3121397809359699161}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8251104426575605193
 MonoBehaviour:
@@ -1161,9 +1066,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7366d0539426c084b838c79ddf8809cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animators:
+  combatAnimations:
   - {fileID: 9100000, guid: 7f7404a4d4ce1ae44888e14aa96319e9, type: 2}
   - {fileID: 9100000, guid: c9ac57fe12d27314f944a78b62f41324, type: 2}
+  deathAnimations:
+  - {fileID: 9100000, guid: dc563fd55d54d6e44a2b5f02d6deb0bc, type: 2}
+  - {fileID: 9100000, guid: 53c50ce46fe226b47b4b912b922d7480, type: 2}
+  - {fileID: 9100000, guid: 6ff8333db24ac8a41abbe2ed560a3c53, type: 2}
 --- !u!1 &5315503205917508178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1256,7 +1165,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerManager: {fileID: 6666194668634368530}
-  consumableManagerObj: {fileID: 1415280495631791562}
   maxHealth: {fileID: 2851762154644321735}
   health: {fileID: 7195641178492966699}
   armor: {fileID: 2062779504216353893}
@@ -1523,6 +1431,8 @@ GameObject:
   - component: {fileID: 6837337765883696064}
   - component: {fileID: 5704900715790483025}
   - component: {fileID: 7597605632689739556}
+  - component: {fileID: 3229368768591104004}
+  - component: {fileID: 786365446715706731}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Player
@@ -1542,8 +1452,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3518600808140707553}
-  - {fileID: 813360196644184669}
-  - {fileID: 1415280495631791557}
   - {fileID: 5164542058118558901}
   - {fileID: 7403975273960462093}
   m_Father: {fileID: 0}
@@ -1564,7 +1472,6 @@ MonoBehaviour:
   dmg: 1
   range: 30
   _camera: {fileID: 4562242209003515458}
-  _powerupManager: {fileID: 1750767430552886244}
 --- !u!114 &5398706823425373229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1615,9 +1522,9 @@ MonoBehaviour:
   - {fileID: 6991073262372153442, guid: a85b09d0ffa58124583532617e2fc912, type: 3}
   - {fileID: 7848310705475243286, guid: 38525e82f0c67134e848b4f89ebf6dfc, type: 3}
   mainCam: {fileID: 4562242209003515458}
-  consumableManagerObj: {fileID: 1415280495631791562}
   animatorManagerObj: {fileID: 5286259190842476530}
   yPos: -1
+  deathCooldown: 2
 --- !u!143 &6666194668634368536
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1670,7 +1577,6 @@ MonoBehaviour:
   _camera: {fileID: 4562242209003515458}
   _weight: 3
   _runSpeedBuff: 2
-  _powerupManager: {fileID: 1750767430552886244}
   _jumpCooldown: 0.2
 --- !u!114 &6666194668634368540
 MonoBehaviour:
@@ -1894,11 +1800,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   maxArmor: 200
-  health: 100
-  armor: 50
+  initialHealth: 100
+  initialArmor: 25
   _armorReduction: 0.7
   _armorReductionOnHit: 0.5
-  _powerupManager: {fileID: 1750767430552886244}
 --- !u!114 &8071889849303746511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2031,7 +1936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13d6c522af31447398568cc65334232b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TransformSyncMode: 1
+  m_TransformSyncMode: 4
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -2095,6 +2000,35 @@ MonoBehaviour:
   weaponsList:
   - {fileID: 8018606936078106615, guid: af10761ef979531479a7f498d696a2a3, type: 3}
   - {fileID: 3551805850954928087, guid: e49b35b52a923bc4e90d5939298e83d5, type: 3}
+--- !u!114 &3229368768591104004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 387a2394c5e87ff4e8b7a7443408373e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerups:
+  - {fileID: 631950880566075843, guid: 5f549b11d8105e3499724a6989187032, type: 3}
+  - {fileID: 3795783636829145110, guid: 2a13dd011d4fe1b46978c7283c597072, type: 3}
+  - {fileID: 1882649575228776267, guid: ecf00558b6e2cb449b548afd4e0fc6f9, type: 3}
+--- !u!114 &786365446715706731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8738b819fb0df44f9f23097aa44b717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioManager: {fileID: 2867725771892789690}
 --- !u!1 &6715530305080902221
 GameObject:
   m_ObjectHideFlags: 0

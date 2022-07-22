@@ -13,15 +13,12 @@ namespace Weapon
         protected PlayerManagerScript pms;
         private SortedDictionary<int, bool> enabledWeapons;
         private SortedDictionary<int, GameObject> playerWeapons;
-
         private AudioSource audioS;
         private GameObject activeWeapon = null;
         [SyncVar(hook = nameof(ChangeWeapon))] private int activeWeaponId = 0;
         private WeaponStatus activeWeaponStatus;
-
         private bool changeButtonsPressed = false;
         protected CharacterStatus status;
-
         protected GameObject weaponContainer;
 
         public GameObject ActiveWeapon
@@ -52,20 +49,28 @@ namespace Weapon
                 {
                     GameObject weapon = Instantiate(weaponsList[i], weaponContainer.transform.position, weaponContainer.transform.rotation, weaponContainer.transform);
                     weapon.SetActive(false);
-                    //pms.CmdSpawnWeapon(weapon);
                     enabledWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, true);
                     playerWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, weapon);
                 }
-
-                //activeWeaponId = 0;
                 ChangeWeapon(activeWeaponId);
             }
+        }
 
+        public void ResetWeapons()
+        {
+            for (int i = 0; i < enabledWeapons.Count; i++)
+            {
+                enabledWeapons[i] = false;
+                playerWeapons[i].GetComponent<WeaponStatus>().ResetAmmo();
+            }
+            enabledWeapons[0] = true;
+            activeWeaponId = 0;
+            ChangeWeapon(activeWeaponId);
         }
 
         void Update()
         {
-            if (isLocalPlayer)
+            if (isLocalPlayer && pms.SpawnedChar.activeSelf)
             {
                 if (weaponsList.Count > 0)
                 {
