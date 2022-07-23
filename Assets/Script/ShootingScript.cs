@@ -8,7 +8,7 @@ namespace Character
 {
     public class ShootingScript : NetworkBehaviour
     {
-        [SerializeField] protected float dmg = 1.0f;
+        
         [SerializeField] protected float range = 100.0f;
         [SerializeField] protected Camera _camera;
         protected PowerUpManager powerUp;

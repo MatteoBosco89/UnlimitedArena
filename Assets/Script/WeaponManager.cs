@@ -49,7 +49,7 @@ namespace Weapon
                 {
                     GameObject weapon = Instantiate(weaponsList[i], weaponContainer.transform.position, weaponContainer.transform.rotation, weaponContainer.transform);
                     weapon.SetActive(false);
-                    enabledWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, true);
+                    enabledWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, false);
                     playerWeapons.Add(weapon.GetComponent<WeaponStatus>().Id, weapon);
                 }
                 ChangeWeapon(activeWeaponId);

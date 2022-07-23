@@ -1471,7 +1471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efcc707d58ae0840a907217253ca82d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmg: 1
   range: 30
   _camera: {fileID: 4562242209003515458}
 --- !u!114 &5398706823425373229
@@ -2019,6 +2018,7 @@ MonoBehaviour:
   - {fileID: 631950880566075843, guid: 5f549b11d8105e3499724a6989187032, type: 3}
   - {fileID: 3795783636829145110, guid: 2a13dd011d4fe1b46978c7283c597072, type: 3}
   - {fileID: 1882649575228776267, guid: ecf00558b6e2cb449b548afd4e0fc6f9, type: 3}
+  - {fileID: 3795783636829145110, guid: 99ef660cf933a3c408f4e50998130063, type: 3}
 --- !u!114 &786365446715706731
 MonoBehaviour:
   m_ObjectHideFlags: 0
