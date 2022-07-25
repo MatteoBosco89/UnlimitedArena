@@ -32,7 +32,7 @@ namespace Character
         protected InGameUIManager inGameUI;
         [SyncVar] protected int chosenPlayer;
         protected Vector3 theSpawnPosition = new Vector3(0, 0, 0);
-        [SyncVar] protected short clientId = 0;
+        [SyncVar] protected int clientId = 0;
 
         public Vector3 TheSpawnPosition
         {
@@ -49,7 +49,7 @@ namespace Character
             get { return chosenPlayer; }
             set { chosenPlayer = value; }
         }
-        public short ClientId
+        public int ClientId
         {
             get { return clientId; }
             set { clientId = value; }

@@ -24,7 +24,7 @@ namespace GameManager
         protected List<Vector3> spawnPoints;
         protected List<GameObject> playerSpawners;
         protected PlayerSpawnScript pss;
-        protected short controllerCounter = 0;
+        protected int clientCounter = 0;
 
         public List<Vector3> SpawnPositionsList
         {
@@ -144,7 +144,7 @@ namespace GameManager
             foreach (GameObject o in connectedPlayer.Values) o.GetComponent<PlayerManagerScript>().SetPvP(flag);
         }
 
-        public void SignalDeath(short conn)
+        public void SignalDeath(int conn)
         {
             NetworkSignalDeathMessage msg = new NetworkSignalDeathMessage();
             msg.connectionId = conn;
@@ -171,7 +171,7 @@ namespace GameManager
 
         public class NetworkSignalDeathMessage : MessageBase
         {
-            public short connectionId;
+            public int connectionId;
         }
 
         public class NetworkPositionMessage : MessageBase
@@ -217,22 +217,22 @@ namespace GameManager
             player = Instantiate(playerManagerPrefab, SpawnPoint(), Quaternion.identity);
             NetworkHeroSelectionMessage msg = extraMessageReader.ReadMessage<NetworkHeroSelectionMessage>();
             player.GetComponent<PlayerManagerScript>().ChosenPlayer = msg.chosenPlayer;
-            player.GetComponent<PlayerManagerScript>().ClientId = controllerCounter;
-            if (isHost) connectedPlayer[controllerCounter] = player;
-            NetworkServer.AddPlayerForConnection(conn, player, controllerCounter);
-            controllerCounter++;
+            player.GetComponent<PlayerManagerScript>().ClientId = conn.connectionId;
+            if (isHost) connectedPlayer[conn.connectionId] = player;
+            NetworkServer.AddPlayerForConnection(conn, player, 0);
         }
 
-        public void PlayerWasKilled(short clientId)
+        public void PlayerWasKilled(int connectionId)
         {
             if (!isHost) return;
-            NetworkConnection conn = NetworkServer.connections[clientId];
-            GameObject player = conn.playerControllers[clientId].gameObject;
+            NetworkConnection conn = NetworkServer.connections[connectionId];
+            GameObject player = conn.playerControllers[0].gameObject;
             var newPlayer = Instantiate(playerManagerPrefab, SpawnPoint(), Quaternion.identity);
             newPlayer.GetComponent<PlayerManagerScript>().ChosenPlayer = player.GetComponent<PlayerManagerScript>().ChosenPlayer;
-            newPlayer.GetComponent<PlayerManagerScript>().ClientId = clientId;
+            newPlayer.GetComponent<PlayerManagerScript>().ClientId = connectionId;
             Destroy(player);
-            NetworkServer.ReplacePlayerForConnection(conn, newPlayer, clientId);
+            connectedPlayer[connectionId] = newPlayer;
+            NetworkServer.ReplacePlayerForConnection(conn, newPlayer, 0);
         }
 
         public override void OnClientConnect(NetworkConnection conn)
