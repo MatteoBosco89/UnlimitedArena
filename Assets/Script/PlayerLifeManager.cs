@@ -11,9 +11,10 @@ namespace Character
         [SerializeField] protected int maxHealth = 100;
         [SerializeField] protected int maxArmor = 200;
         [SerializeField] protected int initialHealth = 100;
-        [SerializeField] protected int initialArmor = 25;
-        [SerializeField] protected float _armorReduction = 0.7f;
-        [SerializeField] protected float _armorReductionOnHit = 0.5f;
+        [SerializeField] protected Color damageReceivedColorFeedback;
+        protected int initialArmor = 0;
+        protected float _armorReduction = 0;
+        protected float _armorReductionOnHit = 0;
         protected DmgReceivedCalc dmgReceived;
         protected PowerUpManager powerUp;
         protected ConsumableHandler consumableHandler;
@@ -66,25 +67,25 @@ namespace Character
         public void TakeDamage(int dmg)
         {
             if (isDead) return;
-            health -= dmgReceived.CalcDamageReceived(dmg);
-            if (armor > 0) ReduceArmor(dmg);
-            MakeFeedback(Color.red);
+            float damage = dmgReceived.CalcDamageReceived(dmg);
+            if (armor > 0) damage = ReduceArmor(damage);
+            health -= Mathf.CeilToInt(damage);
+            inGameUI.DoFeedback(damageReceivedColorFeedback);
         }
 
-        private void Heal(int healing)
+        private void Heal(PlayerLifeHandler.Medikit m)
         {
+            if (!m._isEnabled) return;
             if (isDead) return;
-            health += healing;
+            health += m._amount;
             if (health > maxHealth) health = maxHealth;
-            MakeFeedback(Color.green);
         }
 
-        private void AddArmor(int a)
+        private void AddArmor(PlayerLifeHandler.Armor a)
         {
+            if (!a._isEnabled) return;
             if (isDead) return;
-            armor += a;
-            if (armor > maxArmor) armor = maxArmor;
-            MakeFeedback(Color.yellow);
+            CalcArmor(a);
         }
 
         private void FixedUpdate()
@@ -97,15 +98,6 @@ namespace Character
                 characterStatus.IsAlive = false;
             }
 
-            if (armor > 0) dmgReceived.AddBuff("armor", _armorReduction);
-            else dmgReceived.RemoveBuff("armor");
-
-            if (powerUp.GetTimeRemaining("Invincibility") > 0)
-            {
-                dmgReceived.AddBuff("Invincibility", powerUp.GetAura("Invincibility"));
-            }
-            else dmgReceived.RemoveBuff("Invincibility");
-
             CheckIsOutOfBorder();
         }
 
@@ -117,13 +109,13 @@ namespace Character
         [Command]
         protected void CmdHeal(int amount)
         {
-            Heal(amount);
+            health = amount;
         }
 
         [Command]
         protected void CmdAddArmor(int amount)
         {
-            AddArmor(amount);
+            armor = amount;
         }
 
         [Command]
@@ -138,23 +130,32 @@ namespace Character
             isDead = false;
         }
 
-        protected void ReduceArmor(int dmg)
+        protected float ReduceArmor(float dmg)
         {
             float reduction = dmg * _armorReductionOnHit;
+            dmg *= _armorReduction;
             armor -= Mathf.CeilToInt(reduction);
             if (armor <= 0) armor = 0;
+            return dmg;
         }
 
-        public void PickConsumable(GameObject o)
+        public void PickupLife(GameObject consumable)
         {
-            consumableHandler = o.GetComponent<ConsumableHandler>();
-            if (consumableHandler.Id.Equals("Medikit")) Heal(consumableHandler.Value);
-            if (consumableHandler.Id.Equals("Armor")) AddArmor(consumableHandler.Value);
+            PlayerLifeHandler plh = consumable.GetComponent<PlayerLifeHandler>();
+            Heal(plh.MedikitItem);
+            AddArmor(plh.ArmorItem);
         }
 
-        public void MakeFeedback(Color color)
+        public void CalcArmor(PlayerLifeHandler.Armor a)
         {
-            inGameUI.DoFeedback(color);
+            if (a._reduction == _armorReduction) armor += a._amount;
+            else
+            {
+                armor = a._amount;
+                _armorReduction = a._reduction;
+                _armorReductionOnHit = a._reductionOnHit;
+            }
+            if (armor > maxArmor) armor = maxArmor;
         }
 
     }

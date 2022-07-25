@@ -189,8 +189,9 @@ GameObject:
   - component: {fileID: 3795783636829145111}
   - component: {fileID: 8898160256700672619}
   - component: {fileID: 3752433350501427163}
+  - component: {fileID: 5361104336916367784}
   m_Layer: 0
-  m_Name: Ammazza
+  m_Name: Evasion
   m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -263,9 +264,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a37ef69b04b1043981c83ea3c1da31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: Ammazza
+  _id: Evasion
   _modifierTime: 30
-  _multiplier: 10000
+  _movementPowerup:
+    _isEnabled: 1
+    _multiplier: 3
+  _damageDonePowerup:
+    _isEnabled: 0
+    _multiplier: 0
+  _damageReceivedPowerup:
+    _isEnabled: 1
+    _multiplier: 0.8
+--- !u!114 &5361104336916367784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3795783636829145110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _feedbackColor: {r: 1, g: 0.89192986, b: 0, a: 0}
 --- !u!1 &5554047842755586921
 GameObject:
   m_ObjectHideFlags: 0

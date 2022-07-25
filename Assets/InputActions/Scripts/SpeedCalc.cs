@@ -8,7 +8,12 @@ namespace Character
     {
         public float CalcSpeed(float baseSpeed)
         {
-            return CalcBuff(baseSpeed);
+            LoadList();
+            foreach (PowerupHandler ph in powerupList)
+            {
+                if (ph.MovementPowerup._isEnabled) baseSpeed *= ph.MovementPowerup._multiplier;
+            }
+            return baseSpeed;
         }
 
     }

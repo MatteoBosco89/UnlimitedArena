@@ -269,9 +269,10 @@ GameObject:
   - component: {fileID: 1694129977019481559}
   - component: {fileID: 1694129977019481560}
   - component: {fileID: 6364442502212312996}
-  - component: {fileID: 8989762774846983360}
+  - component: {fileID: -149102199801382433}
+  - component: {fileID: -2753389681471704940}
   m_Layer: 0
-  m_Name: ArmorConsumable
+  m_Name: LightArmor
   m_TagString: Consumable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,8 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onPickupSound: {fileID: 8300000, guid: 233de7b67bffbc34abf0a09680a2f707, type: 3}
-  audioManagerObject: {fileID: 0}
---- !u!114 &8989762774846983360
+--- !u!114 &-149102199801382433
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -342,11 +342,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 1694129977019481561}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 099675ee163fc934aa83b0e5a96a0e8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 60b7154999696e24a80bdcb1c9a11f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Armor
-  value: 100
+  _id: Armor
+  _medikit:
+    _isEnabled: 0
+    _amount: 0
+  _armor:
+    _isEnabled: 1
+    _amount: 50
+    _reduction: 0.2
+    _reductionOnHit: 0.3
+--- !u!114 &-2753389681471704940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694129977019481561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _feedbackColor: {r: 0, g: 0.16778421, b: 1, a: 0}
 --- !u!1 &3310410793475359618
 GameObject:
   m_ObjectHideFlags: 0

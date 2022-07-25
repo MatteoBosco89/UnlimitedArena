@@ -9,7 +9,13 @@ namespace Character
     {
         public int CalcDmg(float baseDmg)
         {
-            return Mathf.CeilToInt(CalcBuff(baseDmg));
+            LoadList();
+            foreach (PowerupHandler ph in powerupList)
+            {
+                if (ph.DamageDonePowerup._isEnabled) baseDmg *= ph.DamageDonePowerup._multiplier;
+            }
+
+            return Mathf.CeilToInt(baseDmg);
         }
     }
 }

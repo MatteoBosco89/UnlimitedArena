@@ -123,8 +123,8 @@ namespace GameManager
         public void ConsumablePickedUp(GameObject consumable)
         {
             consumable.SetActive(false);
-            consumableSpawnManager = csm.GetComponent<ConsumableSpawnManager>();
-            consumableSpawnManager.Cooldown(consumable.GetInstanceID());
+            //consumableSpawnManager = csm.GetComponent<ConsumableSpawnManager>();
+            //consumableSpawnManager.Cooldown(consumable.GetInstanceID());
         }
 
         public void SpawnConsumables()

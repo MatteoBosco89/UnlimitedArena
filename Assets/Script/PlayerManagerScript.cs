@@ -74,11 +74,11 @@ namespace Character
         {
             networkManagerObj = GameObject.FindGameObjectWithTag("NetworkManager");
             consumableManager = GetComponent<ConsumableManager>();
+            powerUpManager = GetComponent<PowerUpManager>();
             weaponManager = GetComponent<WeaponManager>();
             animatorManager = animatorManagerObj.GetComponent<AnimatorManager>();
             netManager = networkManagerObj.GetComponent<NetManager>();
             lifeManager = GetComponent<PlayerLifeManager>();
-            powerUpManager = GetComponent<PowerUpManager>();
             characterStatus = GetComponent<CharacterStatus>();
             mp = GetComponent<MovePlayer>();
             inGameUI = inGameUIObj.GetComponent<InGameUIManager>();

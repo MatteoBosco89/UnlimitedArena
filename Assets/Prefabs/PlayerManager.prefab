@@ -1803,9 +1803,7 @@ MonoBehaviour:
   maxHealth: 100
   maxArmor: 200
   initialHealth: 100
-  initialArmor: 25
-  _armorReduction: 0.7
-  _armorReductionOnHit: 0.5
+  damageReceivedColorFeedback: {r: 0.6981132, g: 0, b: 0, a: 0}
 --- !u!114 &8071889849303746511
 MonoBehaviour:
   m_ObjectHideFlags: 0

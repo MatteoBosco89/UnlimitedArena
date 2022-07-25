@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 631950880566075842}
   - component: {fileID: 5121977589572273086}
   - component: {fileID: 2335389064483475495}
+  - component: {fileID: -4638770147099678552}
   m_Layer: 0
   m_Name: InvincibilityPowerUp
   m_TagString: PowerUp
@@ -172,7 +173,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: Invincibility
   _modifierTime: 30
-  _multiplier: 0
+  _movementPowerup:
+    _isEnabled: 0
+    _multiplier: 0
+  _damageDonePowerup:
+    _isEnabled: 0
+    _multiplier: 0
+  _damageReceivedPowerup:
+    _isEnabled: 1
+    _multiplier: 0
+--- !u!114 &-4638770147099678552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631950880566075843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _feedbackColor: {r: 0.24528301, g: 0, b: 0, a: 0}
 --- !u!1 &631950880718768423
 GameObject:
   m_ObjectHideFlags: 0

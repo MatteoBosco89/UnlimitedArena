@@ -137,7 +137,8 @@ GameObject:
   - component: {fileID: 5567697238572871114}
   - component: {fileID: 5567697238572871109}
   - component: {fileID: 186239278267387833}
-  - component: {fileID: 4185223027375142241}
+  - component: {fileID: -4235335295910701253}
+  - component: {fileID: 4269339616251571550}
   m_Layer: 0
   m_Name: MedKitConsumable
   m_TagString: Consumable
@@ -200,7 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onPickupSound: {fileID: 8300000, guid: 233de7b67bffbc34abf0a09680a2f707, type: 3}
---- !u!114 &4185223027375142241
+--- !u!114 &-4235335295910701253
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -209,11 +210,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 5567697238572871108}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 099675ee163fc934aa83b0e5a96a0e8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 60b7154999696e24a80bdcb1c9a11f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Medikit
-  value: 50
+  _id: Medikit
+  _medikit:
+    _isEnabled: 1
+    _amount: 50
+  _armor:
+    _isEnabled: 0
+    _amount: 0
+    _reduction: 0
+    _reductionOnHit: 0
+--- !u!114 &4269339616251571550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5567697238572871108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _feedbackColor: {r: 0.18613195, g: 1, b: 0, a: 0}
 --- !u!1 &5567697239060601032
 GameObject:
   m_ObjectHideFlags: 0

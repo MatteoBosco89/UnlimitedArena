@@ -37,10 +37,6 @@ namespace Character
         void FixedUpdate()
         {
             if (!isLocalPlayer) return;
-
-            if (powerUp.GetTimeRemaining("QuadDamage") > 0) ddc.AddBuff("QuadDamage", powerUp.GetAura("QuadDamage"));
-            else ddc.RemoveBuff("QuadDamage");
-
             if (status.IsFiring && canShoot) DoShoot();
         }
 

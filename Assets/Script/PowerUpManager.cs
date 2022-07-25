@@ -7,17 +7,16 @@ namespace Character
     public class PowerUpManager : MonoBehaviour
     {
         [SerializeField] protected List<GameObject> powerups;
-        protected string countdown = "CountDown";
         protected Dictionary<string, int> timeRemain;
-        protected Dictionary<string, PowerupHandler> handlers;
+        protected List<PowerupHandler> powerupList;
         protected List<string> powerupsId;
         protected PowerupHandler powerupHandler;
 
         private void Awake()
         {
             timeRemain = new Dictionary<string, int>();
-            handlers = new Dictionary<string, PowerupHandler>();
             powerupsId = new List<string>();
+            powerupList = new List<PowerupHandler>();
         }
 
         public void ResetPowerUps()
@@ -39,20 +38,20 @@ namespace Character
 
         public float GetAura(string id)
         {
-            PowerupHandler p = handlers[id];
-            return p.Multiplier;
+            //PowerupHandler p = handlers[id];
+            return 0f; //p.Multiplier;
+        }
+
+        public List<PowerupHandler> PowerUps
+        {
+            get { return powerupList; }
         }
 
         private void Start()
         {
-            foreach(GameObject p in powerups)
-            {
-                string id = GetIdFromGameObject(p);
-                timeRemain[id] = 0;
-                powerupsId.Add(id);
-                handlers[id] = p.GetComponent<PowerupHandler>();
-            }
-            //InvokeRepeating(countdown, 0.1f, 1);
+            // powerup initialization
+            // setting time remain to zero
+            InvokeRepeating(nameof(CountDown), 0.1f, 1);
         }
 
         private string GetIdFromGameObject(GameObject o)
@@ -64,20 +63,22 @@ namespace Character
         private int GetModifierFromGameObject(GameObject o)
         {
             powerupHandler = o.GetComponent<PowerupHandler>();
-            return powerupHandler.ModifierTime;
+            return 0; //powerupHandler.ModifierTime;
         }
 
-        public void PowerUpPickup(GameObject gameObject)
+        public void PowerUpPickup(GameObject powerup)
         {
-            timeRemain[GetIdFromGameObject(gameObject)] = GetModifierFromGameObject(gameObject);
+            powerupList.Add(powerup.GetComponent<PowerupHandler>());
+            powerup.GetComponent<PowerupHandler>().Activate();
         }
 
         protected void CountDown()
         {
-            foreach (string p in powerupsId)
+            for(int i = 0; i < powerupList.Count; i++)
             {
-                if (GetTimeRemaining(p) > 0) timeRemain[p] -= 1;
+                powerupList[i].CountDown();
             }
+            powerupList.RemoveAll(item => item.IsActive == false);
         }
 
     }

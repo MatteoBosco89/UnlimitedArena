@@ -15,6 +15,7 @@ namespace Character
         protected PlayerLifeManager playerLife;
         protected WeaponManager weaponManager;
         protected PowerUpManager powerupManager;
+        protected InGameUIManager inGameUI;
 
 
         public NetManager NetM
@@ -28,6 +29,7 @@ namespace Character
             playerLife = GetComponent<PlayerLifeManager>();
             weaponManager = GetComponent<WeaponManager>();
             powerupManager = GetComponent<PowerUpManager>();
+            inGameUI = GetComponent<PlayerManagerScript>().InGameUI;
         }
 
         public void ApplyAura(GameObject o)
@@ -38,10 +40,13 @@ namespace Character
 
         public void CheckManager(GameObject o)
         {
-            if (o.CompareTag("PowerUp")) powerupManager.PowerUpPickup(o);
-            if (o.CompareTag("Weapon")) weaponManager.PickUpWeapon(o);
-            if (o.CompareTag("Ammo")) weaponManager.AddAmmoToWeapon(o);
-            if (o.CompareTag("Consumable")) playerLife.PickConsumable(o);
+            o.GetComponent<Consumable>().Pickup(gameObject);
+            inGameUI.DoFeedback(o.GetComponent<Consumable>().FeedbackColor);
+            // chiamare command che dice che ho preso oggetto
+            //if (o.CompareTag("PowerUp")) powerupManager.PowerUpPickup(o);
+            //if (o.CompareTag("Weapon")) weaponManager.PickUpWeapon(o);
+            //if (o.CompareTag("Ammo")) weaponManager.AddAmmoToWeapon(o);
+            //if (o.CompareTag("Consumable")) playerLife.PickConsumable(o);
         }
 
         protected void BeginCooldown(GameObject o)

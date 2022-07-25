@@ -8,6 +8,12 @@ namespace Character
     public class BuffHandler : MonoBehaviour
     {
         protected Dictionary<string, float> buffs = new Dictionary<string, float>();
+        protected List<PowerupHandler> powerupList;
+
+        protected void LoadList()
+        {
+            powerupList = GetComponent<PowerUpManager>().PowerUps;
+        }
 
         public void AddBuff(string name, float buff)
         {
@@ -21,12 +27,7 @@ namespace Character
 
         public float CalcBuff(float b)
         {
-            float f = b;
-            foreach (KeyValuePair<string, float> entry in buffs)
-            {
-                f *= entry.Value;
-            }
-            return f;
+            return 0.0f;
         }
 
     }

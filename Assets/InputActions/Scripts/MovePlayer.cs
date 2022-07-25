@@ -15,6 +15,7 @@ namespace Character
         [SerializeField] protected float _weight = 3.0f;
         [SerializeField] protected float _runSpeedBuff = 2.0f;
         [SerializeField] protected float _jumpCooldown = 0.2f;
+        protected float _currentSpeed = 0;
         protected PowerUpManager powerUp;
         protected CharacterController _charController;
         protected Animator animator;
@@ -45,19 +46,16 @@ namespace Character
                 Vector3 movement = new Vector3(0, 0, 0);
 
                 verticalVelocity = VerticalVelocityCalc();
+                _currentSpeed = _baseSpeed;
 
-                if (status.IsRunning) sc.AddBuff("run", _runSpeedBuff);
-                else if (!status.IsRunning) sc.RemoveBuff("run");
-
-                if (powerUp.GetTimeRemaining("Speed") > 0) sc.AddBuff("SpeedPowerUp", powerUp.GetAura("Speed"));
-                else sc.RemoveBuff("Speed");
+                if (status.IsRunning) _currentSpeed *= _runSpeedBuff;
 
                 if (status.IsRotating)
                 {
                     RotateChar(status.Rotation.x, status.Rotation.y);
                 }
 
-                _speed = sc.CalcSpeed(_baseSpeed);
+                _speed = sc.CalcSpeed(_currentSpeed);
 
                 if (status.IsMoving)
                 {

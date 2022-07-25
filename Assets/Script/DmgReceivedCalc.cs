@@ -6,9 +6,16 @@ namespace Character
 {
     public class DmgReceivedCalc : BuffHandler
     {
-        public int CalcDamageReceived(int dmg)
+        public int CalcDamageReceived(int baseDmg)
         {
-            return Mathf.CeilToInt(CalcBuff(dmg));
+            float dmg = (float)baseDmg;
+            LoadList();
+            foreach (PowerupHandler ph in powerupList)
+            {
+                if (ph.DamageReceivedPowerup._isEnabled) dmg *= ph.DamageReceivedPowerup._multiplier;
+            }
+
+            return Mathf.CeilToInt(dmg);
         }
     }
 }
