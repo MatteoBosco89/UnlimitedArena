@@ -40,13 +40,10 @@ namespace Character
 
         public void CheckManager(GameObject o)
         {
-            o.GetComponent<Consumable>().Pickup(gameObject);
-            inGameUI.DoFeedback(o.GetComponent<Consumable>().FeedbackColor);
-            // chiamare command che dice che ho preso oggetto
-            //if (o.CompareTag("PowerUp")) powerupManager.PowerUpPickup(o);
-            //if (o.CompareTag("Weapon")) weaponManager.PickUpWeapon(o);
-            //if (o.CompareTag("Ammo")) weaponManager.AddAmmoToWeapon(o);
-            //if (o.CompareTag("Consumable")) playerLife.PickConsumable(o);
+            Consumable c = o.GetComponent<Consumable>();
+            c.Pickup(gameObject);
+            if(c.FeedbackColor._isFeedback) inGameUI.DoFeedback(c.FeedbackColor._feedbackColor);
+            // send command to server
         }
 
         protected void BeginCooldown(GameObject o)

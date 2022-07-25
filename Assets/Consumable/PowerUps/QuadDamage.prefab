@@ -194,7 +194,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _feedbackColor: {r: 1, g: 0, b: 0.9390569, a: 0}
+  feedbackColor:
+    _feedbackColor: {r: 0.4433962, g: 0, b: 0.34880087, a: 0}
+    _isFeedback: 1
 --- !u!1 &1882649575615051695
 GameObject:
   m_ObjectHideFlags: 0

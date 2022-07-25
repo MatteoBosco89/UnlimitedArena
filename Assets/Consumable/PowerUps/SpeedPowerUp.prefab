@@ -268,7 +268,7 @@ MonoBehaviour:
   _modifierTime: 30
   _movementPowerup:
     _isEnabled: 1
-    _multiplier: 1.2
+    _multiplier: 2
   _damageDonePowerup:
     _isEnabled: 0
     _multiplier: 0
@@ -287,7 +287,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _feedbackColor: {r: 1, g: 0.31393492, b: 0, a: 0}
+  feedbackColor:
+    _feedbackColor: {r: 1, g: 0.8424336, b: 0, a: 0}
+    _isFeedback: 1
 --- !u!1 &5554047842755586921
 GameObject:
   m_ObjectHideFlags: 0

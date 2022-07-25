@@ -97,6 +97,8 @@ GameObject:
   - component: {fileID: 5121977589572273086}
   - component: {fileID: 2335389064483475495}
   - component: {fileID: -4638770147099678552}
+  - component: {fileID: -8196549152700758813}
+  - component: {fileID: 7449426572134228503}
   m_Layer: 0
   m_Name: InvincibilityPowerUp
   m_TagString: PowerUp
@@ -194,7 +196,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _feedbackColor: {r: 0.24528301, g: 0, b: 0, a: 0}
+  feedbackColor:
+    _feedbackColor: {r: 1, g: 0, b: 0.03720951, a: 0}
+    _isFeedback: 1
+--- !u!114 &-8196549152700758813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631950880566075843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60b7154999696e24a80bdcb1c9a11f9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: Invincibility
+  _medikit:
+    _isEnabled: 1
+    _amount: 100
+  _armor:
+    _isEnabled: 1
+    _amount: 30
+    _armorType: 1
+    _reductionOnHit: 0.3
+--- !u!114 &7449426572134228503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631950880566075843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  feedbackColor:
+    _feedbackColor: {r: 0, g: 0, b: 0, a: 0}
+    _isFeedback: 0
 --- !u!1 &631950880718768423
 GameObject:
   m_ObjectHideFlags: 0

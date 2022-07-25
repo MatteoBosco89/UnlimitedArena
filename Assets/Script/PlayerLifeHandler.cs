@@ -9,11 +9,13 @@ namespace Character
         [SerializeField] protected string _id;
         [SerializeField] protected Medikit _medikit;
         [SerializeField] protected Armor _armor;
-
+        
         public string Id
         {
             get { return _id; }
         }
+
+        
 
         public Medikit MedikitItem
         {
@@ -36,8 +38,15 @@ namespace Character
         [System.Serializable]
         public class Armor : CustomizedLifeConsumable
         {
-            public float _reduction;
-            public float _reductionOnHit;
+            public ArmorType _armorType;
+            public float _armorReducedOnHit = 0.3f;
+            public enum ArmorType { Light, Medium, Heavy, None};
+
+            public ArmorType ArmorTypeOption
+            {
+                get { return _armorType; }
+            }
+
         }
 
 

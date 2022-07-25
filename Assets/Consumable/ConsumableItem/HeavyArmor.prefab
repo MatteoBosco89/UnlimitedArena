@@ -352,8 +352,8 @@ MonoBehaviour:
   _armor:
     _isEnabled: 1
     _amount: 100
-    _reduction: 0.4
-    _reductionOnHit: 0.3
+    _armorType: 2
+    _armorReducedOnHit: 0.3
 --- !u!114 &-9087355497053569027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,7 +366,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _feedbackColor: {r: 1, g: 0.050389357, b: 0, a: 0}
+  feedbackColor:
+    _feedbackColor: {r: 1, g: 0.23065446, b: 0, a: 0}
+    _isFeedback: 1
 --- !u!1 &3310410793475359618
 GameObject:
   m_ObjectHideFlags: 0

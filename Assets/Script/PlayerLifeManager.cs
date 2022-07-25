@@ -12,9 +12,14 @@ namespace Character
         [SerializeField] protected int maxArmor = 200;
         [SerializeField] protected int initialHealth = 100;
         [SerializeField] protected Color damageReceivedColorFeedback;
+        [SerializeField] protected float _noArmorReduction = 0.0f;
+        [SerializeField] protected float _lightArmorReduction = 0.2f;
+        [SerializeField] protected float _mediumArmorReduction = 0.3f;
+        [SerializeField] protected float _heavyArmorReduction = 0.4f;
         protected int initialArmor = 0;
         protected float _armorReduction = 0;
         protected float _armorReductionOnHit = 0;
+        protected PlayerLifeHandler.Armor.ArmorType _currentArmorType = PlayerLifeHandler.Armor.ArmorType.None;
         protected DmgReceivedCalc dmgReceived;
         protected PowerUpManager powerUp;
         protected ConsumableHandler consumableHandler;
@@ -32,6 +37,7 @@ namespace Character
             inGameUI = GetComponent<PlayerManagerScript>().InGameUI;
             armor = initialArmor;
             health = initialHealth;
+            _armorReduction = _noArmorReduction;
         }
 
         public void ResetPlayerLife()
@@ -135,7 +141,11 @@ namespace Character
             float reduction = dmg * _armorReductionOnHit;
             dmg *= _armorReduction;
             armor -= Mathf.CeilToInt(reduction);
-            if (armor <= 0) armor = 0;
+            if (armor <= 0)
+            {
+                armor = 0;
+                _currentArmorType = PlayerLifeHandler.Armor.ArmorType.None;
+            }
             return dmg;
         }
 
@@ -148,14 +158,23 @@ namespace Character
 
         public void CalcArmor(PlayerLifeHandler.Armor a)
         {
-            if (a._reduction == _armorReduction) armor += a._amount;
-            else
+            if (_currentArmorType != a._armorType)
             {
+                _currentArmorType = a._armorType;
                 armor = a._amount;
-                _armorReduction = a._reduction;
-                _armorReductionOnHit = a._reductionOnHit;
+                _armorReduction = CalcReduction();
+                _armorReductionOnHit = a._armorReducedOnHit;
             }
+            else { armor += a._amount; }
             if (armor > maxArmor) armor = maxArmor;
+        }
+
+        protected float CalcReduction()
+        {
+            if (_currentArmorType == PlayerLifeHandler.Armor.ArmorType.Light) return _lightArmorReduction;
+            if (_currentArmorType == PlayerLifeHandler.Armor.ArmorType.Medium) return _mediumArmorReduction;
+            if (_currentArmorType == PlayerLifeHandler.Armor.ArmorType.Heavy) return _heavyArmorReduction;
+            return _noArmorReduction;
         }
 
     }

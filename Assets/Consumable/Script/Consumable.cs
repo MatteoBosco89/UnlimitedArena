@@ -7,15 +7,21 @@ namespace Character
     public class Consumable : MonoBehaviour
     {
 
-        [SerializeField] protected Color _feedbackColor;
+        [SerializeField] protected FeedbackColorOptions feedbackColor;
 
-        public Color FeedbackColor
+        public FeedbackColorOptions FeedbackColor
         {
-            get { return _feedbackColor; }
+            get { return feedbackColor; }
         }
 
         public virtual void Pickup(GameObject player) { }
 
+        [System.Serializable]
+        public class FeedbackColorOptions
+        {
+            public Color _feedbackColor;
+            public bool _isFeedback;
+        }
 
     }
 }
