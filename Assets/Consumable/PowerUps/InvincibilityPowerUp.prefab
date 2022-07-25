@@ -94,11 +94,11 @@ GameObject:
   - component: {fileID: 631950880566075852}
   - component: {fileID: 631950880566075853}
   - component: {fileID: 631950880566075842}
-  - component: {fileID: 5121977589572273086}
   - component: {fileID: 2335389064483475495}
   - component: {fileID: -4638770147099678552}
   - component: {fileID: -8196549152700758813}
   - component: {fileID: 7449426572134228503}
+  - component: {fileID: 3612449760382172093}
   m_Layer: 0
   m_Name: InvincibilityPowerUp
   m_TagString: PowerUp
@@ -148,19 +148,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5121977589572273086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631950880566075843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2416ee52f2e799748be7b1a980bc46db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onPickupSound: {fileID: 8300000, guid: 233de7b67bffbc34abf0a09680a2f707, type: 3}
 --- !u!114 &2335389064483475495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,9 +183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  feedbackColor:
-    _feedbackColor: {r: 1, g: 0, b: 0.03720951, a: 0}
-    _isFeedback: 1
 --- !u!114 &-8196549152700758813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,7 +203,7 @@ MonoBehaviour:
     _isEnabled: 1
     _amount: 30
     _armorType: 1
-    _reductionOnHit: 0.3
+    _armorReducedOnHit: 0.3
 --- !u!114 &7449426572134228503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,9 +216,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3612449760382172093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631950880566075843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 772aae759bbd03945b1625693e124651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPickupSound: {fileID: 8300000, guid: 233de7b67bffbc34abf0a09680a2f707, type: 3}
   feedbackColor:
-    _feedbackColor: {r: 0, g: 0, b: 0, a: 0}
-    _isFeedback: 0
+    _feedbackColor: {r: 0.6509434, g: 0, b: 0, a: 0}
+    _isFeedback: 1
 --- !u!1 &631950880718768423
 GameObject:
   m_ObjectHideFlags: 0

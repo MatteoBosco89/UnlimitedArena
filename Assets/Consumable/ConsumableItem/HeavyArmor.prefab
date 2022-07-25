@@ -142,7 +142,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c3580d6d525ceec44a69aff73526da33, type: 2}
+  - {fileID: 2100000, guid: 28cb037fe84b4bf4282351b0ca0644ae, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -268,9 +268,9 @@ GameObject:
   - component: {fileID: 1694129977019481558}
   - component: {fileID: 1694129977019481559}
   - component: {fileID: 1694129977019481560}
-  - component: {fileID: 6364442502212312996}
   - component: {fileID: -149102199801382433}
   - component: {fileID: -9087355497053569027}
+  - component: {fileID: 8976876069178613924}
   m_Layer: 0
   m_Name: HeavyArmor
   m_TagString: Consumable
@@ -320,19 +320,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6364442502212312996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1694129977019481561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2416ee52f2e799748be7b1a980bc46db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onPickupSound: {fileID: 8300000, guid: 233de7b67bffbc34abf0a09680a2f707, type: 3}
 --- !u!114 &-149102199801382433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,8 +353,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8976876069178613924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694129977019481561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 772aae759bbd03945b1625693e124651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPickupSound: {fileID: 8300000, guid: 233de7b67bffbc34abf0a09680a2f707, type: 3}
   feedbackColor:
-    _feedbackColor: {r: 1, g: 0.23065446, b: 0, a: 0}
+    _feedbackColor: {r: 1, g: 0, b: 0, a: 0}
     _isFeedback: 1
 --- !u!1 &3310410793475359618
 GameObject:

@@ -372,8 +372,8 @@ GameObject:
   - component: {fileID: 2085627081501935412}
   - component: {fileID: 2085627081501935411}
   - component: {fileID: 2085627081501935415}
-  - component: {fileID: 2085627081501935413}
   - component: {fileID: 2085627081501935416}
+  - component: {fileID: 3374925215506942551}
   m_Layer: 0
   m_Name: RifleAmmo
   m_TagString: Ammo
@@ -424,19 +424,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animation_amp: 0.2
   rotation_speed: 100
---- !u!114 &2085627081501935413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2085627081501935410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2416ee52f2e799748be7b1a980bc46db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onPickupSound: {fileID: 8300000, guid: 32de12b7f17487b49b15c234da4dd5d5, type: 3}
 --- !u!114 &2085627081501935416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,6 +438,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   ammo: 50
+--- !u!114 &3374925215506942551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085627081501935410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 772aae759bbd03945b1625693e124651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPickupSound: {fileID: 8300000, guid: 32de12b7f17487b49b15c234da4dd5d5, type: 3}
+  feedbackColor:
+    _feedbackColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0}
+    _isFeedback: 1
 --- !u!1 &2085627081572120788
 GameObject:
   m_ObjectHideFlags: 0

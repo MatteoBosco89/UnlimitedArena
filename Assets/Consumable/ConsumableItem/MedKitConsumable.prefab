@@ -136,9 +136,9 @@ GameObject:
   - component: {fileID: 5567697238572871115}
   - component: {fileID: 5567697238572871114}
   - component: {fileID: 5567697238572871109}
-  - component: {fileID: 186239278267387833}
   - component: {fileID: -4235335295910701253}
   - component: {fileID: 4269339616251571550}
+  - component: {fileID: 6088888502328257911}
   m_Layer: 0
   m_Name: MedKitConsumable
   m_TagString: Consumable
@@ -188,19 +188,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &186239278267387833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5567697238572871108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2416ee52f2e799748be7b1a980bc46db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onPickupSound: {fileID: 8300000, guid: 233de7b67bffbc34abf0a09680a2f707, type: 3}
 --- !u!114 &-4235335295910701253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,8 +221,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6088888502328257911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5567697238572871108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 772aae759bbd03945b1625693e124651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPickupSound: {fileID: 8300000, guid: 233de7b67bffbc34abf0a09680a2f707, type: 3}
   feedbackColor:
-    _feedbackColor: {r: 0.2670188, g: 1, b: 0, a: 0}
+    _feedbackColor: {r: 0.232162, g: 1, b: 0, a: 0}
     _isFeedback: 1
 --- !u!1 &5567697239060601032
 GameObject:

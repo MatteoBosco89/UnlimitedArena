@@ -42,13 +42,18 @@ namespace Character
         {
             Consumable c = o.GetComponent<Consumable>();
             c.Pickup(gameObject);
-            if(c.FeedbackColor._isFeedback) inGameUI.DoFeedback(c.FeedbackColor._feedbackColor);
+            ConsumableFeedback cf = c.GetComponent<ConsumableFeedback>();
+            if (cf.FeedbackColor._isFeedback)
+            {
+                audioManager.PlaySound(cf.Clip);
+                inGameUI.DoFeedback(cf.FeedbackColor._feedbackColor);
+            }
+                
             // send command to server
         }
 
         protected void BeginCooldown(GameObject o)
         {
-            audioManager.PlaySound(o.GetComponent<AudioScript>().Clip);
             netManager.ConsumablePickedUp(o);
         }
     }

@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1149931864900754848}
   - component: {fileID: 1149931864900754853}
   - component: {fileID: 1149931864900754855}
-  - component: {fileID: 1149931864900754854}
   - component: {fileID: 1149931864900754856}
+  - component: {fileID: 7338822360877078040}
   m_Layer: 0
   m_Name: MachineGunConsumable
   m_TagString: Weapon
@@ -64,19 +64,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animation_amp: 0.5
   rotation_speed: 100
---- !u!114 &1149931864900754854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1149931864900754852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2416ee52f2e799748be7b1a980bc46db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onPickupSound: {fileID: 8300000, guid: 32de12b7f17487b49b15c234da4dd5d5, type: 3}
 --- !u!135 &1149931864900754856
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -90,6 +77,22 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.4
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7338822360877078040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149931864900754852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 772aae759bbd03945b1625693e124651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPickupSound: {fileID: 8300000, guid: 32de12b7f17487b49b15c234da4dd5d5, type: 3}
+  feedbackColor:
+    _feedbackColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0}
+    _isFeedback: 0
 --- !u!1 &1149931865504453342
 GameObject:
   m_ObjectHideFlags: 0
