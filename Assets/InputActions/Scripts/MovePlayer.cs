@@ -15,14 +15,15 @@ namespace Character
         [SerializeField] protected float _weight = 3.0f;
         [SerializeField] protected float _runSpeedBuff = 2.0f;
         [SerializeField] protected float _jumpCooldown = 0.2f;
+        [SerializeField] protected string SPEED = "MOVEMENT_SPEED";
+        [SerializeField] protected string JUMP = "JUMP_HEIGHT";
         protected float _currentSpeed = 0;
-        protected PowerUpManager powerUp;
         protected CharacterController _charController;
         protected Animator animator;
         protected CharacterStatus status;
-        protected SpeedCalc sc;
         protected PlayerManagerScript pms;
         protected float _speed;
+        protected float _jump;
         private float groundedTimer;
         private float verticalVelocity;
         CursorLockMode lockMode;
@@ -34,9 +35,7 @@ namespace Character
             Cursor.lockState = lockMode;
             _charController = GetComponent<CharacterController>();
             status = GetComponent<CharacterStatus>();
-            sc = GetComponent<SpeedCalc>();
             pms = GetComponent<PlayerManagerScript>();
-            powerUp = GetComponent<PowerUpManager>();
         }
 
         private void FixedUpdate()
@@ -55,7 +54,7 @@ namespace Character
                     RotateChar(status.Rotation.x, status.Rotation.y);
                 }
 
-                _speed = sc.CalcSpeed(_currentSpeed);
+                _speed = _currentSpeed * ComputateFeature(SPEED);
 
                 if (status.IsMoving)
                 {
@@ -64,11 +63,12 @@ namespace Character
                 }
 
                 if (status.IsJumping && _charController.isGrounded)
-                {
+                {     
                     if (groundedTimer <= 0)
-                    {
+                    {   
                         groundedTimer = 0;
-                        if(verticalVelocity < _maxJump) verticalVelocity += Mathf.Sqrt(_baseJump * 2 * _gravity);
+                        _jump = _baseJump * ComputateFeature(JUMP);
+                        if (verticalVelocity < _maxJump) verticalVelocity += Mathf.Sqrt(_jump * 2 * _gravity);
                     }
                 }
 
@@ -77,6 +77,11 @@ namespace Character
                 MoveChar(movement);
             }
             
+        }
+
+        protected float ComputateFeature(string feature)
+        {
+            return pms.FeatureValue(feature);
         }
 
         private void AnimatorSpeed(Vector3 movement)

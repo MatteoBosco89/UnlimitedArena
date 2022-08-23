@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 1683890181020440348}
   m_Layer: 0
   m_Name: SpeedPowerUp
-  m_TagString: PowerUp
+  m_TagString: POWERUP
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,6 +260,9 @@ MonoBehaviour:
     _isEnabled: 0
     _multiplier: 0
   _damageReceivedPowerup:
+    _isEnabled: 0
+    _multiplier: 0
+  _jumpCostumizedPowerup:
     _isEnabled: 0
     _multiplier: 0
 --- !u!114 &-1195896347121648802

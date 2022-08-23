@@ -11,11 +11,11 @@ namespace Character
         
         [SerializeField] protected float range = 100.0f;
         [SerializeField] protected Camera _camera;
-        protected PowerUpManager powerUp;
+        [SerializeField] protected string DAMAGEDONE = "DAMAGE_DONE";
         protected CharacterStatus status;
         protected WeaponManager weaponManager;
         private bool canShoot = true;
-        protected DmgDoneCalc ddc;
+        protected PlayerManagerScript playerManager;
         [SyncVar] protected bool pvp = true;
 
 
@@ -27,10 +27,9 @@ namespace Character
 
         private void Awake()
         {
+            playerManager = GetComponent<PlayerManagerScript>();
             status = GetComponent<CharacterStatus>();
             weaponManager = GetComponent<WeaponManager>();
-            ddc = GetComponent<DmgDoneCalc>();
-            powerUp = GetComponent<PowerUpManager>();
         }
 
 
@@ -48,7 +47,7 @@ namespace Character
             if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hitInfo, range))
             {
                 GameObject enemy = hitInfo.transform.gameObject;
-                int finalDmg = ddc.CalcDmg(weaponManager.GetActiveWeaponDamage());
+                int finalDmg = CalcDamage(weaponManager.GetActiveWeaponDamage());
                 if (enemy.CompareTag("Player") && pvp)
                 {
                     CmdShootEnemyPlayer(enemy, finalDmg);
@@ -71,6 +70,11 @@ namespace Character
         {
             yield return new WaitForSeconds(weaponManager.GetActiveWeaponShootDelay());
             canShoot = true;
+        }
+
+        protected int CalcDamage(float baseDmg)
+        {
+            return Mathf.CeilToInt(playerManager.PlayerFeatures.FeatureValue(DAMAGEDONE) * baseDmg);
         }
 
     }

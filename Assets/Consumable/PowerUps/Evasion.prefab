@@ -187,14 +187,11 @@ GameObject:
   - component: {fileID: 3795783636829145113}
   - component: {fileID: 3795783636829145112}
   - component: {fileID: 3795783636829145111}
-  - component: {fileID: 3752433350501427163}
-  - component: {fileID: -246157467924737213}
-  - component: {fileID: 5361104336916367784}
-  - component: {fileID: -6210713479565099428}
   - component: {fileID: 1748939857161743506}
+  - component: {fileID: -2579932237101210448}
   m_Layer: 0
   m_Name: Evasion
-  m_TagString: PowerUp
+  m_TagString: POWERUP
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -241,74 +238,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3752433350501427163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3795783636829145110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34a37ef69b04b1043981c83ea3c1da31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: Evasion
-  _modifierTime: 30
-  _movementPowerup:
-    _isEnabled: 1
-    _multiplier: 1.5
-  _damageDonePowerup:
-    _isEnabled: 0
-    _multiplier: 0
-  _damageReceivedPowerup:
-    _isEnabled: 1
-    _multiplier: 0.8
---- !u!114 &-246157467924737213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3795783636829145110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60b7154999696e24a80bdcb1c9a11f9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: Evasion
-  _medikit:
-    _isEnabled: 1
-    _amount: 15
-  _armor:
-    _isEnabled: 1
-    _amount: 10
-    _armorType: 0
-    _armorReducedOnHit: 0.3
---- !u!114 &5361104336916367784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3795783636829145110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-6210713479565099428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3795783636829145110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1748939857161743506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,6 +254,19 @@ MonoBehaviour:
   feedbackColor:
     _feedbackColor: {r: 0.6641852, g: 0.9716981, b: 0, a: 0}
     _isFeedback: 1
+--- !u!114 &-2579932237101210448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3795783636829145110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33dfe087349248d4c9f498142ba2783f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: Assets/Consumable/ConsumableComponents/Evasion.csv
 --- !u!1 &5554047842755586921
 GameObject:
   m_ObjectHideFlags: 0

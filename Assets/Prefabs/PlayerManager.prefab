@@ -1166,6 +1166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerManager: {fileID: 6666194668634368530}
+  audioManagerObj: {fileID: 2946226679684329017}
   maxHealth: {fileID: 2851762154644321735}
   health: {fileID: 7195641178492966699}
   armor: {fileID: 2062779504216353893}
@@ -1418,23 +1419,22 @@ GameObject:
   - component: {fileID: 3121397809359699161}
   - component: {fileID: 6666194668634368537}
   - component: {fileID: 5398706823425373229}
+  - component: {fileID: -2038053329074294541}
+  - component: {fileID: -8625925096297787812}
   - component: {fileID: 6666194668634368538}
   - component: {fileID: 6666194668634368536}
   - component: {fileID: 6666194668634368543}
   - component: {fileID: 6666194668634368542}
-  - component: {fileID: 6666194668634368540}
   - component: {fileID: 6666194668634368531}
   - component: {fileID: 6648841005298274023}
+  - component: {fileID: 5113199147089727754}
+  - component: {fileID: -3788956415682354281}
   - component: {fileID: 1615446667531850186}
-  - component: {fileID: 8071889849303746511}
   - component: {fileID: 2737055497636203910}
-  - component: {fileID: 6390374207803589799}
   - component: {fileID: 1854647328756850522}
   - component: {fileID: 6837337765883696064}
   - component: {fileID: 5704900715790483025}
   - component: {fileID: 7597605632689739556}
-  - component: {fileID: 3229368768591104004}
-  - component: {fileID: 786365446715706731}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Player
@@ -1473,6 +1473,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 30
   _camera: {fileID: 4562242209003515458}
+  DAMAGEDONE: DAMAGE_DONE
 --- !u!114 &5398706823425373229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1506,6 +1507,32 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &-2038053329074294541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ded20d2c5b2984a4db50fcc74c870db6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeIntervalInSecond: 1
+--- !u!114 &-8625925096297787812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6d855a581d6b345839eb4970cf9ec0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countDownTimeInSecond: 1
 --- !u!114 &6666194668634368538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1527,6 +1554,8 @@ MonoBehaviour:
   yPos: -1
   deathCooldown: 2
   inGameUIObj: {fileID: 5315503205917508178}
+  collidersTags:
+  - powerup
 --- !u!143 &6666194668634368536
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1580,18 +1609,8 @@ MonoBehaviour:
   _weight: 3
   _runSpeedBuff: 2
   _jumpCooldown: 0.2
---- !u!114 &6666194668634368540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fbe6f38a47beb14d9f079213ee0a327, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  SPEED: MOVEMENT_SPEED
+  JUMP: JUMP_HEIGHT
 --- !u!114 &6666194668634368531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1788,6 +1807,32 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5113199147089727754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c25e4ff93976d0f408039597b699d633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  featuresDirectory: Assets\PlayerFeatures\Features
+--- !u!114 &-3788956415682354281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d704d771ae0e2064e835fa9bebd5f300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  componentDirectory: Assets\PlayerFeatures\Components
 --- !u!114 &1615446667531850186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1802,20 +1847,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   maxArmor: 200
-  initialHealth: 100
   damageReceivedColorFeedback: {r: 0.6981132, g: 0, b: 0, a: 0}
---- !u!114 &8071889849303746511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b119f27e01627ed48b51d43ec66ac317, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  minArmorReductionOnHit: 0
+  ARMORREDUCTION: ARMOR_REDUCTION_ON_HIT
+  ARMORDURABILITY: DURABILITY
+  ARMOR: ARMOR
+  HEALTH: HEALTH
+  HOT: HOT
+  DOT: DOT
+  DAMAGEREDUCTION: DAMAGE_RECEIVED
+  LIFEFEATUREPATH: Assets\PlayerFeatures\LifeFeatures\lifeFeatures.csv
 --- !u!82 &2737055497636203910
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1912,18 +1953,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6390374207803589799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f2d7326158bbae41a03447187fc6930, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1854647328756850522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2000,36 +2029,6 @@ MonoBehaviour:
   weaponsList:
   - {fileID: 8018606936078106615, guid: af10761ef979531479a7f498d696a2a3, type: 3}
   - {fileID: 3551805850954928087, guid: e49b35b52a923bc4e90d5939298e83d5, type: 3}
---- !u!114 &3229368768591104004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 387a2394c5e87ff4e8b7a7443408373e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powerups:
-  - {fileID: 631950880566075843, guid: 5f549b11d8105e3499724a6989187032, type: 3}
-  - {fileID: 3795783636829145110, guid: 2a13dd011d4fe1b46978c7283c597072, type: 3}
-  - {fileID: 1882649575228776267, guid: ecf00558b6e2cb449b548afd4e0fc6f9, type: 3}
-  - {fileID: 3795783636829145110, guid: 99ef660cf933a3c408f4e50998130063, type: 3}
---- !u!114 &786365446715706731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8738b819fb0df44f9f23097aa44b717, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioManager: {fileID: 2867725771892789690}
 --- !u!1 &6715530305080902221
 GameObject:
   m_ObjectHideFlags: 0

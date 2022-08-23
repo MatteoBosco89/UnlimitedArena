@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Weapon;
+using AudioManagerPkg;
 
 namespace Character
 {
     public class InGameUIManager : MonoBehaviour
     {
         [SerializeField] protected GameObject playerManager;
+        [SerializeField] protected GameObject audioManagerObj;
         [SerializeField] protected Text maxHealth;
         [SerializeField] protected Text health;
         [SerializeField] protected Text armor;
@@ -19,7 +21,7 @@ namespace Character
         [SerializeField] protected Image healthFeedback;
         protected PlayerLifeManager lifeManager;
         protected WeaponManager weaponManager;
-        protected ConsumableManager consumableManager;
+        protected AudioManager audioManager;
         protected float placeholderVal;
         protected float maxVal;
         protected bool isFeedback = false;
@@ -31,13 +33,13 @@ namespace Character
         {
             lifeManager = playerManager.GetComponent<PlayerLifeManager>();
             weaponManager = playerManager.GetComponent<WeaponManager>();
-            consumableManager = playerManager.GetComponent<ConsumableManager>();
             maxHealth.text = lifeManager.MaxHealth.ToString();
             placeholderVal = Mathf.CeilToInt(placeHolder.rectTransform.sizeDelta.x);
             maxVal = 1 / (float)lifeManager.MaxHealth;
             healthFeedback.color = new Color(0, 0, 0, 0);
             feedbackTime = healthFeedback.GetComponent<UiFeedback>().FeedbackTime;
             maxTransparency = healthFeedback.GetComponent<UiFeedback>().MaxTransparency;
+            audioManager = audioManagerObj.GetComponent<AudioManager>();
         }
 
         private void FixedUpdate()
@@ -73,6 +75,16 @@ namespace Character
             healthFeedback.color = color;
             colorUp = true;
             isFeedback = true;
+        }
+
+        public void CollectibleFeedback(GameObject o)
+        {
+            if (o.GetComponent<CollectibleFeedback>().FeedbackColor._isFeedback)
+            {
+                DoFeedback(o.GetComponent<CollectibleFeedback>().FeedbackColor._feedbackColor);
+                audioManager.PlaySound(o.GetComponent<CollectibleFeedback>().Clip);
+            }
+                
         }
     }
 }

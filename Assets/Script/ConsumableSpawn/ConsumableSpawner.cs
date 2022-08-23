@@ -50,4 +50,9 @@ public class ConsumableSpawner : NetworkBehaviour
         startCooldown = Time.time;
     }
 
+    public void PickedUp()
+    {
+
+    }
+
 }

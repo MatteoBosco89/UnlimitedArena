@@ -8,7 +8,6 @@ TagManager:
   - QuadDamage
   - Invincibility
   - Speed
-  - PowerUp
   - WeaponContainer
   - Ammo
   - Weapon
@@ -17,11 +16,12 @@ TagManager:
   - ConsumableSpawnManager
   - NetworkManager
   - PlayerSpawnManager
+  - POWERUP
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Pickable
   - Water
   - UI
   - 

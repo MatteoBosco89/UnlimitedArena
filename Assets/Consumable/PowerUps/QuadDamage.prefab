@@ -94,12 +94,10 @@ GameObject:
   - component: {fileID: 1882649575228776260}
   - component: {fileID: 1882649575228776261}
   - component: {fileID: 1882649575228776266}
-  - component: {fileID: 7258372874626506527}
-  - component: {fileID: 2197583711057070715}
   - component: {fileID: 2446672848078145592}
   m_Layer: 0
   m_Name: QuadDamage
-  m_TagString: PowerUp
+  m_TagString: POWERUP
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,41 +144,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7258372874626506527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1882649575228776267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34a37ef69b04b1043981c83ea3c1da31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: QuadDamage
-  _modifierTime: 30
-  _movementPowerup:
-    _isEnabled: 0
-    _multiplier: 0
-  _damageDonePowerup:
-    _isEnabled: 1
-    _multiplier: 4
-  _damageReceivedPowerup:
-    _isEnabled: 0
-    _multiplier: 0
---- !u!114 &2197583711057070715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1882649575228776267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2446672848078145592
 MonoBehaviour:
   m_ObjectHideFlags: 0

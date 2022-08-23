@@ -1,43 +1,54 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.IO;
+using System.Linq;
 
 namespace Character
 {
     public class PlayerLifeManager : NetworkBehaviour
     {
-
         [SerializeField] protected int maxHealth = 100;
-        [SerializeField] protected int maxArmor = 200;
-        [SerializeField] protected int initialHealth = 100;
+        [SerializeField] protected int maxArmor = 500;
         [SerializeField] protected Color damageReceivedColorFeedback;
-        [SerializeField] protected float _noArmorReduction = 0.0f;
-        [SerializeField] protected float _lightArmorReduction = 0.2f;
-        [SerializeField] protected float _mediumArmorReduction = 0.3f;
-        [SerializeField] protected float _heavyArmorReduction = 0.4f;
+        [SerializeField] protected int minArmorReductionOnHit;
+        [SerializeField] protected string ARMORREDUCTION = "ARMOR_REDUCTION_ON_HIT";
+        [SerializeField] protected string ARMORDURABILITY = "DURABILITY";
+        [SerializeField] protected string ARMOR = "ARMOR";
+        [SerializeField] protected string HEALTH = "HEALTH";
+        [SerializeField] protected string HOT = "HOT";
+        [SerializeField] protected string DOT = "DOT";
+        [SerializeField] protected string DAMAGEREDUCTION = "DAMAGE_RECEIVED";
+        [SerializeField] protected string LIFEFEATUREPATH;
         protected int initialArmor = 0;
-        protected float _armorReduction = 0;
-        protected float _armorReductionOnHit = 0;
-        protected PlayerLifeHandler.Armor.ArmorType _currentArmorType = PlayerLifeHandler.Armor.ArmorType.None;
-        protected DmgReceivedCalc dmgReceived;
-        protected PowerUpManager powerUp;
-        protected ConsumableHandler consumableHandler;
+        protected int initialHealth = 0;
         protected CharacterStatus characterStatus;
         protected InGameUIManager inGameUI;
+        protected PlayerManagerScript playerManager;
+        protected ComponentManager componentManager;
+        protected FeatureManager featureManager;
+        protected Dictionary<string, float> lifeFeatures = new Dictionary<string, float>();
         [SyncVar] protected int armor;
         [SyncVar] protected int health;
         [SyncVar] protected bool isDead = false;
 
         private void Awake()
         {
-            dmgReceived = GetComponent<DmgReceivedCalc>();
-            powerUp = GetComponent<PowerUpManager>();
+            playerManager = GetComponent<PlayerManagerScript>();
+            componentManager = playerManager.ComponentManager;
             characterStatus = GetComponent<CharacterStatus>();
-            inGameUI = GetComponent<PlayerManagerScript>().InGameUI;
+            LoadParameters(LIFEFEATUREPATH, lifeFeatures);
+        }
+
+        public void Start()
+        {
+            inGameUI = playerManager.InGameUI;
+            initialHealth = (int)playerManager.FeatureValue(HEALTH);
+            initialArmor = (int)playerManager.FeatureValue(ARMOR);
             armor = initialArmor;
             health = initialHealth;
-            _armorReduction = _noArmorReduction;
         }
 
         public void ResetPlayerLife()
@@ -73,29 +84,19 @@ namespace Character
         public void TakeDamage(int dmg)
         {
             if (isDead) return;
-            float damage = dmgReceived.CalcDamageReceived(dmg);
-            if (armor > 0) damage = ReduceArmor(damage);
+            ReduceArmor(dmg);
+            float damage = ComputateHealthReduction(dmg);          
             health -= Mathf.CeilToInt(damage);
             inGameUI.DoFeedback(damageReceivedColorFeedback);
         }
 
-        private void Heal(PlayerLifeHandler.Medikit m)
-        {
-            if (!m._isEnabled) return;
-            if (isDead) return;
-            health += m._amount;
-            if (health > maxHealth) health = maxHealth;
-        }
-
-        private void AddArmor(PlayerLifeHandler.Armor a)
-        {
-            if (!a._isEnabled) return;
-            if (isDead) return;
-            CalcArmor(a);
-        }
-
         private void FixedUpdate()
         {
+            ComputeFeature();
+            armor = (int)playerManager.FeatureValue(ARMOR);
+            maxHealth = (int)playerManager.FeatureValue(HEALTH);
+            ComputeDamageByComponent(DOT);
+            ComputeHealByComponent(HOT);
             if (health <= 0)
             {
                 health = 0;
@@ -103,8 +104,52 @@ namespace Character
                 CmdDeath();
                 characterStatus.IsAlive = false;
             }
-
             CheckIsOutOfBorder();
+        }
+
+        protected void ComputeFeature()
+        {
+            for(int i = 0; i < lifeFeatures.Count; i++)
+            {
+                string s = lifeFeatures.Keys.ElementAt(i);
+                lifeFeatures[s] = componentManager.FeatureValue(s);
+            }
+        }
+
+        public void ComputeDamageByComponent(string type)
+        {
+            Dictionary<string, float> filtered = playerManager.GetAllTicks(type);
+            float damage = ComputeFeatureValue(filtered);
+            if(damage > 0) TakeDamage(Mathf.CeilToInt(damage));
+        }
+
+        public void ComputeHealByComponent(string type)
+        {
+            Dictionary<string, float> filtered = playerManager.GetAllTicks(type);
+            float healing = ComputeFeatureValue(filtered);
+            if (healing > 0) HealMe(Mathf.CeilToInt(healing));
+        }
+
+        public float ComputeFeatureValue(Dictionary<string, float> received)
+        {
+            float res = 0;
+            foreach(string s in received.Keys)
+            {
+                try
+                {
+                    float reduction = lifeFeatures[s];
+                    res += received[s] * reduction;
+                }
+                catch (Exception) { }
+            }
+            return res;
+        }
+
+        protected void HealMe(int amount)
+        {
+            if (isDead) return;
+            health += amount;
+            if (health > maxHealth) health = maxHealth;
         }
 
         protected void CheckIsOutOfBorder()
@@ -136,45 +181,44 @@ namespace Character
             isDead = false;
         }
 
-        protected float ReduceArmor(float dmg)
+        protected void ReduceArmor(float dmg)
         {
-            float reduction = dmg * _armorReductionOnHit;
-            dmg *= _armorReduction;
-            armor -= Mathf.CeilToInt(reduction);
-            if (armor <= 0)
+            Dictionary<string, UAComponent> comp = componentManager.ComponentsByFeature(ARMOR);
+            foreach(UAComponent c in comp.Values)
             {
-                armor = 0;
-                _currentArmorType = PlayerLifeHandler.Armor.ArmorType.None;
+                try
+                {
+                    float reduction = c.MyModifiers[ARMORREDUCTION].MultFactor;
+                    reduction *= dmg;
+                    if (reduction < minArmorReductionOnHit) reduction = minArmorReductionOnHit;
+                    c.ReduceComponent(ARMORDURABILITY, reduction);
+                }
+                catch (Exception) { }
             }
-            return dmg;
         }
 
-        public void PickupLife(GameObject consumable)
+        protected float ComputateHealthReduction(float dmg)
         {
-            PlayerLifeHandler plh = consumable.GetComponent<PlayerLifeHandler>();
-            Heal(plh.MedikitItem);
-            AddArmor(plh.ArmorItem);
+            float reduction = playerManager.PlayerFeatures.FeatureValue(DAMAGEREDUCTION);
+            float healthReduction = dmg * reduction;
+            return healthReduction;
         }
 
-        public void CalcArmor(PlayerLifeHandler.Armor a)
+        protected void LoadParameters(string path, Dictionary<string, float> paramDict)
         {
-            if (_currentArmorType != a._armorType)
+            string[] lines = File.ReadAllLines(path);
+            foreach (string l in lines)
             {
-                _currentArmorType = a._armorType;
-                armor = a._amount;
-                _armorReduction = CalcReduction();
-                _armorReductionOnHit = a._armorReducedOnHit;
+                string[] items = l.Split(',');
+                string param1 = items[0].Trim();
+                float param2 = ParseFloatValue(items[1]);
+                paramDict.Add(param1, param2);
             }
-            else { armor += a._amount; }
-            if (armor > maxArmor) armor = maxArmor;
         }
 
-        protected float CalcReduction()
+        protected float ParseFloatValue(string val)
         {
-            if (_currentArmorType == PlayerLifeHandler.Armor.ArmorType.Light) return _lightArmorReduction;
-            if (_currentArmorType == PlayerLifeHandler.Armor.ArmorType.Medium) return _mediumArmorReduction;
-            if (_currentArmorType == PlayerLifeHandler.Armor.ArmorType.Heavy) return _heavyArmorReduction;
-            return _noArmorReduction;
+            return float.Parse(val, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
         }
 
     }

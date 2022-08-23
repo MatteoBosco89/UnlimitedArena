@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 3612449760382172093}
   m_Layer: 0
   m_Name: InvincibilityPowerUp
-  m_TagString: PowerUp
+  m_TagString: POWERUP
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -170,6 +170,9 @@ MonoBehaviour:
     _multiplier: 0
   _damageReceivedPowerup:
     _isEnabled: 1
+    _multiplier: 0
+  _jumpCostumizedPowerup:
+    _isEnabled: 0
     _multiplier: 0
 --- !u!114 &-4638770147099678552
 MonoBehaviour:

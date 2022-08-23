@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Weapon;
 using GameManager;
+using System.IO;
 
 namespace Character
 {
@@ -15,13 +16,16 @@ namespace Character
         [SerializeField] protected float yPos = -2.0f;
         [SerializeField] protected float deathCooldown = 2.0f;
         [SerializeField] protected GameObject inGameUIObj;
+        [SerializeField] protected List<string> collidersTags;
+        protected FeatureManager featureManager;
+        protected ComponentManager componentManager;
         protected float startDeathCooldown = 0;
         protected GameObject networkManagerObj;
-        protected ConsumableManager consumableManager;
         protected WeaponManager weaponManager;
         protected AnimatorManager animatorManager;
         protected PlayerLifeManager lifeManager;
-        protected PowerUpManager powerUpManager;
+        protected CountDownManager countDownManager;
+        protected TickManager tickManager;
         protected GameObject thisChar = null;
         protected GameObject thisCharWeapon = null;
         protected Vector3 playerPosition;
@@ -33,6 +37,16 @@ namespace Character
         [SyncVar] protected int chosenPlayer;
         protected Vector3 theSpawnPosition = new Vector3(0, 0, 0);
         [SyncVar] protected int clientId = 0;
+
+        public FeatureManager PlayerFeatures
+        {
+            get { return featureManager; }
+        }
+
+        public ComponentManager ComponentManager
+        {
+            get { return componentManager; }
+        }
 
         public Vector3 TheSpawnPosition
         {
@@ -72,9 +86,11 @@ namespace Character
 
         private void Awake()
         {
+            featureManager = GetComponent<FeatureManager>();
+            componentManager = GetComponent<ComponentManager>();
+            countDownManager = GetComponent<CountDownManager>();
+            tickManager = GetComponent<TickManager>();
             networkManagerObj = GameObject.FindGameObjectWithTag("NetworkManager");
-            consumableManager = GetComponent<ConsumableManager>();
-            powerUpManager = GetComponent<PowerUpManager>();
             weaponManager = GetComponent<WeaponManager>();
             animatorManager = animatorManagerObj.GetComponent<AnimatorManager>();
             netManager = networkManagerObj.GetComponent<NetManager>();
@@ -82,7 +98,7 @@ namespace Character
             characterStatus = GetComponent<CharacterStatus>();
             mp = GetComponent<MovePlayer>();
             inGameUI = inGameUIObj.GetComponent<InGameUIManager>();
-            consumableManager.NetM = netManager;
+            collidersTags = collidersTags.ConvertAll(s => s.ToUpper());
         }
 
         public void ActivateCam()
@@ -92,7 +108,7 @@ namespace Character
 
         void Start()
         {
-            if(isLocalPlayer) netManager.PManager = GetComponent<PlayerManagerScript>();
+            if (isLocalPlayer) netManager.PManager = GetComponent<PlayerManagerScript>();
             ActivateModel();
             thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
             weaponManager.WeaponContainer = thisCharWeapon;
@@ -100,7 +116,7 @@ namespace Character
             Settings();
             if (isLocalPlayer) PlayerReset();
             SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
-            ActivateCam();
+            ActivateCam();      
         }
 
         private void Settings()
@@ -117,7 +133,7 @@ namespace Character
         {
             lifeManager.ResetPlayerLife();
             weaponManager.ResetWeapons();
-            powerUpManager.ResetPowerUps();    
+            //powerUpManager.ResetPowerUps();    
         }
 
         private void StartDeathCooldown()
@@ -154,11 +170,25 @@ namespace Character
 
             // for debugging purpose
             if (isLocalPlayer && characterStatus.IsChangingWeaponsPre) lifeManager.TakeDamage(10);
+            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) componentManager.Print();
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            consumableManager.ApplyAura(other.gameObject);
+            string tag = other.gameObject.tag.ToUpper();
+            if (InTagList(tag))
+            {
+                string path = other.gameObject.GetComponent<PathManager>().Path;
+                string[] n = path.Split('.');
+                string name =  Path.GetFileName(n[0]);
+                componentManager.ComponentPickup(tag, name, path);
+                inGameUI.CollectibleFeedback(other.gameObject);
+            }  
+        }
+
+        protected bool InTagList(string s)
+        {
+            return collidersTags.Contains(s);
         }
 
         public void SetPvP(bool flag)
@@ -168,7 +198,10 @@ namespace Character
 
         protected GameObject SearchByTag(GameObject o, string tag)
         {
-            foreach (Transform t in o.GetComponentsInChildren<Transform>()) if (t.CompareTag(tag)) return t.gameObject;
+            foreach (Transform t in o.GetComponentsInChildren<Transform>())
+            {
+                if (t.CompareTag(tag)) return t.gameObject;
+            }
             return null;
         }
 
@@ -209,6 +242,20 @@ namespace Character
             isDeathCooldown = val;
         }
 
+        public float FeatureValue(string f)
+        {
+            return PlayerFeatures.FeatureValue(f);
+        }
+
+        public float TickValue(string f)
+        {
+            return PlayerFeatures.TickValue(f);
+        }
+
+        public Dictionary<string, float> GetAllTicks(string type)
+        {
+            return ComponentManager.GetAllTicks(type);
+        }
 
     }
 }
