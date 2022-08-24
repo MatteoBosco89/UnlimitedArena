@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using Weapon;
 using GameManager;
 using System.IO;
+using Unity.IO;
 
 namespace Character
 {
@@ -114,7 +115,7 @@ namespace Character
             weaponManager.WeaponContainer = thisCharWeapon;
             weaponManager.Spawn();
             Settings();
-            if (isLocalPlayer) PlayerReset();
+            PlayerReset();
             SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
             ActivateCam();      
         }
@@ -131,9 +132,7 @@ namespace Character
 
         private void PlayerReset()
         {
-            lifeManager.ResetPlayerLife();
-            weaponManager.ResetWeapons();
-            //powerUpManager.ResetPowerUps();    
+            weaponManager.ResetWeapons();  
         }
 
         private void StartDeathCooldown()
@@ -163,14 +162,16 @@ namespace Character
             {
                 if (Time.time - startDeathCooldown >= deathCooldown && characterStatus.IsJumping)
                 {
+                    lifeManager.SignalAlive();
                     netManager.SignalDeath(clientId);
                     isDeathCooldown = false;
+                    lifeManager.IsDead = false;
                 }
             }
 
             // for debugging purpose
             if (isLocalPlayer && characterStatus.IsChangingWeaponsPre) lifeManager.TakeDamage(10);
-            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) TestFilter();
+            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) componentManager.Print();
         }
 
         protected void TestFilter()

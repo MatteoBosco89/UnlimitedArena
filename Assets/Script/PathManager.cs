@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.IO;
 
 namespace Character
 {
@@ -10,9 +12,13 @@ namespace Character
 
         public string Path
         {
-            get { return path; }
+            get { return CorrectPath(); }
         }
 
+        protected string CorrectPath()
+        {
+            return System.IO.Path.Combine(Application.streamingAssetsPath, path);
+        }
     }
 }
 

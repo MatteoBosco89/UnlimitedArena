@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Unity.IO;
 
 namespace Character
 {
@@ -31,6 +32,7 @@ namespace Character
         protected FeatureManager featureManager;
         protected Dictionary<string, float> lifeFeatures = new Dictionary<string, float>();
         protected Dictionary<string, string> tickables = new Dictionary<string, string>();
+        protected bool loading = true;
         [SyncVar] protected int armor;
         [SyncVar] protected int health;
         [SyncVar] protected bool isDead = false;
@@ -38,6 +40,8 @@ namespace Character
 
         private void Awake()
         {
+            LIFEFEATUREPATH = Path.Combine(Application.streamingAssetsPath, LIFEFEATUREPATH);
+            TICKSPATH = Path.Combine(Application.streamingAssetsPath, TICKSPATH);
             playerManager = GetComponent<PlayerManagerScript>();
             componentManager = playerManager.ComponentManager;
             characterStatus = GetComponent<CharacterStatus>();
@@ -50,23 +54,31 @@ namespace Character
             inGameUI = playerManager.InGameUI;
             initialHealth = (int)playerManager.FeatureValue(HEALTH);
             initialArmor = (int)playerManager.FeatureValue(ARMOR);
-            armor = initialArmor;
-            health = initialHealth;
+            if (isLocalPlayer)
+            {
+                CmdHeal(initialHealth);
+                CmdAddArmor(initialArmor);
+            }
+            ResetPlayerLife();
             experience = 0;
         }
 
         public void ResetPlayerLife()
         {
             isDead = false;
-            CmdAlive();
-            CmdAddArmor(initialArmor);
-            CmdHeal(initialHealth);
+            if (isLocalPlayer)
+            {
+                CmdAddArmor(initialArmor);
+                CmdHeal(initialHealth);
+            }
             characterStatus.IsAlive = true;
+            loading = false;
         }
 
         public bool IsDead
         {
             get { return isDead; }
+            set { isDead = value; }
         }
 
         public int MaxHealth
@@ -111,11 +123,11 @@ namespace Character
             armor = (int)playerManager.FeatureValue(ARMOR);
             maxHealth = (int)playerManager.FeatureValue(HEALTH);
             DoAllTicks();
-            if (health <= 0)
+            if (health <= 0 && !loading)
             {
                 health = 0;
                 isDead = true;
-                CmdDeath();
+                if(isLocalPlayer) CmdDeath();
                 characterStatus.IsAlive = false;
             }
             CheckIsOutOfBorder();
@@ -127,6 +139,11 @@ namespace Character
             {
                 ComputeByComponent(t.Key, t.Value);
             }
+        }
+
+        public void ForeignDamage(Dictionary<string, float> damageList)
+        {
+            TakeDamage(Mathf.CeilToInt(ComputeFeatureValue(damageList)));
         }
 
         protected void ComputeFeature()
@@ -167,7 +184,11 @@ namespace Character
             return res;
         }
 
-        
+        public void SignalAlive()
+        {
+            CmdAlive();
+            CmdHeal(100);
+        }
 
         protected void CheckIsOutOfBorder()
         {
@@ -205,7 +226,8 @@ namespace Character
             {
                 try
                 {
-                    float reduction = c.MyModifiers[ARMORREDUCTION].MultFactor;
+                    string reductionName = c.ModifierNameByFeature(ARMORREDUCTION);
+                    float reduction = c.MyModifiers[reductionName].MultFactor;
                     reduction *= dmg;
                     if (reduction < minArmorReductionOnHit) reduction = minArmorReductionOnHit;
                     c.ReduceComponent(ARMORDURABILITY, reduction);

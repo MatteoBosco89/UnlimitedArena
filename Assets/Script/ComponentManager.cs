@@ -1,5 +1,6 @@
 using System.Collections;
 using System;
+using Unity.IO;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Character
     {
         [SerializeField] protected string componentDirectory;
         protected Dictionary<string, UAComponent> components = new Dictionary<string, UAComponent>();
+        protected Dictionary<string, UAComponent> baseComponents = new Dictionary<string, UAComponent>();
         protected Dictionary<string, Feature> objectFeatures = null;
         protected List<string> tickable = new List<string>();
         protected Dictionary<string, float> featureMulMod = new Dictionary<string, float>();
@@ -43,6 +45,7 @@ namespace Character
 
         private void Awake()
         {
+            componentDirectory = Path.Combine(Application.streamingAssetsPath, componentDirectory);
             countDownManager = GetComponent<CountDownManager>();
             tickManager = GetComponent<TickManager>();
             featureManager = GetComponent<FeatureManager>();
@@ -131,7 +134,8 @@ namespace Character
             if (!CheckFile(path)) return;
             string[] n = path.Split('.');
             UAComponent c = new UAComponent(Path.GetFileName(n[0].Trim()), path, this);
-            AddComponent(c);            
+            AddBaseComponent(c);
+            AddComponent(c);
         }
 
         protected void LoadComponentGroup(string path)
@@ -148,6 +152,12 @@ namespace Character
         {
             component = component.ToUpper();
             return components[component];
+        }
+
+        public void AddBaseComponent(UAComponent c)
+        {
+            if (baseComponents.ContainsKey(c.ComponentId)) RemoveComponent(c.ComponentId);
+            baseComponents.Add(c.ComponentId, c);
         }
 
         public void AddComponent(UAComponent c)
@@ -205,6 +215,11 @@ namespace Character
             }
         }
 
+        public void PrintFeatures()
+        {
+            foreach (Feature f in objectFeatures.Values) Debug.Log(f.Type + " " + f.CurrValue);
+        }
+
         public Dictionary<string, UAComponent> ComponentsByFeature(string feature)
         {
             return components.Where(x => x.Value.HasFeature(feature)).ToDictionary(x => x.Key, x=> x.Value);
@@ -221,6 +236,7 @@ namespace Character
 
         public void ComponentPickup(string type, string name, string path)
         {
+            path = Path.Combine(Application.streamingAssetsPath, path);
             type = type.ToLower();
             type = char.ToUpper(type[0]) + type.Substring(1);
             Type t = Type.GetType("Character." + type);
@@ -256,6 +272,23 @@ namespace Character
                 if (c.Value is T t) filtered.Add(c.Key, t);
             }
             return filtered;
+        }
+
+        public bool IsFeaturePresent(string feature)
+        {
+            return objectFeatures.ContainsKey(feature);
+        }
+
+        public void AddComponents(Dictionary<string, UAComponent> com)
+        {
+            foreach (UAComponent c in com.Values) AddComponent(c);
+        }
+
+        public void UpdateComponents(Dictionary<string, UAComponent> com)
+        {
+            components.Clear();
+            foreach (UAComponent c in com.Values) AddComponent(c);
+            foreach (UAComponent c in baseComponents.Values) AddComponent(c);
         }
 
     }

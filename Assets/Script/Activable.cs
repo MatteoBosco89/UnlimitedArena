@@ -8,9 +8,13 @@ namespace Character
     {
         protected CountDownManager cdmanager;
         protected TickManager tm;
+        protected string powerupName;
+        protected string activableSuffix = "activable";
 
         public Activable(string name, string path, ComponentManager comm) : base(name, path, comm)
         {
+            powerupName = name;
+            componentId = name + activableSuffix; 
             tm = cm.TheTickManager;
             cdmanager = cm.TheCountDownManager;
         }
@@ -20,11 +24,11 @@ namespace Character
             //base.LoadMe(path);
         }
 
-        protected void Activate()
+        public void Activate()
         {
-            Powerup p = new Powerup(componentId, componentPath, cm);
+            Powerup p = new Powerup(powerupName, componentPath, cm);
             cm.AddComponent(p);
-            cm.RemoveComponent(this);
+            cm.RemoveComponent(componentId);
         }
 
     }

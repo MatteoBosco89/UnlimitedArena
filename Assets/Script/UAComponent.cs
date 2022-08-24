@@ -101,11 +101,18 @@ namespace Character
                 float mul_val = ParseFloatValue(items[2]);
                 float add_val = ParseFloatValue(items[3]);
                 Modifier m = new Modifier(name, feature, mul_val, add_val);
-                Feature f = new Feature(ParseFloatValue(items[3]), feature);
+                Feature f = new Feature(add_val, feature);
                 AddWrapper(name, feature);
                 AddModifier(m);
                 AddFeature(f);
+                
             }
+        }
+
+        public string ModifierNameByFeature(string feature)
+        {
+            foreach (KeyValuePair<string, string> w in wrapper) if (w.Value == feature) return w.Key;
+            return null;
         }
 
         protected float ParseFloatValue(string val)

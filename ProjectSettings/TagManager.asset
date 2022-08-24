@@ -17,6 +17,7 @@ TagManager:
   - NetworkManager
   - PlayerSpawnManager
   - POWERUP
+  - ACTIVABLE
   layers:
   - Default
   - TransparentFX

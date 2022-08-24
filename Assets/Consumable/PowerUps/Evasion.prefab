@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dfe087349248d4c9f498142ba2783f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: Assets/Consumable/ConsumableComponents/Evasion.csv
+  path: Consumable/Evasion.csv
 --- !u!1 &5554047842755586921
 GameObject:
   m_ObjectHideFlags: 0

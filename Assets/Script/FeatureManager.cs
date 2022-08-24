@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using System.IO;
 using UnityEngine;
+using Unity.IO;
 
 namespace Character
 {
@@ -33,13 +34,14 @@ namespace Character
 
         private void Awake()
         {
+            featuresDirectory = Path.Combine(Application.streamingAssetsPath, featuresDirectory);
             componentManager = GetComponent<ComponentManager>();
             LoadFeatures();
             componentManager.ObjectFeatures = features;
         }
 
         protected void LoadFeatures()
-        {
+        { 
             if (!Directory.Exists(featuresDirectory))
             {
                 Debug.LogError("Features Directory Not Found");

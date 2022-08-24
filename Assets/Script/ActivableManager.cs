@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 namespace Character
 {
     public class ActivableManager : MonoBehaviour
     {
         protected Dictionary<string, Activable> activables = new Dictionary<string, Activable>();
-        protected Activable selected;
+        protected int current = 0;
         protected ComponentManager cm;
         protected CharacterStatus cs;
         protected float timer = 0;
@@ -23,7 +25,9 @@ namespace Character
         private void FixedUpdate()
         {
             activables = cm.FilterByType<Activable>();
+            if (activables.Count <= 0) return;
             CheckTimer();
+            CheckActivablesBound();
             if (cs.Activate) Activate();
             else if (cs.ActivateNext) NextActivable();
             else if (cs.ActivatePre) PreviousActivable();
@@ -44,7 +48,8 @@ namespace Character
         {
             if (action)
             {
-                Debug.Log("NEXT");
+                current += 1;
+                if (current >= activables.Count) current = 0;
                 timer = interval;
             }
             
@@ -54,7 +59,8 @@ namespace Character
         {
             if (action)
             {
-                Debug.Log("PRE");
+                current -= 1;
+                if (current < 0) current = activables.Count - 1;
                 timer = interval;
             }
         }
@@ -63,9 +69,23 @@ namespace Character
         {
             if (action)
             {
-                Debug.Log("ACTIVATE");
+                activables.ElementAt(current).Value.Activate();
                 timer = interval;
             }
+        }
+
+        protected void CheckActivablesBound()
+        {
+            if (current >= activables.Count) current = activables.Count - 1;
+        }
+
+        public string GetCurrent()
+        {
+            try
+            {
+                return activables.ElementAt(current).Key;
+            }
+            catch (Exception) { return ""; }
         }
 
     }

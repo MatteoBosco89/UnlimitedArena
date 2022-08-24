@@ -20,6 +20,13 @@ namespace Weapon
         private bool changeButtonsPressed = false;
         protected CharacterStatus status;
         protected GameObject weaponContainer;
+        protected ComponentManager componentManager;
+        protected FeatureManager featureManager;
+
+        public FeatureManager MyFeatureManager
+        {
+            get { return featureManager;}
+        }
 
         public GameObject ActiveWeapon
         {
@@ -68,16 +75,19 @@ namespace Weapon
             ChangeWeapon(activeWeaponId);
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (isLocalPlayer && pms.SpawnedChar.activeSelf)
             {
-                if (weaponsList.Count > 0)
-                {
-                    SelectWeapon();
-                    CheckButtonPressed();
-                }
+                SelectWeapon();
+                CheckButtonPressed();
+                UpdateWeaponFeatures();
             }
+        }
+
+        protected void UpdateWeaponFeatures()
+        {
+            componentManager.UpdateComponents(pms.ComponentManager.Components);
         }
 
         private void SelectWeapon()
@@ -173,6 +183,8 @@ namespace Weapon
             activeWeapon = playerWeapons[activeWeaponId];
             activeWeapon.SetActive(true);
             activeWeaponStatus = activeWeapon.GetComponent<WeaponStatus>();
+            componentManager = activeWeapon.GetComponent<ComponentManager>();
+            featureManager = activeWeapon.GetComponent<FeatureManager>();
             WeaponInPosition();
             AnimateByWeapon();
         }

@@ -1422,14 +1422,14 @@ GameObject:
   - component: {fileID: -2038053329074294541}
   - component: {fileID: -8625925096297787812}
   - component: {fileID: 6666194668634368538}
+  - component: {fileID: 5113199147089727754}
+  - component: {fileID: -3788956415682354281}
+  - component: {fileID: 1615446667531850186}
   - component: {fileID: 6666194668634368536}
   - component: {fileID: 6666194668634368543}
   - component: {fileID: 6666194668634368542}
   - component: {fileID: 6666194668634368531}
   - component: {fileID: 6648841005298274023}
-  - component: {fileID: 5113199147089727754}
-  - component: {fileID: -3788956415682354281}
-  - component: {fileID: 1615446667531850186}
   - component: {fileID: 2737055497636203910}
   - component: {fileID: 1854647328756850522}
   - component: {fileID: 6837337765883696064}
@@ -1475,6 +1475,9 @@ MonoBehaviour:
   range: 30
   _camera: {fileID: 4562242209003515458}
   DAMAGEDONE: DAMAGE_DONE
+  DEFAULTDAMAGEDONE: PHYSICALDAMAGEDONE
+  DEFAULTDAMAGERESIST: PHYSICALDAMAGE
+  damageWrapperDirectory: DamageWrapper
 --- !u!114 &5398706823425373229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1558,6 +1561,55 @@ MonoBehaviour:
   collidersTags:
   - powerup
   - activable
+--- !u!114 &5113199147089727754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c25e4ff93976d0f408039597b699d633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  featuresDirectory: PlayerFeatures\Features
+--- !u!114 &-3788956415682354281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d704d771ae0e2064e835fa9bebd5f300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  componentDirectory: PlayerFeatures\Components
+--- !u!114 &1615446667531850186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14494fe006ec4054daebb667b604691b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  maxArmor: 200
+  damageReceivedColorFeedback: {r: 0.6981132, g: 0, b: 0, a: 0}
+  minArmorReductionOnHit: 0
+  ARMORREDUCTION: ARMOR_REDUCTION_ON_HIT
+  ARMORDURABILITY: DURABILITY
+  ARMOR: ARMOR
+  HEALTH: HEALTH
+  DAMAGEREDUCTION: DAMAGE_RECEIVED
+  LIFEFEATUREPATH: PlayerFeatures\LifeFeatures\lifeFeatures.csv
+  TICKSPATH: PlayerFeatures\LifeFeatures\ticks.csv
 --- !u!143 &6666194668634368536
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1857,55 +1909,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5113199147089727754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c25e4ff93976d0f408039597b699d633, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  featuresDirectory: Assets\PlayerFeatures\Features
---- !u!114 &-3788956415682354281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d704d771ae0e2064e835fa9bebd5f300, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentDirectory: Assets\PlayerFeatures\Components
---- !u!114 &1615446667531850186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14494fe006ec4054daebb667b604691b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  maxArmor: 200
-  damageReceivedColorFeedback: {r: 0.6981132, g: 0, b: 0, a: 0}
-  minArmorReductionOnHit: 0
-  ARMORREDUCTION: ARMOR_REDUCTION_ON_HIT
-  ARMORDURABILITY: DURABILITY
-  ARMOR: ARMOR
-  HEALTH: HEALTH
-  DAMAGEREDUCTION: DAMAGE_RECEIVED
-  LIFEFEATUREPATH: Assets\PlayerFeatures\LifeFeatures\lifeFeatures.csv
-  TICKSPATH: Assets\PlayerFeatures\LifeFeatures\ticks.csv
 --- !u!82 &2737055497636203910
 AudioSource:
   m_ObjectHideFlags: 0

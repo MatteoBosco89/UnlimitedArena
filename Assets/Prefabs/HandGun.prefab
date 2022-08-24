@@ -335,6 +335,8 @@ GameObject:
   - component: {fileID: 8020332677471428543}
   - component: {fileID: 6229229793471096415}
   - component: {fileID: -9024506808250010574}
+  - component: {fileID: 8838549547184694667}
+  - component: {fileID: -2874525236280737910}
   m_Layer: 0
   m_Name: HandGun
   m_TagString: Untagged
@@ -420,6 +422,32 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &8838549547184694667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8018606936078106615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c25e4ff93976d0f408039597b699d633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  featuresDirectory: Weapons\HandGun\Features
+--- !u!114 &-2874525236280737910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8018606936078106615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d704d771ae0e2064e835fa9bebd5f300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  componentDirectory: Weapons\HandGun\Components
 --- !u!1 &8018648106291836137
 GameObject:
   m_ObjectHideFlags: 0
