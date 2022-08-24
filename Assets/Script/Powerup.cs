@@ -12,9 +12,9 @@ namespace Character
         protected string TICK = "TICK";
         protected int valuePerSecond = 1;
 
-        public Powerup(string name, string path, CountDownManager countDownManager, TickManager tim) : base(name, path){
-            cdmanager = countDownManager;
-            tm = tim;
+        public Powerup(string name, string path, ComponentManager comm) : base(name, path, comm){
+            cdmanager = cm.TheCountDownManager;
+            tm = cm.TheTickManager;
             AddToCountdown();
             AddToTick();
         }

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Character
 {
@@ -18,10 +19,9 @@ namespace Character
         [SerializeField] protected string ARMORDURABILITY = "DURABILITY";
         [SerializeField] protected string ARMOR = "ARMOR";
         [SerializeField] protected string HEALTH = "HEALTH";
-        [SerializeField] protected string HOT = "HOT";
-        [SerializeField] protected string DOT = "DOT";
         [SerializeField] protected string DAMAGEREDUCTION = "DAMAGE_RECEIVED";
         [SerializeField] protected string LIFEFEATUREPATH;
+        [SerializeField] protected string TICKSPATH;
         protected int initialArmor = 0;
         protected int initialHealth = 0;
         protected CharacterStatus characterStatus;
@@ -30,9 +30,11 @@ namespace Character
         protected ComponentManager componentManager;
         protected FeatureManager featureManager;
         protected Dictionary<string, float> lifeFeatures = new Dictionary<string, float>();
+        protected Dictionary<string, string> tickables = new Dictionary<string, string>();
         [SyncVar] protected int armor;
         [SyncVar] protected int health;
         [SyncVar] protected bool isDead = false;
+        [SyncVar] protected int experience;
 
         private void Awake()
         {
@@ -40,6 +42,7 @@ namespace Character
             componentManager = playerManager.ComponentManager;
             characterStatus = GetComponent<CharacterStatus>();
             LoadParameters(LIFEFEATUREPATH, lifeFeatures);
+            LoadParameters(TICKSPATH, tickables);
         }
 
         public void Start()
@@ -49,6 +52,7 @@ namespace Character
             initialArmor = (int)playerManager.FeatureValue(ARMOR);
             armor = initialArmor;
             health = initialHealth;
+            experience = 0;
         }
 
         public void ResetPlayerLife()
@@ -89,14 +93,24 @@ namespace Character
             health -= Mathf.CeilToInt(damage);
             inGameUI.DoFeedback(damageReceivedColorFeedback);
         }
+        public void HealMe(int amount)
+        {
+            if (isDead) return;
+            health += amount;
+            if (health > maxHealth) health = maxHealth;
+        }
+        public void AddExp(int amount)
+        {
+            if (isDead) return;
+            experience += amount;
+        }
 
         private void FixedUpdate()
         {
             ComputeFeature();
             armor = (int)playerManager.FeatureValue(ARMOR);
             maxHealth = (int)playerManager.FeatureValue(HEALTH);
-            ComputeDamageByComponent(DOT);
-            ComputeHealByComponent(HOT);
+            DoAllTicks();
             if (health <= 0)
             {
                 health = 0;
@@ -105,6 +119,14 @@ namespace Character
                 characterStatus.IsAlive = false;
             }
             CheckIsOutOfBorder();
+        }
+
+        protected void DoAllTicks()
+        {
+            foreach(KeyValuePair<string, string> t in tickables)
+            {
+                ComputeByComponent(t.Key, t.Value);
+            }
         }
 
         protected void ComputeFeature()
@@ -116,18 +138,18 @@ namespace Character
             }
         }
 
-        public void ComputeDamageByComponent(string type)
+        public void ComputeByComponent(string type, string func)
         {
             Dictionary<string, float> filtered = playerManager.GetAllTicks(type);
-            float damage = ComputeFeatureValue(filtered);
-            if(damage > 0) TakeDamage(Mathf.CeilToInt(damage));
-        }
-
-        public void ComputeHealByComponent(string type)
-        {
-            Dictionary<string, float> filtered = playerManager.GetAllTicks(type);
-            float healing = ComputeFeatureValue(filtered);
-            if (healing > 0) HealMe(Mathf.CeilToInt(healing));
+            float amount = ComputeFeatureValue(filtered);
+            int famount = Mathf.CeilToInt(amount);
+            if (famount > 0)
+            {
+                object[] p = { famount };
+                Type thisType = this.GetType();
+                MethodInfo theMethod = thisType.GetMethod(func);
+                theMethod.Invoke(this, p);
+            }
         }
 
         public float ComputeFeatureValue(Dictionary<string, float> received)
@@ -145,12 +167,7 @@ namespace Character
             return res;
         }
 
-        protected void HealMe(int amount)
-        {
-            if (isDead) return;
-            health += amount;
-            if (health > maxHealth) health = maxHealth;
-        }
+        
 
         protected void CheckIsOutOfBorder()
         {
@@ -204,15 +221,16 @@ namespace Character
             return healthReduction;
         }
 
-        protected void LoadParameters(string path, Dictionary<string, float> paramDict)
+        protected void LoadParameters<T1, T2>(string path, Dictionary<T1, T2> paramDict)
         {
             string[] lines = File.ReadAllLines(path);
             foreach (string l in lines)
             {
                 string[] items = l.Split(',');
-                string param1 = items[0].Trim();
-                float param2 = ParseFloatValue(items[1]);
-                paramDict.Add(param1, param2);
+                object param1 = items[0].Trim();
+                object param2 = items[1].Trim();
+                if (typeof(T2) == typeof(float)) param2 = ParseFloatValue(items[1]);
+                paramDict.Add((T1)param1, (T2)param2);
             }
         }
 
@@ -220,6 +238,7 @@ namespace Character
         {
             return float.Parse(val, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
         }
+
 
     }
 }

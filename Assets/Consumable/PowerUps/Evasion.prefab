@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: -2579932237101210448}
   m_Layer: 0
   m_Name: Evasion
-  m_TagString: POWERUP
+  m_TagString: ACTIVABLE
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

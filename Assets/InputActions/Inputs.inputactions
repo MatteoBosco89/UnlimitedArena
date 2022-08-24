@@ -67,6 +67,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Activate",
+                    "type": "Button",
+                    "id": "1ff2e846-aac6-44e6-aacb-731abd0ec37c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ActivablePre",
+                    "type": "Button",
+                    "id": "0eceddf3-70a3-48d3-8c9c-c3ba63b31c34",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ActivableNext",
+                    "type": "Button",
+                    "id": "e5f2447f-14a5-44a7-a910-f65c315b034f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -342,6 +369,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "WeaponPre",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f72c02ef-2a0a-4698-beac-310c820bc417",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Activate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8fbe6bfe-1c39-4bb5-a2a1-d36b5f6c7881",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ActivablePre",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "07c80e2d-d60d-45fa-a3b7-578225822a01",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ActivableNext",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -31,6 +31,16 @@ namespace Character
             set { objectFeatures = value; }
         }
 
+        public TickManager TheTickManager
+        {
+            get { return tickManager; }
+        }
+
+        public CountDownManager TheCountDownManager
+        {
+            get { return countDownManager; }
+        }
+
         private void Awake()
         {
             countDownManager = GetComponent<CountDownManager>();
@@ -120,7 +130,7 @@ namespace Character
         {
             if (!CheckFile(path)) return;
             string[] n = path.Split('.');
-            UAComponent c = new UAComponent(Path.GetFileName(n[0].Trim()), path);
+            UAComponent c = new UAComponent(Path.GetFileName(n[0].Trim()), path, this);
             AddComponent(c);            
         }
 
@@ -211,21 +221,10 @@ namespace Character
 
         public void ComponentPickup(string type, string name, string path)
         {
-            switch (type.ToUpper())
-            {
-                case "POWERUP":
-                    Powerup p = new Powerup(name, path, countDownManager, tickManager);
-                    AddComponent(p);
-                    break;
-                case "ACTIVABLE":
-                    Activable a = new Activable(name, path, countDownManager, tickManager, this);
-                    AddComponent(a);
-                    break;
-                default:
-                    UAComponent c = new UAComponent(name, path);
-                    AddComponent(c);
-                    break;
-            }
+            type = type.ToLower();
+            type = char.ToUpper(type[0]) + type.Substring(1);
+            Type t = Type.GetType("Character." + type);
+            AddComponent((UAComponent)Activator.CreateInstance(t, name, path, this));
         }
 
         public Dictionary<string, float> GetAllTicks(string type)
@@ -247,6 +246,16 @@ namespace Character
             }
             catch (Exception) { }
             return res;
+        }
+
+        public Dictionary<string, T> FilterByType<T>()
+        {
+            Dictionary<string, T> filtered = new Dictionary<string, T>();
+            foreach(KeyValuePair<string, UAComponent> c in components)
+            {
+                if (c.Value is T t) filtered.Add(c.Key, t);
+            }
+            return filtered;
         }
 
     }

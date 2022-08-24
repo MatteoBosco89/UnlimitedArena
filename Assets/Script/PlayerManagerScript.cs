@@ -170,7 +170,13 @@ namespace Character
 
             // for debugging purpose
             if (isLocalPlayer && characterStatus.IsChangingWeaponsPre) lifeManager.TakeDamage(10);
-            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) componentManager.Print();
+            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) TestFilter();
+        }
+
+        protected void TestFilter()
+        {
+            Dictionary<string, Powerup> p = componentManager.FilterByType<Powerup>();
+            foreach (string s in p.Keys) Debug.Log(s);
         }
 
         private void OnTriggerEnter(Collider other)

@@ -19,6 +19,9 @@ namespace Character
         protected bool isChangingWeaponPre;
         protected bool isChangingWeaponNext;
         protected bool isAlive = true;
+        protected bool activate;
+        protected bool activatePre;
+        protected bool activateNext;
         protected Vector3 movement; 
         protected Vector3 rotation;
         protected PlayerLifeManager lifeManager;
@@ -37,6 +40,21 @@ namespace Character
         public bool IsChangingWeaponsNext
         {
             get { return isChangingWeaponNext; }
+        }
+
+        public bool Activate
+        {
+            get { return activate; }
+        }
+
+        public bool ActivatePre
+        {
+            get { return activatePre; }
+        }
+
+        public bool ActivateNext
+        {
+            get { return activateNext; }
         }
 
         public bool IsMoving
@@ -73,6 +91,24 @@ namespace Character
         {
             isMoving = (movement.z != 0 || movement.x != 0);
             isRotating = (rotation.y != 0 || rotation.x != 0);
+        }
+
+        public void OnActivate(InputAction.CallbackContext value)
+        {
+            if (value.started) activate = true;
+            else if (value.canceled) activate = false;
+        }
+
+        public void OnActivatePre(InputAction.CallbackContext value)
+        {
+            if (value.started) activatePre = true;
+            else if (value.canceled) activatePre = false;
+        }
+
+        public void OnActivateNext(InputAction.CallbackContext value)
+        {
+            if (value.started) activateNext = true;
+            else if (value.canceled) activateNext = false;
         }
 
         public void OnMove(InputAction.CallbackContext value)

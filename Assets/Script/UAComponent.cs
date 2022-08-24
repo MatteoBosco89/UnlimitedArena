@@ -11,6 +11,7 @@ namespace Character
     {
         protected string componentId;
         protected string componentPath;
+        protected ComponentManager cm;
         protected bool isActive = true;
         protected bool nextTick = false;
         protected Dictionary<string, Modifier> modifiers = new Dictionary<string, Modifier>();
@@ -81,10 +82,11 @@ namespace Character
             set { m_features = value; }
         }
 
-        public UAComponent(string name, string path)
+        public UAComponent(string name, string path, ComponentManager comm)
         {
             componentId = name;
             componentPath = path;
+            cm = comm;
             LoadMe(path);
         }
 
