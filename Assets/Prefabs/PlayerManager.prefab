@@ -1424,7 +1424,6 @@ GameObject:
   - component: {fileID: 6666194668634368538}
   - component: {fileID: 5113199147089727754}
   - component: {fileID: -3788956415682354281}
-  - component: {fileID: 1615446667531850186}
   - component: {fileID: 6666194668634368536}
   - component: {fileID: 6666194668634368543}
   - component: {fileID: 6666194668634368542}
@@ -1435,6 +1434,7 @@ GameObject:
   - component: {fileID: 6837337765883696064}
   - component: {fileID: 5704900715790483025}
   - component: {fileID: 7597605632689739556}
+  - component: {fileID: 1615446667531850186}
   - component: {fileID: 3797594839189374819}
   m_Layer: 0
   m_Name: PlayerManager
@@ -1587,29 +1587,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   componentDirectory: PlayerFeatures\Components
---- !u!114 &1615446667531850186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6666194668634368530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14494fe006ec4054daebb667b604691b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  maxArmor: 200
-  damageReceivedColorFeedback: {r: 0.6981132, g: 0, b: 0, a: 0}
-  minArmorReductionOnHit: 0
-  ARMORREDUCTION: ARMOR_REDUCTION_ON_HIT
-  ARMORDURABILITY: DURABILITY
-  ARMOR: ARMOR
-  HEALTH: HEALTH
-  DAMAGEREDUCTION: DAMAGE_RECEIVED
-  LIFEFEATUREPATH: PlayerFeatures\LifeFeatures\lifeFeatures.csv
-  TICKSPATH: PlayerFeatures\LifeFeatures\ticks.csv
 --- !u!143 &6666194668634368536
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2081,6 +2058,29 @@ MonoBehaviour:
   weaponsList:
   - {fileID: 8018606936078106615, guid: af10761ef979531479a7f498d696a2a3, type: 3}
   - {fileID: 3551805850954928087, guid: e49b35b52a923bc4e90d5939298e83d5, type: 3}
+--- !u!114 &1615446667531850186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666194668634368530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14494fe006ec4054daebb667b604691b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  maxArmor: 200
+  damageReceivedColorFeedback: {r: 0.6981132, g: 0, b: 0, a: 0}
+  minArmorReductionOnHit: 0
+  ARMORREDUCTION: ARMOR_REDUCTION_ON_HIT
+  ARMORDURABILITY: DURABILITY
+  ARMOR: ARMOR
+  HEALTH: HEALTH
+  DAMAGEREDUCTION: DAMAGE_RECEIVED
+  LIFEFEATUREPATH: PlayerFeatures\LifeFeatures\lifeFeatures.csv
+  TICKSPATH: PlayerFeatures\LifeFeatures\ticks.csv
 --- !u!114 &3797594839189374819
 MonoBehaviour:
   m_ObjectHideFlags: 0

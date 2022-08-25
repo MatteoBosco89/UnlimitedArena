@@ -114,15 +114,9 @@ namespace Character
             thisCharWeapon = SearchByTag(thisChar, "WeaponContainer");
             weaponManager.WeaponContainer = thisCharWeapon;
             weaponManager.Spawn();
-            Settings();
             PlayerReset();
             SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
             ActivateCam();      
-        }
-
-        private void Settings()
-        {
-            // poi vediamo
         }
 
         private void ActivateModel()
@@ -142,7 +136,7 @@ namespace Character
         }
 
         private void FixedUpdate()
-        {
+        {            
             if (thisChar != null)
             {
                 if (thisChar.activeSelf && !lifeManager.IsDead)
@@ -162,16 +156,14 @@ namespace Character
             {
                 if (Time.time - startDeathCooldown >= deathCooldown && characterStatus.IsJumping)
                 {
-                    lifeManager.SignalAlive();
                     netManager.SignalDeath(clientId);
                     isDeathCooldown = false;
-                    lifeManager.IsDead = false;
                 }
             }
 
             // for debugging purpose
             if (isLocalPlayer && characterStatus.IsChangingWeaponsPre) lifeManager.TakeDamage(10);
-            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) componentManager.Print();
+            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) Debug.Log(clientId);
         }
 
         protected void TestFilter()
@@ -182,6 +174,7 @@ namespace Character
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!isLocalPlayer) return;
             string tag = other.gameObject.tag.ToUpper();
             if (InTagList(tag))
             {

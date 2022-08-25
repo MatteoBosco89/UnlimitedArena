@@ -73,6 +73,7 @@ namespace GameManager
         void Start()
         {
             scm = GetComponent<SceneChangeManager>();
+            //LogFilter.currentLogLevel = 0;
         }
             
         private string ChooseMap()

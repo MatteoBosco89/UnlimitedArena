@@ -10,10 +10,16 @@ namespace Character
 {
     public class FeatureManager : MonoBehaviour
     {
-        [SerializeField] protected string featuresDirectory; 
+        [SerializeField] protected string featuresDirectory;
+        protected bool loaded = false;
         protected Dictionary<string, Feature> features = new Dictionary<string, Feature>();
         protected Dictionary<string, Feature> baseFeatures = new Dictionary<string, Feature>();
         protected ComponentManager componentManager;
+
+        public bool Loaded
+        {
+            get { return loaded; }
+        }
 
         public string FeaturesDirectory
         {
@@ -61,6 +67,7 @@ namespace Character
                     AddBaseFeature(f);
                 }
             }
+            loaded = true;
         }
 
         protected float ParseFloatValue(string val)

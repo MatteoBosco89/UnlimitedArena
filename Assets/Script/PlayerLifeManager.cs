@@ -43,6 +43,7 @@ namespace Character
             LIFEFEATUREPATH = Path.Combine(Application.streamingAssetsPath, LIFEFEATUREPATH);
             TICKSPATH = Path.Combine(Application.streamingAssetsPath, TICKSPATH);
             playerManager = GetComponent<PlayerManagerScript>();
+            featureManager = playerManager.PlayerFeatures;
             componentManager = playerManager.ComponentManager;
             characterStatus = GetComponent<CharacterStatus>();
             LoadParameters(LIFEFEATUREPATH, lifeFeatures);
@@ -52,27 +53,19 @@ namespace Character
         public void Start()
         {
             inGameUI = playerManager.InGameUI;
-            initialHealth = (int)playerManager.FeatureValue(HEALTH);
-            initialArmor = (int)playerManager.FeatureValue(ARMOR);
-            if (isLocalPlayer)
-            {
-                CmdHeal(initialHealth);
-                CmdAddArmor(initialArmor);
-            }
-            ResetPlayerLife();
-            experience = 0;
+            if (isLocalPlayer) CmdAlive();
         }
 
-        public void ResetPlayerLife()
+        protected void LoadFeatures()
         {
+            initialHealth = (int)featureManager.FeatureValue(HEALTH);
+            initialArmor = (int)featureManager.FeatureValue(ARMOR);
+            if (isLocalPlayer) CmdHeal(initialHealth);
+            if (isLocalPlayer) CmdAddArmor(initialArmor);
             isDead = false;
-            if (isLocalPlayer)
-            {
-                CmdAddArmor(initialArmor);
-                CmdHeal(initialHealth);
-            }
             characterStatus.IsAlive = true;
             loading = false;
+            experience = 0;
         }
 
         public bool IsDead
@@ -119,12 +112,23 @@ namespace Character
 
         private void FixedUpdate()
         {
+            if (!featureManager.Loaded)
+            {
+                Debug.Log("NON CARICATO");
+                return;
+            }
+            if (loading && featureManager.Loaded)
+            {
+                health = (int)playerManager.FeatureValue(HEALTH);
+                LoadFeatures();
+            }
             ComputeFeature();
             armor = (int)playerManager.FeatureValue(ARMOR);
             maxHealth = (int)playerManager.FeatureValue(HEALTH);
             DoAllTicks();
             if (health <= 0 && !loading)
             {
+                Debug.Log("MORTO");
                 health = 0;
                 isDead = true;
                 if(isLocalPlayer) CmdDeath();
