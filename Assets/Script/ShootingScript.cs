@@ -5,6 +5,7 @@ using Weapon;
 using UnityEngine.Networking;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Character
 {
@@ -44,7 +45,7 @@ namespace Character
         void FixedUpdate()
         {
             if (!isLocalPlayer) return;
-            if (status.IsFiring && canShoot) DoShoot();
+            if (status.IsFiring && canShoot && !status.IsPaused) DoShoot();
         }
 
         private void DoShoot()
@@ -57,7 +58,12 @@ namespace Character
                 GameObject enemy = hitInfo.transform.gameObject;
                 if (enemy.CompareTag("Player") && pvp)
                 {
-                    CmdShootEnemyPlayer(enemy);
+                    DamageDone dmg = new DamageDone(playerManager.PlayerName, playerManager.ClientId);
+                    dmg.DamageList = DamagePacket();
+                    dmg.effects = weaponManager.MyComponentManager.Components.Keys.ToList();
+                    string jsonString = JsonUtility.ToJson(dmg);
+                    Debug.Log(jsonString);
+                    CmdShootEnemyPlayer(enemy, jsonString);
                 }
             }
             StartCoroutine(ShootCooldown());
@@ -94,17 +100,6 @@ namespace Character
             }
         }
 
-        protected Dictionary<string, float> DamagePacket()
-        {
-            Dictionary<string, float> damagePacket = new Dictionary<string, float>();
-            FeatureManager fm = weaponManager.MyFeatureManager;
-            foreach(KeyValuePair<string, Feature> kvf in fm.Features)
-            {
-                if(damageWrapper.ContainsKey(kvf.Key)) damagePacket.Add(damageWrapper[kvf.Key], kvf.Value.CurrValue);
-            }
-            return damagePacket;
-        }
-
         protected bool CheckDirectory(string path)
         {
             if (!Directory.Exists(path))
@@ -125,10 +120,21 @@ namespace Character
             return true;
         }
 
-        [Command]
-        private void CmdShootEnemyPlayer(GameObject enemy)
+        protected Dictionary<string, float> DamagePacket()
         {
-            enemy.GetComponent<PlayerLifeManager>().ForeignDamage(DamagePacket());
+            Dictionary<string, float> damagePacket = new Dictionary<string, float>();
+            FeatureManager fm = weaponManager.MyFeatureManager;
+            foreach(KeyValuePair<string, Feature> kvf in fm.Features)
+            {
+                if(damageWrapper.ContainsKey(kvf.Key)) damagePacket.Add(damageWrapper[kvf.Key], kvf.Value.CurrValue);
+            }
+            return damagePacket;
+        }
+
+        [Command]
+        private void CmdShootEnemyPlayer(GameObject enemy, string dmg)
+        {
+            enemy.GetComponent<PlayerLifeManager>().ForeignDamage(dmg);
         }
 
         private IEnumerator ShootCooldown()
@@ -142,6 +148,65 @@ namespace Character
             return Mathf.CeilToInt(playerManager.PlayerFeatures.FeatureValue(DAMAGEDONE) * baseDmg);
         }
 
+        [Serializable]
+        public class DamageDone
+        {
+            public string player;
+            public int playerid;
+            protected Dictionary<string, float> damageDone;
+            public List<string> damageType = new List<string>();
+            public List<float> damageValue = new List<float>();
+            public List<string> effects = new List<string>();
+            public DamageDone(string p, int id)
+            {
+                player = p;
+                playerid = id;
+            }
+            public Dictionary<string, float> DamageList
+            {
+                get { DeserializeDmg();  return damageDone; }
+                set { damageDone = value; SerializeDmg(); }
+            }
+            public string Player
+            {
+                get { return player; }
+                set { player = value; }
+            }
+            public List<string> Effects
+            {
+                get { return effects; }
+                set { effects = value; }
+            }
+            protected void DeserializeDmg()
+            {
+                damageDone = new Dictionary<string, float>();
+                for(int i = 0; i < damageType.Count; i++)
+                {
+                    damageDone.Add(damageType.ElementAt(i), damageValue.ElementAt(i));
+                }
+            }
+
+            protected void SerializeDmg()
+            {
+                foreach(KeyValuePair<string, float> k in damageDone)
+                {
+                    damageType.Add(k.Key);
+                    damageValue.Add(k.Value);
+                }
+            }
+
+        }
+        [Serializable]
+        public class EffectList
+        {
+            public List<string> effects;
+            public List<string> Effects
+            {
+                get { return effects; }
+                set { effects = value; }
+            }
+            public EffectList(List<string> eff) { effects = eff; }
+        }
 
     }
 }

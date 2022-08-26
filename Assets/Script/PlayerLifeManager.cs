@@ -23,20 +23,26 @@ namespace Character
         [SerializeField] protected string DAMAGEREDUCTION = "DAMAGE_RECEIVED";
         [SerializeField] protected string LIFEFEATUREPATH;
         [SerializeField] protected string TICKSPATH;
+        [SerializeField] protected string buffBasePath = "Buff/";
+        [SerializeField] protected string ext = ".csv";
         protected int initialArmor = 0;
         protected int initialHealth = 0;
         protected CharacterStatus characterStatus;
         protected InGameUIManager inGameUI;
+        protected ScoreTableManager scoreTableManager;
         protected PlayerManagerScript playerManager;
         protected ComponentManager componentManager;
         protected FeatureManager featureManager;
         protected Dictionary<string, float> lifeFeatures = new Dictionary<string, float>();
         protected Dictionary<string, string> tickables = new Dictionary<string, string>();
         protected bool loading = true;
+        protected int lastPlayerHitting;
+        protected EffectManager effectManager;
         [SyncVar] protected int armor;
         [SyncVar] protected int health;
         [SyncVar] protected bool isDead = false;
         [SyncVar] protected int experience;
+        [SyncVar] protected string effectJSON;
 
         private void Awake()
         {
@@ -46,6 +52,7 @@ namespace Character
             featureManager = playerManager.PlayerFeatures;
             componentManager = playerManager.ComponentManager;
             characterStatus = GetComponent<CharacterStatus>();
+            effectManager = GetComponent<EffectManager>();
             LoadParameters(LIFEFEATUREPATH, lifeFeatures);
             LoadParameters(TICKSPATH, tickables);
         }
@@ -53,14 +60,16 @@ namespace Character
         public void Start()
         {
             inGameUI = playerManager.InGameUI;
+            scoreTableManager = playerManager.ScoreTable;
             if (isLocalPlayer) CmdAlive();
+            lastPlayerHitting = playerManager.ClientId;
         }
 
         protected void LoadFeatures()
         {
             initialHealth = (int)featureManager.FeatureValue(HEALTH);
             initialArmor = (int)featureManager.FeatureValue(ARMOR);
-            if (isLocalPlayer) CmdHeal(initialHealth);
+            if (isLocalPlayer) CmdHealth(initialHealth);
             if (isLocalPlayer) CmdAddArmor(initialArmor);
             isDead = false;
             characterStatus.IsAlive = true;
@@ -94,14 +103,16 @@ namespace Character
         {
             if (isDead) return;
             ReduceArmor(dmg);
-            float damage = ComputateHealthReduction(dmg);          
-            health -= Mathf.CeilToInt(damage);
+            float damage = ComputateHealthReduction(dmg);
+            int finalDamage = Mathf.CeilToInt(damage);
+            playerManager.ScoreTable.UpdateDamage(lastPlayerHitting, finalDamage);
+            if (isLocalPlayer) CmdTakeDamage(finalDamage);
             inGameUI.DoFeedback(damageReceivedColorFeedback);
         }
         public void HealMe(int amount)
         {
             if (isDead) return;
-            health += amount;
+            CmdHeal(amount);
             if (health > maxHealth) health = maxHealth;
         }
         public void AddExp(int amount)
@@ -112,11 +123,8 @@ namespace Character
 
         private void FixedUpdate()
         {
-            if (!featureManager.Loaded)
-            {
-                Debug.Log("NON CARICATO");
-                return;
-            }
+            if (isDead) return;
+            if (!featureManager.Loaded) return;
             if (loading && featureManager.Loaded)
             {
                 health = (int)playerManager.FeatureValue(HEALTH);
@@ -126,13 +134,14 @@ namespace Character
             armor = (int)playerManager.FeatureValue(ARMOR);
             maxHealth = (int)playerManager.FeatureValue(HEALTH);
             DoAllTicks();
+            CheckEffects();
             if (health <= 0 && !loading)
             {
-                Debug.Log("MORTO");
                 health = 0;
                 isDead = true;
                 if(isLocalPlayer) CmdDeath();
                 characterStatus.IsAlive = false;
+                scoreTableManager.UpdateKill(lastPlayerHitting);
             }
             CheckIsOutOfBorder();
         }
@@ -145,9 +154,35 @@ namespace Character
             }
         }
 
-        public void ForeignDamage(Dictionary<string, float> damageList)
+        public void ForeignDamage(string dmg)
         {
+            ShootingScript.DamageDone damage = JsonUtility.FromJson<ShootingScript.DamageDone>(dmg);
+            ShootingScript.EffectList effList = new ShootingScript.EffectList(effectManager.Effects(damage.Effects));
+            Dictionary<string, float> damageList = damage.DamageList;
+            lastPlayerHitting = damage.playerid;
             TakeDamage(Mathf.CeilToInt(ComputeFeatureValue(damageList)));
+            effectJSON = JsonUtility.ToJson(effList);
+        }
+
+        protected void CheckEffects()
+        {
+            if (String.IsNullOrEmpty(effectJSON)) return;
+            List<string> eff = JsonUtility.FromJson<ShootingScript.EffectList>(effectJSON).Effects;
+            ApplyAruas(eff);
+            if (isLocalPlayer)
+            {
+                effectJSON = null;
+                CmdClearEffect();
+            }
+        }
+
+        protected void ApplyAruas(List<string> effects)
+        {
+            foreach(string e in effects)
+            {
+                string path = buffBasePath + e + ext;
+                componentManager.ComponentPickup("Powerup", e, path);
+            }
         }
 
         protected void ComputeFeature()
@@ -191,7 +226,7 @@ namespace Character
         public void SignalAlive()
         {
             CmdAlive();
-            CmdHeal(100);
+            CmdHealth(100);
         }
 
         protected void CheckIsOutOfBorder()
@@ -200,7 +235,25 @@ namespace Character
         }
 
         [Command]
+        protected void CmdClearEffect()
+        {
+            effectJSON = null;
+        }
+
+        [Command]
+        protected void CmdTakeDamage(int amount)
+        {
+            health -= amount;
+        }
+
+        [Command]
         protected void CmdHeal(int amount)
+        {
+            health += amount;
+        }
+
+        [Command]
+        protected void CmdHealth(int amount)
         {
             health = amount;
         }

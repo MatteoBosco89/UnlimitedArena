@@ -136,8 +136,6 @@ GameObject:
   - component: {fileID: 5567697238572871115}
   - component: {fileID: 5567697238572871114}
   - component: {fileID: 5567697238572871109}
-  - component: {fileID: -4235335295910701253}
-  - component: {fileID: 4269339616251571550}
   - component: {fileID: 6088888502328257911}
   m_Layer: 0
   m_Name: MedKitConsumable
@@ -188,39 +186,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-4235335295910701253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5567697238572871108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60b7154999696e24a80bdcb1c9a11f9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: Medikit
-  _medikit:
-    _isEnabled: 1
-    _amount: 50
-  _armor:
-    _isEnabled: 0
-    _amount: 0
-    _armorType: 0
-    _armorReducedOnHit: 0.3
---- !u!114 &4269339616251571550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5567697238572871108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6088888502328257911
 MonoBehaviour:
   m_ObjectHideFlags: 0

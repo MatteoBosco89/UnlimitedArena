@@ -1,33 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace GameManager
 {
     public class ConsumableSpawnManager : MonoBehaviour
     {
-        protected NetManager netManager;
-        [SerializeField] protected List<ConsumableSpawner> spawners = new List<ConsumableSpawner>();
-        protected Dictionary<int, ConsumableSpawner> consumables = new Dictionary<int, ConsumableSpawner>();
+        [SerializeField] protected int interval = 1;
+        protected List<Collectible> collectibles = new List<Collectible>();
+        protected float timer = 0;
 
-        public NetManager NetHandler
+        public void AddCollectible(Collectible c)
         {
-            get { return netManager; }
-            set { netManager = value; }
+            collectibles.Add(c);
         }
 
-        public void SpawnAll()
+        public void RemoveCollectible(Collectible c)
         {
-            foreach(ConsumableSpawner cs in spawners)
+            collectibles.Remove(c);
+        }
+
+        public void CheckIsActive()
+        {
+            collectibles.RemoveAll(item => item.CooldownFinished == true);
+        }
+
+        protected void DoCountdown()
+        {
+            foreach (Collectible c in collectibles) c.DoCooldown();
+        }
+
+        private void FixedUpdate()
+        {
+            if (collectibles.Count == 0) return;
+            CheckIsActive();
+            timer -= Time.deltaTime;
+            if (timer <= 0)
             {
-                cs.SpawnConsumable();
-                consumables[cs.SpawnedObject.GetInstanceID()] = cs;
+                timer = interval;
+                DoCountdown();
             }
-        }
-
-        public void Cooldown(int id)
-        {
-            consumables[id].SetCooldown();
         }
 
     }

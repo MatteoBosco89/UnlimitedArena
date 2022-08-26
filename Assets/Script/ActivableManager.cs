@@ -88,6 +88,35 @@ namespace Character
             catch (Exception) { return ""; }
         }
 
+        public List<string> GetActivablesNames()
+        {
+            List<string> names = new List<string>();
+            int count = activables.Count;
+            if (count > 0)
+            {
+                string c = activables.Keys.ElementAt(current);
+                names.Add(c);
+                //next
+                if (current >= count - 1)
+                {
+                    names.Add("");
+                }
+                else
+                {
+                    names.Add(activables.Keys.ElementAt(current + 1));
+                }
+                if (current <= 0)
+                {
+                    names.Add("");
+                }
+                else
+                {
+                    names.Add(activables.Keys.ElementAt(current - 1));
+                }
+
+            }
+            return names;
+        }
     }
 }
 

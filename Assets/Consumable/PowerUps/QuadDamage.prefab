@@ -95,9 +95,13 @@ GameObject:
   - component: {fileID: 1882649575228776261}
   - component: {fileID: 1882649575228776266}
   - component: {fileID: 2446672848078145592}
+  - component: {fileID: 6939156725883782148}
+  - component: {fileID: 1042742236235310853}
+  - component: {fileID: -6205757827825793171}
+  - component: {fileID: -4938567153077532285}
   m_Layer: 0
   m_Name: QuadDamage
-  m_TagString: POWERUP
+  m_TagString: ACTIVABLE
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,6 +164,80 @@ MonoBehaviour:
   feedbackColor:
     _feedbackColor: {r: 0.49056602, g: 0, b: 0.3316456, a: 0}
     _isFeedback: 1
+--- !u!114 &6939156725883782148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882649575228776267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33dfe087349248d4c9f498142ba2783f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: Consumable/QuadDamage.csv
+--- !u!114 &1042742236235310853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882649575228776267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &-6205757827825793171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882649575228776267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9275c0a14efebb548bb20eca4a1da875, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldownInSeconds: 30
+  spawnManager: {fileID: 0}
+  reduction: 1
+--- !u!114 &-4938567153077532285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882649575228776267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4cb4449fb4ea364fb7e5c06a50aea14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countdownTimeInSeconds: 30
 --- !u!1 &1882649575615051695
 GameObject:
   m_ObjectHideFlags: 0

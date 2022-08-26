@@ -17,6 +17,7 @@ namespace Character
         [SerializeField] protected float yPos = -2.0f;
         [SerializeField] protected float deathCooldown = 2.0f;
         [SerializeField] protected GameObject inGameUIObj;
+        [SerializeField] protected GameObject scoreTableObj;
         [SerializeField] protected List<string> collidersTags;
         protected FeatureManager featureManager;
         protected ComponentManager componentManager;
@@ -35,9 +36,17 @@ namespace Character
         protected MovePlayer mp;
         protected bool isDeathCooldown = false;
         protected InGameUIManager inGameUI;
+        protected ScoreTableManager scoreTableManager;
         [SyncVar] protected int chosenPlayer;
         protected Vector3 theSpawnPosition = new Vector3(0, 0, 0);
         [SyncVar] protected int clientId = 0;
+        [SyncVar] protected string playerName;
+        [SyncVar] protected string scores;
+
+        public ScoreTableManager ScoreTable
+        {
+            get { return scoreTableManager; }
+        }
 
         public FeatureManager PlayerFeatures
         {
@@ -85,6 +94,12 @@ namespace Character
             get { return inGameUI; }
         }
 
+        public string PlayerName
+        {
+            get { return playerName; }
+            set { playerName = value; }
+        }
+
         private void Awake()
         {
             featureManager = GetComponent<FeatureManager>();
@@ -99,6 +114,7 @@ namespace Character
             characterStatus = GetComponent<CharacterStatus>();
             mp = GetComponent<MovePlayer>();
             inGameUI = inGameUIObj.GetComponent<InGameUIManager>();
+            scoreTableManager = scoreTableObj.GetComponent<ScoreTableManager>();
             collidersTags = collidersTags.ConvertAll(s => s.ToUpper());
         }
 
@@ -116,7 +132,17 @@ namespace Character
             weaponManager.Spawn();
             PlayerReset();
             SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
-            ActivateCam();      
+            ActivateCam();
+            if (isLocalPlayer) CmdScore();
+            scoreTableManager.AddNewPlayer(playerName, clientId);
+            if (isLocalPlayer) CmdScore();
+            PlayerPrefs.SetString("SCORES", scores);
+        }
+
+        [Command]
+        protected void CmdScore()
+        {
+            scores = PlayerPrefs.GetString("SCORES");
         }
 
         private void ActivateModel()
@@ -136,7 +162,8 @@ namespace Character
         }
 
         private void FixedUpdate()
-        {            
+        {
+            if (isLocalPlayer) CmdScore();
             if (thisChar != null)
             {
                 if (thisChar.activeSelf && !lifeManager.IsDead)
@@ -156,6 +183,7 @@ namespace Character
             {
                 if (Time.time - startDeathCooldown >= deathCooldown && characterStatus.IsJumping)
                 {
+                    scoreTableManager.SaveState();
                     netManager.SignalDeath(clientId);
                     isDeathCooldown = false;
                 }
@@ -163,7 +191,11 @@ namespace Character
 
             // for debugging purpose
             if (isLocalPlayer && characterStatus.IsChangingWeaponsPre) lifeManager.TakeDamage(10);
-            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) Debug.Log(clientId);
+            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) componentManager.Print();
+            
+            //if (isLocalPlayer && characterStatus.ScoreTable) scoreTableObj.SetActive(true);
+            //else scoreTableObj.SetActive(false);
+
         }
 
         protected void TestFilter()

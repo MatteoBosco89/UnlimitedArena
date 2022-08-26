@@ -22,10 +22,22 @@ namespace Character
         protected bool activate;
         protected bool activatePre;
         protected bool activateNext;
+        protected bool scoreTable;
+        protected bool isPaused = false;
         protected Vector3 movement; 
         protected Vector3 rotation;
         protected PlayerLifeManager lifeManager;
-        
+
+        public bool IsPaused
+        {
+            get { return isPaused; }
+            set { isPaused = value; }
+        }
+        public bool ScoreTable
+        {
+            get { return scoreTable; }
+        }
+
         public bool IsAlive
         {
             get { return isAlive; }
@@ -93,6 +105,12 @@ namespace Character
             isRotating = (rotation.y != 0 || rotation.x != 0);
         }
 
+        public void OnScoreTable(InputAction.CallbackContext value)
+        {
+            if (value.started) scoreTable = true;
+            else if (value.canceled) scoreTable = false;
+        }
+
         public void OnActivate(InputAction.CallbackContext value)
         {
             if (value.started) activate = true;
@@ -153,6 +171,12 @@ namespace Character
         {
             if (value.started) isChangingWeaponNext = true;
             else if (value.canceled) isChangingWeaponNext = false;
+        }
+
+        public void OnPause(InputAction.CallbackContext value)
+        {
+            if (isPaused) isPaused = false;
+            else isPaused = true;
         }
     }
 }

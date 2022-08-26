@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Linq;
 
 namespace Character
 {
@@ -31,8 +33,7 @@ namespace Character
 
         void Awake()
         {
-            lockMode = CursorLockMode.Locked;
-            Cursor.lockState = lockMode;
+            if (isLocalPlayer) DisableMouseInput();
             _charController = GetComponent<CharacterController>();
             status = GetComponent<CharacterStatus>();
             pms = GetComponent<PlayerManagerScript>();
@@ -40,7 +41,8 @@ namespace Character
 
         private void FixedUpdate()
         {
-            if (isLocalPlayer && status.IsAlive)
+            if (isLocalPlayer) DisableMouseInput();
+            if (isLocalPlayer && status.IsAlive && !status.IsPaused)
             {
                 Vector3 movement = new Vector3(0, 0, 0);
 
@@ -88,7 +90,16 @@ namespace Character
         {
             animator = pms.GetComponent<Animator>();
             _animSpeed = movement.z;
-            animator.SetFloat("speed", _animSpeed);
+            if(CheckParameterExists(animator, "speed")) animator.SetFloat("speed", _animSpeed);     
+        }
+
+        protected bool CheckParameterExists(Animator a, string p)
+        {
+            foreach(AnimatorControllerParameter param in a.parameters)
+            {
+                if (param.name == p) return true;
+            }
+            return false;
         }
 
         public void TeleportToRespawn(Vector3 respawnPos)
@@ -97,6 +108,20 @@ namespace Character
             transform.position = respawnPos;
             _charController.enabled = true;
             CmdRespawn(transform.position);
+        }
+
+        protected void DisableMouseInput()
+        {
+            if (!status.IsPaused)
+            {
+                lockMode = CursorLockMode.Locked;
+                Cursor.lockState = lockMode;
+            }
+            else
+            {
+                lockMode = CursorLockMode.None;
+                Cursor.lockState = lockMode;
+            }
         }
 
         [Command]

@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     {
         CursorLockMode lockMode = CursorLockMode.Confined;
         Cursor.lockState = lockMode;
+        AudioListener.volume = PlayerPrefs.GetFloat("masterVolume");
     }
 
     public void ExitGame()

@@ -28,6 +28,11 @@ namespace Weapon
             get { return featureManager;}
         }
 
+        public ComponentManager MyComponentManager
+        {
+            get { return componentManager; }
+        }
+
         public GameObject ActiveWeapon
         {
             get { return activeWeapon; }
@@ -42,6 +47,8 @@ namespace Weapon
         private void Awake()
         {
             pms = GetComponent<PlayerManagerScript>();
+            status = GetComponent<CharacterStatus>();
+            audioS = GetComponent<AudioSource>();
         }
 
         public void Spawn()
@@ -50,8 +57,6 @@ namespace Weapon
             {
                 enabledWeapons = new SortedDictionary<int, bool>();
                 playerWeapons = new SortedDictionary<int, GameObject>();
-                status = GetComponent<CharacterStatus>();
-                audioS = GetComponent<AudioSource>();
                 for (int i = 0; i < weaponsList.Count; i++)
                 {
                     GameObject weapon = Instantiate(weaponsList[i], weaponContainer.transform.position, weaponContainer.transform.rotation, weaponContainer.transform);

@@ -32,6 +32,7 @@ namespace Character
 
         void FixedUpdate()
         {
+            if (countDowns.Count == 0) return;
             CheckIsActive();
             timer -= Time.deltaTime;
             if(timer <= 0)

@@ -94,14 +94,14 @@ GameObject:
   - component: {fileID: 631950880566075852}
   - component: {fileID: 631950880566075853}
   - component: {fileID: 631950880566075842}
-  - component: {fileID: 2335389064483475495}
-  - component: {fileID: -4638770147099678552}
-  - component: {fileID: -8196549152700758813}
-  - component: {fileID: 7449426572134228503}
   - component: {fileID: 3612449760382172093}
+  - component: {fileID: 536239339850321096}
+  - component: {fileID: 3773715140709774323}
+  - component: {fileID: 2498648145425128366}
+  - component: {fileID: 3833250607567931168}
   m_Layer: 0
   m_Name: InvincibilityPowerUp
-  m_TagString: POWERUP
+  m_TagString: ACTIVABLE
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,77 +148,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2335389064483475495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631950880566075843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34a37ef69b04b1043981c83ea3c1da31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: Invincibility
-  _modifierTime: 30
-  _movementPowerup:
-    _isEnabled: 0
-    _multiplier: 0
-  _damageDonePowerup:
-    _isEnabled: 0
-    _multiplier: 0
-  _damageReceivedPowerup:
-    _isEnabled: 1
-    _multiplier: 0
-  _jumpCostumizedPowerup:
-    _isEnabled: 0
-    _multiplier: 0
---- !u!114 &-4638770147099678552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631950880566075843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e854ee29920bbb14aae18e6aace4ce1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-8196549152700758813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631950880566075843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60b7154999696e24a80bdcb1c9a11f9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: Invincibility
-  _medikit:
-    _isEnabled: 1
-    _amount: 100
-  _armor:
-    _isEnabled: 1
-    _amount: 30
-    _armorType: 1
-    _armorReducedOnHit: 0.3
---- !u!114 &7449426572134228503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631950880566075843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe29f0553f6d4854a8ee5ad5b73c9de0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3612449760382172093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +164,80 @@ MonoBehaviour:
   feedbackColor:
     _feedbackColor: {r: 0.6509434, g: 0, b: 0, a: 0}
     _isFeedback: 1
+--- !u!114 &536239339850321096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631950880566075843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &3773715140709774323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631950880566075843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9275c0a14efebb548bb20eca4a1da875, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldownInSeconds: 30
+  spawnManager: {fileID: 0}
+  reduction: 1
+--- !u!114 &2498648145425128366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631950880566075843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4cb4449fb4ea364fb7e5c06a50aea14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countdownTimeInSeconds: 30
+--- !u!114 &3833250607567931168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631950880566075843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33dfe087349248d4c9f498142ba2783f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: Consumable/GodMode.csv
 --- !u!1 &631950880718768423
 GameObject:
   m_ObjectHideFlags: 0

@@ -72,6 +72,7 @@ namespace GameManager
         
         void Start()
         {
+            PlayerPrefs.SetString("SCORES", "");
             scm = GetComponent<SceneChangeManager>();
             //LogFilter.currentLogLevel = 0;
         }
@@ -126,18 +127,6 @@ namespace GameManager
             consumable.SetActive(false);
             //consumableSpawnManager = csm.GetComponent<ConsumableSpawnManager>();
             //consumableSpawnManager.Cooldown(consumable.GetInstanceID());
-        }
-
-        public void SpawnConsumables()
-        {
-            consumableSpawnManager.SpawnAll();
-        }
-        
-        public void SetConsumableSpawnManager()
-        {
-            csm = GameObject.FindGameObjectWithTag("ConsumableSpawnManager");
-            consumableSpawnManager = csm.GetComponent<ConsumableSpawnManager>();
-            consumableSpawnManager.NetHandler = gameObject.GetComponent<NetManager>();
         }
 
         public void SetPvP(bool flag)
@@ -219,6 +208,7 @@ namespace GameManager
             NetworkHeroSelectionMessage msg = extraMessageReader.ReadMessage<NetworkHeroSelectionMessage>();
             player.GetComponent<PlayerManagerScript>().ChosenPlayer = msg.chosenPlayer;
             player.GetComponent<PlayerManagerScript>().ClientId = conn.connectionId;
+            player.GetComponent<PlayerManagerScript>().PlayerName = "Player " + conn.connectionId;
             if (isHost) connectedPlayer[conn.connectionId] = player;
             NetworkServer.AddPlayerForConnection(conn, player, 0);
         }
@@ -231,6 +221,7 @@ namespace GameManager
             var newPlayer = Instantiate(playerManagerPrefab, SpawnPoint(), Quaternion.identity);
             newPlayer.GetComponent<PlayerManagerScript>().ChosenPlayer = player.GetComponent<PlayerManagerScript>().ChosenPlayer;
             newPlayer.GetComponent<PlayerManagerScript>().ClientId = connectionId;
+            newPlayer.GetComponent<PlayerManagerScript>().PlayerName = player.GetComponent<PlayerManagerScript>().PlayerName;
             Destroy(player);
             connectedPlayer[connectionId] = newPlayer;
             NetworkServer.ReplacePlayerForConnection(conn, newPlayer, 0);
