@@ -9,7 +9,6 @@ namespace Weapon
     public class WeaponStatus : MonoBehaviour
     {
         [SerializeField] protected int id;
-        [SerializeField] protected float damage;
         [SerializeField] protected bool has_infinite_ammo;
         [SerializeField] protected int ammo;
         [SerializeField] protected int max_ammo;
@@ -56,10 +55,7 @@ namespace Weapon
         {
             get { return id; }
         }
-        public float Damage
-        {
-            get { return damage; }
-        }
+
         public bool Has_infinite_ammo
         {
             get { return has_infinite_ammo; }

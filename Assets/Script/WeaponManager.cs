@@ -72,7 +72,7 @@ namespace Weapon
         {
             for (int i = 0; i < enabledWeapons.Count; i++)
             {
-                enabledWeapons[i] = false;
+                enabledWeapons[i] = true;
                 playerWeapons[i].GetComponent<WeaponStatus>().ResetAmmo();
             }
             enabledWeapons[0] = true;
@@ -235,11 +235,6 @@ namespace Weapon
         public int GetActiveWeaponAmmo()
         {
             return activeWeaponStatus.Ammo;
-        }
-
-        public float GetActiveWeaponDamage()
-        {
-            return activeWeaponStatus.Damage;
         }
 
         public float GetActiveWeaponRange()

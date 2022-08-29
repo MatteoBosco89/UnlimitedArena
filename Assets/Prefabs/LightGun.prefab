@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 3551805850957180035}
   - component: {fileID: 515123091440556409}
   - component: {fileID: -1490790976459469658}
+  - component: {fileID: -2818469048713475814}
+  - component: {fileID: 3612116559843964521}
   m_Layer: 0
   m_Name: LightGun
   m_TagString: Untagged
@@ -142,3 +144,29 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &-2818469048713475814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3551805850954928087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c25e4ff93976d0f408039597b699d633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  featuresDirectory: Weapons\LightGun\Features
+--- !u!114 &3612116559843964521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3551805850954928087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d704d771ae0e2064e835fa9bebd5f300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  componentDirectory: Weapons\LightGun\Components

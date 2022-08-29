@@ -14,10 +14,10 @@ namespace Character
         protected Dictionary<string, UAComponent> components = new Dictionary<string, UAComponent>();
         protected Dictionary<string, UAComponent> baseComponents = new Dictionary<string, UAComponent>();
         protected Dictionary<string, Feature> objectFeatures = null;
-        protected List<string> tickable = new List<string>();
         protected Dictionary<string, float> featureMulMod = new Dictionary<string, float>();
         protected Dictionary<string, float> featureAddMod = new Dictionary<string, float>();
         protected Dictionary<string, Modifier> allTicks = new Dictionary<string, Modifier>();
+        protected List<string> tickable = new List<string>();
         protected CountDownManager countDownManager;
         protected TickManager tickManager;
         protected FeatureManager featureManager;
@@ -200,6 +200,7 @@ namespace Character
             return true;
         }
 
+        // for debug
         public void Print()
         {
             foreach(KeyValuePair<string, UAComponent> keyValuePair in components)

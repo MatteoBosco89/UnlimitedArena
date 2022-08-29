@@ -190,9 +190,8 @@ namespace Character
             }
 
             // for debugging purpose
-            if (isLocalPlayer && characterStatus.IsChangingWeaponsPre) lifeManager.TakeDamage(10);
-            if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) componentManager.Print();
-            
+            //if (isLocalPlayer && characterStatus.IsChangingWeaponsPre) lifeManager.TakeDamage(10);
+            //if (isLocalPlayer && characterStatus.IsChangingWeaponsNext) componentManager.Print(); 
             //if (isLocalPlayer && characterStatus.ScoreTable) scoreTableObj.SetActive(true);
             //else scoreTableObj.SetActive(false);
 
