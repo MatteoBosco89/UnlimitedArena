@@ -133,10 +133,10 @@ namespace Character
             PlayerReset();
             SetAnimator(weaponManager.ActiveWeaponStatus.WeaponType);
             ActivateCam();
-            if (isLocalPlayer) CmdScore();
-            scoreTableManager.AddNewPlayer(playerName, clientId);
-            if (isLocalPlayer) CmdScore();
-            PlayerPrefs.SetString("SCORES", scores);
+            //if (isLocalPlayer) CmdScore();
+            //scoreTableManager.AddNewPlayer(playerName, clientId);
+            //if (isLocalPlayer) CmdScore();
+            //PlayerPrefs.SetString("SCORES", scores);
         }
 
         [Command]

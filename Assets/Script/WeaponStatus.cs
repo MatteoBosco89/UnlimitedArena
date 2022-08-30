@@ -21,6 +21,7 @@ namespace Weapon
         [SerializeField] protected Vector3 rotation;
         [SerializeField] protected string weaponType;
         [SerializeField] protected string weaponName;
+        protected MuzzleManager muzzle;
         
         public void ResetAmmo()
         {
@@ -87,11 +88,12 @@ namespace Weapon
 
         void Start()
         {
+            muzzle = GetComponent<MuzzleManager>();
             if (ammo > max_ammo)
             {
                 ammo = max_ammo;
             }
-
+            
         }
 
         public void AddAmmo(int value)
@@ -113,12 +115,18 @@ namespace Weapon
                 if (ammo > ammo_per_shot)
                 {
                     ammo -= ammo_per_shot;
+                    StartCoroutine(muzzle.Muzzle());
                 }
                 else
                 {
                     ammo = 0;
                 }
             }
+            else
+            {
+                StartCoroutine(muzzle.Muzzle());
+            }
         }
+
     }
 }
