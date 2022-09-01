@@ -8,6 +8,7 @@ namespace Character
     {
         protected int tickPerSecond = 1;
         protected float timer = 0;
+        protected bool active = true;
 
         public float Timer
         {
@@ -28,8 +29,12 @@ namespace Character
 
         public override void Activate()
         {
-            if(valuePerSecond >= 0) c.TickFeature();
-            valuePerSecond -= tickPerSecond;
+            if (valuePerSecond >= 0)
+            {
+                valuePerSecond -= tickPerSecond;
+                if (valuePerSecond < 0) active = false;
+            }
+            if (active) c.TickFeature();
         }
 
         public void DoTick()
