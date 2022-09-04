@@ -133,7 +133,7 @@ namespace Character
         {
             if (!CheckFile(path)) return;
             string[] n = path.Split('.');
-            UAComponent c = new UAComponent(Path.GetFileName(n[0].Trim()), path, this);
+            Gear c = new Gear(Path.GetFileName(n[0].Trim()), path, this);
             AddBaseComponent(c);
             AddComponent(c);
         }

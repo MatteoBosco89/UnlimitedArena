@@ -4993,6 +4993,7 @@ MonoBehaviour:
   collidersTags:
   - powerup
   - activable
+  - gear
 --- !u!114 &5113199147089727754
 MonoBehaviour:
   m_ObjectHideFlags: 0

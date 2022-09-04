@@ -154,6 +154,11 @@ namespace Character
             return null;
         }
 
+        public bool CheckFeature(string f)
+        {
+            return m_features.ContainsKey(f);
+        }
+
     }
 }
 
