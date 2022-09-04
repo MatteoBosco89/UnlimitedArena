@@ -18,6 +18,7 @@ TagManager:
   - PlayerSpawnManager
   - POWERUP
   - ACTIVABLE
+  - GEAR
   layers:
   - Default
   - TransparentFX
